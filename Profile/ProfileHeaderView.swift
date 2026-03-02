@@ -1,11 +1,185 @@
 //
 //  ProfileHeaderView.swift
-//  Navigation
+//  NavigationNew
 //
 //  Created by Timur Zakirov on 02/03/26.
 //
-import UIKit
 
+import UIKit
+// версия кода с AutoLayout
+class ProfileHeaderView: UIView {
+    
+    // круглая аватарка
+    private lazy var avatarkaImageView: UIImageView = {
+        let ava = UIImageView()
+        ava.image = UIImage(resource: .dog)
+        ava.contentMode = .scaleAspectFill
+        ava.clipsToBounds = true
+        ava.layer.borderColor = UIColor.white.cgColor
+        ava.layer.borderWidth = 3
+        ava.layer.cornerRadius = 50
+        ava.translatesAutoresizingMaskIntoConstraints = false
+        return ava
+    } ()
+    
+    // Надпись Running dog
+    private lazy var nameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Running dog"
+        label.font = UIFont.boldSystemFont(ofSize: 18)
+        label.textColor = .black
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    } ()
+    
+    // статус
+    private lazy var statusLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Waiting for something..."
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textColor = .gray
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    } ()
+    
+    // кнопка показы статуса
+    private lazy var showStatusBatton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Change status", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .systemBlue
+        button.layer.cornerRadius = 4
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        return button
+    } ()
+    
+    // кнопка смены статуса
+    private lazy var setStatusBatton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Set status", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .systemBlue
+        button.isHidden = true
+        button.layer.cornerRadius = 4
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        return button
+    } ()
+    
+    // текстовое поле для ввода статуса
+    private lazy var statusTextField: UITextField = {
+        let textField = UITextField()
+        textField.text = "Listening mucis..."
+        textField.borderStyle = .roundedRect
+        textField.isHidden = true
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        return textField
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .lightGray
+        setupViews()
+        setupTarget()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupViews() {
+        addSubview(avatarkaImageView)
+        addSubview(nameLabel)
+        addSubview(statusLabel)
+        addSubview(showStatusBatton)
+        addSubview(statusTextField)
+        addSubview(setStatusBatton)
+        
+        NSLayoutConstraint.activate([
+            // аватарка
+            avatarkaImageView.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            avatarkaImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            avatarkaImageView.widthAnchor.constraint(equalToConstant: 100),
+            avatarkaImageView.heightAnchor.constraint(equalToConstant: 100),
+            
+            // Running dog
+            nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 27),
+            nameLabel.leadingAnchor.constraint(equalTo: avatarkaImageView.trailingAnchor, constant: 16),
+            nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            
+            // кнопка Show status
+            showStatusBatton.topAnchor.constraint(equalTo: avatarkaImageView.bottomAnchor, constant: 16),
+            showStatusBatton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            showStatusBatton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            showStatusBatton.heightAnchor.constraint(equalToConstant: 50),
+            
+            // статус
+            statusLabel.bottomAnchor.constraint(equalTo: showStatusBatton.topAnchor, constant: -34),
+            statusLabel.leadingAnchor.constraint(equalTo: avatarkaImageView.trailingAnchor, constant: 16),
+            statusLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            
+            // текстовое поле ввода статуса
+            statusTextField.topAnchor.constraint(equalTo: statusLabel.bottomAnchor, constant: 16),
+            statusTextField.leadingAnchor.constraint(equalTo: statusLabel.leadingAnchor, constant: 0),
+            statusTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            statusTextField.heightAnchor.constraint(equalToConstant: 40),
+            
+            // кнопка Установить статус
+            setStatusBatton.topAnchor.constraint(equalTo: statusTextField.bottomAnchor, constant: 10),
+            setStatusBatton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            setStatusBatton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            setStatusBatton.heightAnchor.constraint(equalToConstant: 50)
+            
+        ])
+        
+        
+    }
+    
+    
+    func setupTarget() {
+        showStatusBatton.addTarget(
+            self,
+            action: #selector(showBattonPressed),
+            for: .touchUpInside
+        )
+        
+        setStatusBatton.addTarget(
+            self,
+            action: #selector(setBattonPressed),
+            for: .touchUpInside
+        )
+    }
+    
+    
+    @objc func showBattonPressed() {
+        showStatusBatton.isHidden = true
+        statusTextField.isHidden = false
+        setStatusBatton.isHidden = false
+        //setStatusField.becomeFirstResponder()
+        print(statusTextField.text ?? "")
+    }
+    
+    @objc func setBattonPressed() {
+        setStatusBatton.isHidden = true
+        statusTextField.isHidden = true
+        showStatusBatton.isHidden = false
+        //setStatusField.resignFirstResponder()
+        if(statusTextField.text == "") {
+                statusLabel.text = "Waiting for something..."
+        }
+        else {
+            statusLabel.text = statusTextField.text
+        }
+        
+        print(statusTextField.text ?? "")
+    }
+    
+}
+
+// старая версия кода
+/*
 class ProfileHeaderView: UIView {
     
  //  кнопка показа статуса
@@ -196,3 +370,4 @@ class ProfileHeaderView: UIView {
         print(setStatusField.text ?? "")
     }
 }
+*/
