@@ -71,7 +71,7 @@ class ProfileHeaderView: UIView {
     // текстовое поле для ввода статуса
     private lazy var statusTextField: UITextField = {
         let textField = UITextField()
-        textField.text = "Listening mucis..."
+        textField.placeholder = "Listening mucis..."
         textField.borderStyle = .roundedRect
         textField.isHidden = true
         textField.translatesAutoresizingMaskIntoConstraints = false
