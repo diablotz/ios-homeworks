@@ -6,11 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		C329DACE2F558A4E00EF8FCB /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C329DAC62F558A4E00EF8FCB /* ProfileViewController.swift */; };
-		C329DAD72F558B0400EF8FCB /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C329DAD62F558B0400EF8FCB /* ProfileHeaderView.swift */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
 		C329D9EC2F5559D700EF8FCB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -32,8 +27,6 @@
 		C329D9D52F5559D400EF8FCB /* Navigation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Navigation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C329D9EB2F5559D700EF8FCB /* NavigationTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NavigationTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C329D9F52F5559D700EF8FCB /* NavigationUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NavigationUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		C329DAC62F558A4E00EF8FCB /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
-		C329DAD62F558B0400EF8FCB /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -85,7 +78,6 @@
 		C329D9CC2F5559D400EF8FCB = {
 			isa = PBXGroup;
 			children = (
-				C329DAD52F558A8F00EF8FCB /* Profile */,
 				C329D9D72F5559D400EF8FCB /* Navigation */,
 				C329D9D62F5559D400EF8FCB /* Products */,
 			);
@@ -99,15 +91,6 @@
 				C329D9F52F5559D700EF8FCB /* NavigationUITests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		C329DAD52F558A8F00EF8FCB /* Profile */ = {
-			isa = PBXGroup;
-			children = (
-				C329DAC62F558A4E00EF8FCB /* ProfileViewController.swift */,
-				C329DAD62F558B0400EF8FCB /* ProfileHeaderView.swift */,
-			);
-			path = Profile;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -248,8 +231,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C329DACE2F558A4E00EF8FCB /* ProfileViewController.swift in Sources */,
-				C329DAD72F558B0400EF8FCB /* ProfileHeaderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
