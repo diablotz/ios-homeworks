@@ -30,11 +30,11 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         title = "Профиль"
         #if DEBUG
-        view.backgroundColor = .black
+        view.backgroundColor = .blue
         #else
         view.backgroundColor = .green
         #endif
-        //view.backgroundColor = .white
+        
         
         view.addSubview(headerView)
         view.addSubview(newButton)
