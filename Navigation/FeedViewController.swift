@@ -6,11 +6,7 @@
 //
 
 import UIKit
-
-struct Post {
-    let title: String
-    let content: String
-}
+import StorageService
 
 class FeedViewController: UIViewController {
     
