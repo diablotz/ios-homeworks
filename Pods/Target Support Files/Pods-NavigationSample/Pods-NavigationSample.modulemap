@@ -1,0 +1,6 @@
+framework module Pods_NavigationSample {
+  umbrella header "Pods-NavigationSample-umbrella.h"
+
+  export *
+  module * { export * }
+}
