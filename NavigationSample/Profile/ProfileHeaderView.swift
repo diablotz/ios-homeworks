@@ -134,9 +134,11 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         returnAvatarButton.addTarget(self, action: #selector(returnAvatarToOrigin), for: .touchUpInside)
         
         // translucent background for the modal animation mode
-        avatarBackground = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+        guard let windowScene = self.window?.windowScene else { return }
+        let screenBounds = windowScene.screen.bounds
+        avatarBackground = UIView(frame: CGRect(x: 0, y: 0, width: screenBounds.width, height: screenBounds.height))
         avatarBackground.backgroundColor = .darkGray
-        avatarBackground.isHidden = true
+        avatarBackground.isHidden = false
         avatarBackground.alpha = 0
         
         addSubviews(avatarBackground, avatarImageView, returnAvatarButton)
@@ -170,11 +172,13 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         ProfileViewController.postTableView.cellForRow(at: IndexPath(row: 0, section: 0))?.isUserInteractionEnabled = false
         
         avatarOriginPoint = avatarImageView.center
-        let scale = UIScreen.main.bounds.width / avatarImageView.bounds.width
+        guard let windowScene = self.window?.windowScene else { return }
+        let screenBounds = windowScene.screen.bounds
+        let scale = screenBounds.width / avatarImageView.bounds.width
         
         UIView.animate(withDuration: 0.5) {
-            self.avatarImageView.center = CGPoint(x: UIScreen.main.bounds.midX,
-                                                  y: UIScreen.main.bounds.midY - self.avatarOriginPoint.y)
+            self.avatarImageView.center = CGPoint(x: screenBounds.midX,
+                                                  y: screenBounds.midY - self.avatarOriginPoint.y)
             self.avatarImageView.transform = CGAffineTransform(scaleX: scale, y: scale)
             self.avatarImageView.layer.cornerRadius = 0
             self.avatarBackground.isHidden = false
