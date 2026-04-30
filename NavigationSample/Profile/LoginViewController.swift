@@ -92,6 +92,27 @@ final class LoginViewController: UIViewController {
         return password
     }()
     
+    /*
+     let userService: UserService = CurrentUserService(
+        user: User(
+            login: "John", fullName: "John Smith", avatar: UIImage(named: "teo"), status: "Test!"
+        )
+        
+    )
+     */
+    
+    private let userService: UserService = {
+        #if DEBUG
+        return TestUserService()
+        #else
+        return CurrentUserService(
+            user: User(
+                login: "John", fullName: "John Smith", avatar: UIImage(named: "teo"), status: "Hello!"
+            )
+        )
+        #endif
+    }()
+    
     // MARK: - Setup section
     
     override func viewDidLoad() {
@@ -166,11 +187,24 @@ final class LoginViewController: UIViewController {
 
     }
     
+    private func showLoginError() {
+        let alert = UIAlertController(title: "Error", message: "User not found", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
     // MARK: - Event handlers
 
     @objc private func touchLoginButton() {
-        let profileVC = ProfileViewController()
-        navigationController?.setViewControllers([profileVC], animated: true)
+        guard let login = loginField.text else { return }
+        if let user = userService.getUser(by: login) {
+            let profileVC = ProfileViewController(user: user)
+            navigationController?.setViewControllers([profileVC], animated: true)
+        }
+        else {
+            showLoginError()
+        }
+        
     }
 
     @objc private func keyboardShow(notification: NSNotification) {

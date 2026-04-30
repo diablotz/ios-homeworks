@@ -11,6 +11,9 @@ final class ProfileViewController: UIViewController {
     static let photoIdent = "photo"
     static let postIdent = "post"
     
+    private let user: User
+    private let tableView = UITableView(frame: .zero, style: .grouped)
+    
     static var postTableView: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
         table.translatesAutoresizingMaskIntoConstraints = false
@@ -20,33 +23,44 @@ final class ProfileViewController: UIViewController {
         return table
     }()
     
+    init(user: User) {
+        self.user = user
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Setup section
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        title = user.fullName
 
         view.backgroundColor = .systemBackground
+        print(user.avatar ?? UIImage())
         
-        view.addSubview(Self.postTableView)
+        view.addSubview(tableView)
         setupConstraints()
-        Self.postTableView.dataSource = self
-        Self.postTableView.delegate = self
-        Self.postTableView.refreshControl = UIRefreshControl()
-        Self.postTableView.refreshControl?.addTarget(self, action: #selector(reloadTableView), for: .valueChanged)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(reloadTableView), for: .valueChanged)
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            Self.postTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            Self.postTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            Self.postTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            Self.postTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 
     @objc func reloadTableView() {
-        Self.postTableView.reloadData()
-        Self.postTableView.refreshControl?.endRefreshing()
+        tableView.reloadData()
+        tableView.refreshControl?.endRefreshing()
     }
 }
 
@@ -89,6 +103,9 @@ extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard section == 0 else { return nil }
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: Self.headerIdent) as! ProfileHeaderView
+        headerView.fullNameLabel.text = user.fullName
+        headerView.statusLabel.text = user.status
+        headerView.avatarImageView.image = user.avatar
         return headerView
     }
 
