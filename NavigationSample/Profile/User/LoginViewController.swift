@@ -6,6 +6,7 @@
 import UIKit
 
 final class LoginViewController: UIViewController {
+    var loginDelegate: LoginViewControllerDelegate?
     
     // MARK: Visual content
     
@@ -101,13 +102,18 @@ final class LoginViewController: UIViewController {
     )
      */
     
+    
     private let userService: UserService = {
         #if DEBUG
         return TestUserService()
         #else
         return CurrentUserService(
             user: User(
-                login: "John", fullName: "John Smith", avatar: UIImage(named: "teo"), status: "Hello!"
+                login: "John",
+                fullName: "John Smith",
+                //avatar: UIImage(named: "teo"),
+                avatar: UIImage(systemName: "person.circle"),
+                status: "Hello!"
             )
         )
         #endif
@@ -187,8 +193,8 @@ final class LoginViewController: UIViewController {
 
     }
     
-    private func showLoginError() {
-        let alert = UIAlertController(title: "Error", message: "User not found", preferredStyle: .alert)
+    private func showLoginError(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
@@ -196,14 +202,24 @@ final class LoginViewController: UIViewController {
     // MARK: - Event handlers
 
     @objc private func touchLoginButton() {
-        guard let login = loginField.text else { return }
-        if let user = userService.getUser(by: login) {
-            let profileVC = ProfileViewController(user: user)
-            navigationController?.setViewControllers([profileVC], animated: true)
+        guard let login = loginField.text,
+        let password = passwordField.text
+        else { return }
+        let isValid = loginDelegate?.check(login: login, password: password) ?? false
+        if isValid {
+            if let user = userService.getUser(by: login) {
+                let profileVC = ProfileViewController(user: user)
+                navigationController?.setViewControllers([profileVC], animated: true)
+                print(user, " это юзер")
+            }
+            else {
+                showLoginError(message: "Такого пользователя не существует")
+            }
         }
         else {
-            showLoginError()
+            showLoginError(message: "Неправильный логин или пароль")
         }
+        
         
     }
 
@@ -229,3 +245,5 @@ extension LoginViewController: UITextFieldDelegate {
         return true
     }
 }
+
+

@@ -8,17 +8,19 @@
 import UIKit
 
 final class TestUserService: UserService {
-    let testUser = User(
-        login: "test",
-        fullName: "Test User",
-        avatar: UIImage(named: "test-avatar"),
+    let user = User(
+        login: "dog",
+        fullName: "Running dog",
+        //avatar: UIImage(named: "test-avatar"),
+        avatar: UIImage(systemName: "person.circle"),
         status: "DEBUG mode"
     )
-    
+    /*
     func getUser(by login: String) -> User? {
-        if login == testUser.login {
-            return testUser
+        if login == user.login {
+            return user
         }
         return nil
     }
+     */
 }
