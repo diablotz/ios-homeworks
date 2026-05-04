@@ -14,8 +14,11 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     var statusLabel = UILabel()
     var statusTextField = UITextField()
     var setStatusButton = UIButton()
-    var returnAvatarButton = UIButton()
-    var avatarBackground = UIView()
+   // var returnAvatarButton = UIButton()
+    //var avatarBackground = UIView()
+    private var overlayView: UIView?
+    private var animatedImageView: UIImageView?
+    private var originalFrame: CGRect = .zero
     
     private var statusText = "Ready to help"
     private var avatarOriginPoint = CGPoint()
@@ -114,6 +117,7 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         self.fullNameLabel.text = user.fullName
         self.statusLabel.text = user.status
         self.avatarImageView.image = user.avatar
+        print("Configgggg!!!!")
     }
     private func setupAvatarImage() {
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -131,7 +135,7 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         avatarImageView.addGestureRecognizer(tapGesture)
         
         // cancel an animation mode
-        returnAvatarButton.translatesAutoresizingMaskIntoConstraints = false
+        /*returnAvatarButton.translatesAutoresizingMaskIntoConstraints = false
         returnAvatarButton.alpha = 0
         returnAvatarButton.backgroundColor = .clear
         returnAvatarButton.contentMode = .scaleToFill
@@ -140,14 +144,14 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         returnAvatarButton.addTarget(self, action: #selector(returnAvatarToOrigin), for: .touchUpInside)
         
         // translucent background for the modal animation mode
-        guard let windowScene = self.window?.windowScene else { return }
-        let screenBounds = windowScene.screen.bounds
-        avatarBackground = UIView(frame: CGRect(x: 0, y: 0, width: screenBounds.width, height: screenBounds.height))
+        //guard let windowScene = self.window?.windowScene else { return }
+        //let screenBounds = windowScene.screen.bounds
+        avatarBackground = UIView()//UIView(frame: CGRect(x: 0, y: 0, width: screenBounds.width, height: screenBounds.height))
         avatarBackground.backgroundColor = .darkGray
         avatarBackground.isHidden = false
         avatarBackground.alpha = 0
-        
-        addSubviews(avatarBackground, avatarImageView, returnAvatarButton)
+        */
+        //addSubviews(avatarBackground, avatarImageView, returnAvatarButton)
         
         NSLayoutConstraint.activate([
             avatarImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
@@ -155,8 +159,8 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
             avatarImageView.widthAnchor.constraint(equalToConstant: 128),
             avatarImageView.heightAnchor.constraint(equalTo: avatarImageView.widthAnchor),
             
-            returnAvatarButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
-            returnAvatarButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            //returnAvatarButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
+            //returnAvatarButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
         ])
     }
     
@@ -169,7 +173,52 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     @objc private func statusButtonPressed() {
         statusLabel.text = statusText
     }
-    
+    @objc private func didTapOnAvatar() {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
+
+        
+        guard let window = windowScene.windows.first(where: { $0.isKeyWindow }) else {return}
+        // переводим координаты avatar в систему окна
+        originalFrame = avatarImageView.convert(avatarImageView.bounds, to: window)
+        
+        // затемнение фона
+        let overlay = UIView(frame: window.bounds)
+        overlay.backgroundColor = UIColor.black
+        overlay.alpha = 0
+        window.addSubview(overlay)
+        
+        // создаём копию аватара
+        let imageView = UIImageView(frame: originalFrame)
+        imageView.image = avatarImageView.image
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        window.addSubview(imageView)
+        
+        // скрываем оригинал
+        avatarImageView.isHidden = true
+        
+        overlayView = overlay
+        animatedImageView = imageView
+        
+        // анимация
+        UIView.animate(withDuration: 0.4) {
+            overlay.alpha = 0.7
+            
+            let size = window.bounds.width
+            imageView.frame = CGRect(
+                x: 0,
+                y: (window.bounds.height - size) / 2,
+                width: size,
+                height: size
+            )
+            imageView.layer.cornerRadius = 0
+        }
+        
+        // тап для закрытия
+        let tap = UITapGestureRecognizer(target: self, action: #selector(closeAvatar))
+        overlay.addGestureRecognizer(tap)
+    }
+    /*
     @objc private func didTapOnAvatar() {
         // create an animation
         avatarImageView.isUserInteractionEnabled = false
@@ -195,7 +244,8 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
             }
         }
     }
-    
+     */
+    /*
     @objc private func returnAvatarToOrigin() {
         UIImageView.animate(withDuration: 0.5) {
             UIImageView.animate(withDuration: 0.5) {
@@ -209,6 +259,26 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
             ProfileViewController.postTableView.isScrollEnabled = true
             ProfileViewController.postTableView.cellForRow(at: IndexPath(row: 0, section: 0))?.isUserInteractionEnabled = true
             self.avatarImageView.isUserInteractionEnabled = true
+        }
+    }
+     */
+    @objc private func closeAvatar() {
+        guard let window = UIApplication.shared.connectedScenes.first,
+              let imageView = animatedImageView,
+              let overlay = overlayView else { return }
+        
+        UIView.animate(withDuration: 0.4, animations: {
+            imageView.frame = self.originalFrame
+            imageView.layer.cornerRadius = imageView.frame.width / 2
+            overlay.alpha = 0
+        }) { _ in
+            imageView.removeFromSuperview()
+            overlay.removeFromSuperview()
+            
+            self.avatarImageView.isHidden = false
+            
+            self.animatedImageView = nil
+            self.overlayView = nil
         }
     }
 }
