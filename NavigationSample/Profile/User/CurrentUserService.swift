@@ -7,19 +7,12 @@
 
 import UIKit
 
-class CurrentUserService: UserService {
-    private let user: User
-    
+final class CurrentUserService: UserService {
+   
+    let user: User
     init(user: User) {
         self.user = user
     }
     
-    func getUser(by login: String) -> User? {
-         if login == user.login {
-             return user
-        }
-        else {
-            return nil
-        }
-    }
+    
 }

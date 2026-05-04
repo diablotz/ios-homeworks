@@ -103,9 +103,10 @@ extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard section == 0 else { return nil }
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: Self.headerIdent) as! ProfileHeaderView
-        headerView.fullNameLabel.text = user.fullName
-        headerView.statusLabel.text = user.status
-        headerView.avatarImageView.image = user.avatar
+        //headerView.fullNameLabel.text = user.fullName
+        //headerView.statusLabel.text = user.status
+        //headerView.avatarImageView.image = user.avatar
+        headerView.configure(with: user)
         return headerView
     }
 
