@@ -6,27 +6,8 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXContainerItemProxy section */
-		C3A6DD972FAB112300E803DE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C3A6DD782FAB112000E803DE /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C3A6DD7F2FAB112000E803DE;
-			remoteInfo = NavigationSmpl;
-		};
-		C3A6DDA12FAB112300E803DE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C3A6DD782FAB112000E803DE /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C3A6DD7F2FAB112000E803DE;
-			remoteInfo = NavigationSmpl;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		C3A6DD802FAB112000E803DE /* NavigationSmpl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NavigationSmpl.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C3A6DD962FAB112300E803DE /* NavigationSmplTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NavigationSmplTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		C3A6DDA02FAB112300E803DE /* NavigationSmplUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NavigationSmplUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -48,34 +29,10 @@
 			path = NavigationSmpl;
 			sourceTree = "<group>";
 		};
-		C3A6DD992FAB112300E803DE /* NavigationSmplTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = NavigationSmplTests;
-			sourceTree = "<group>";
-		};
-		C3A6DDA32FAB112300E803DE /* NavigationSmplUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = NavigationSmplUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		C3A6DD7D2FAB112000E803DE /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C3A6DD932FAB112300E803DE /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C3A6DD9D2FAB112300E803DE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -89,8 +46,6 @@
 			isa = PBXGroup;
 			children = (
 				C3A6DD822FAB112000E803DE /* NavigationSmpl */,
-				C3A6DD992FAB112300E803DE /* NavigationSmplTests */,
-				C3A6DDA32FAB112300E803DE /* NavigationSmplUITests */,
 				C3A6DD812FAB112000E803DE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -99,8 +54,6 @@
 			isa = PBXGroup;
 			children = (
 				C3A6DD802FAB112000E803DE /* NavigationSmpl.app */,
-				C3A6DD962FAB112300E803DE /* NavigationSmplTests.xctest */,
-				C3A6DDA02FAB112300E803DE /* NavigationSmplUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -130,52 +83,6 @@
 			productReference = C3A6DD802FAB112000E803DE /* NavigationSmpl.app */;
 			productType = "com.apple.product-type.application";
 		};
-		C3A6DD952FAB112300E803DE /* NavigationSmplTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = C3A6DDAE2FAB112300E803DE /* Build configuration list for PBXNativeTarget "NavigationSmplTests" */;
-			buildPhases = (
-				C3A6DD922FAB112300E803DE /* Sources */,
-				C3A6DD932FAB112300E803DE /* Frameworks */,
-				C3A6DD942FAB112300E803DE /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				C3A6DD982FAB112300E803DE /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				C3A6DD992FAB112300E803DE /* NavigationSmplTests */,
-			);
-			name = NavigationSmplTests;
-			packageProductDependencies = (
-			);
-			productName = NavigationSmplTests;
-			productReference = C3A6DD962FAB112300E803DE /* NavigationSmplTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		C3A6DD9F2FAB112300E803DE /* NavigationSmplUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = C3A6DDB12FAB112300E803DE /* Build configuration list for PBXNativeTarget "NavigationSmplUITests" */;
-			buildPhases = (
-				C3A6DD9C2FAB112300E803DE /* Sources */,
-				C3A6DD9D2FAB112300E803DE /* Frameworks */,
-				C3A6DD9E2FAB112300E803DE /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				C3A6DDA22FAB112300E803DE /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				C3A6DDA32FAB112300E803DE /* NavigationSmplUITests */,
-			);
-			name = NavigationSmplUITests;
-			packageProductDependencies = (
-			);
-			productName = NavigationSmplUITests;
-			productReference = C3A6DDA02FAB112300E803DE /* NavigationSmplUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -188,14 +95,6 @@
 				TargetAttributes = {
 					C3A6DD7F2FAB112000E803DE = {
 						CreatedOnToolsVersion = 26.2;
-					};
-					C3A6DD952FAB112300E803DE = {
-						CreatedOnToolsVersion = 26.2;
-						TestTargetID = C3A6DD7F2FAB112000E803DE;
-					};
-					C3A6DD9F2FAB112300E803DE = {
-						CreatedOnToolsVersion = 26.2;
-						TestTargetID = C3A6DD7F2FAB112000E803DE;
 					};
 				};
 			};
@@ -214,28 +113,12 @@
 			projectRoot = "";
 			targets = (
 				C3A6DD7F2FAB112000E803DE /* NavigationSmpl */,
-				C3A6DD952FAB112300E803DE /* NavigationSmplTests */,
-				C3A6DD9F2FAB112300E803DE /* NavigationSmplUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		C3A6DD7E2FAB112000E803DE /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C3A6DD942FAB112300E803DE /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C3A6DD9E2FAB112300E803DE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -252,34 +135,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C3A6DD922FAB112300E803DE /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C3A6DD9C2FAB112300E803DE /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		C3A6DD982FAB112300E803DE /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C3A6DD7F2FAB112000E803DE /* NavigationSmpl */;
-			targetProxy = C3A6DD972FAB112300E803DE /* PBXContainerItemProxy */;
-		};
-		C3A6DDA22FAB112300E803DE /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C3A6DD7F2FAB112000E803DE /* NavigationSmpl */;
-			targetProxy = C3A6DDA12FAB112300E803DE /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		C3A6DDAA2FAB112300E803DE /* Debug */ = {
@@ -293,7 +149,6 @@
 				INFOPLIST_FILE = NavigationSmpl/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -324,7 +179,6 @@
 				INFOPLIST_FILE = NavigationSmpl/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -463,86 +317,6 @@
 			};
 			name = Release;
 		};
-		C3A6DDAF2FAB112300E803DE /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "ru.netoligy.IOS-64.NavigationSmplTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NavigationSmpl.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NavigationSmpl";
-			};
-			name = Debug;
-		};
-		C3A6DDB02FAB112300E803DE /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "ru.netoligy.IOS-64.NavigationSmplTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NavigationSmpl.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NavigationSmpl";
-			};
-			name = Release;
-		};
-		C3A6DDB22FAB112300E803DE /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "ru.netoligy.IOS-64.NavigationSmplUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = NavigationSmpl;
-			};
-			name = Debug;
-		};
-		C3A6DDB32FAB112300E803DE /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "ru.netoligy.IOS-64.NavigationSmplUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = NavigationSmpl;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -560,24 +334,6 @@
 			buildConfigurations = (
 				C3A6DDAA2FAB112300E803DE /* Debug */,
 				C3A6DDAB2FAB112300E803DE /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		C3A6DDAE2FAB112300E803DE /* Build configuration list for PBXNativeTarget "NavigationSmplTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C3A6DDAF2FAB112300E803DE /* Debug */,
-				C3A6DDB02FAB112300E803DE /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		C3A6DDB12FAB112300E803DE /* Build configuration list for PBXNativeTarget "NavigationSmplUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C3A6DDB22FAB112300E803DE /* Debug */,
-				C3A6DDB32FAB112300E803DE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
