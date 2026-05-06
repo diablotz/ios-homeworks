@@ -4,6 +4,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class ProfileHeaderView: UITableViewHeaderFooterView {
     
@@ -44,12 +45,20 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         fullNameLabel.font = .boldSystemFont(ofSize: 18)
         fullNameLabel.textColor = .black
         addSubview(fullNameLabel)
+        fullNameLabel.snp.makeConstraints { (make) -> Void in
+            make.leading.equalTo(156)
+            make.trailing.equalTo(-16)
+            make.top.equalTo(16)
+            make.height.equalTo(28)
+        }
+        /*
         NSLayoutConstraint.activate([
             fullNameLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
             fullNameLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 156),
             fullNameLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
             fullNameLabel.heightAnchor.constraint(equalToConstant: 28),
         ])
+         */
     }
     
     private func setupStatusLabel() {
@@ -58,12 +67,19 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         statusLabel.font = .systemFont(ofSize: 17)
         statusLabel.textColor = .black
         addSubview(statusLabel)
-        NSLayoutConstraint.activate([
+        statusLabel.snp.makeConstraints { (make) -> Void in
+            make.top.equalTo(fullNameLabel.snp.bottom).offset(16)
+            make.leading.trailing.height.equalTo(fullNameLabel)
+            
+        }
+        /*
+         NSLayoutConstraint.activate([
             statusLabel.topAnchor.constraint(equalTo: fullNameLabel.bottomAnchor, constant: 16),
             statusLabel.leadingAnchor.constraint(equalTo: fullNameLabel.leadingAnchor),
             statusLabel.trailingAnchor.constraint(equalTo: fullNameLabel.trailingAnchor),
             statusLabel.heightAnchor.constraint(equalTo: fullNameLabel.heightAnchor),
         ])
+         */
     }
     
     private func setupStatusTextField() {

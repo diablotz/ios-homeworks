@@ -27,7 +27,7 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         
         #if DEBUG
-        view.backgroundColor = .green
+        view.backgroundColor = .systemPink
         #else
         view.backgroundColor = .blue
         #endif
