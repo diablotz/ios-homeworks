@@ -4,6 +4,7 @@
 //
 
 import UIKit
+//import StorageService
 
 final class ProfileViewController: UIViewController {
     
@@ -24,8 +25,14 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        #if DEBUG
+        view.backgroundColor = .green
+        #else
+        view.backgroundColor = .blue
+        #endif
 
-        view.backgroundColor = .systemBackground
+        
         
         view.addSubview(Self.postTableView)
         setupConstraints()

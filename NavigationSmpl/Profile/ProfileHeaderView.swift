@@ -117,6 +117,54 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         avatarImageView.layer.borderColor = UIColor.white.cgColor
         avatarImageView.clipsToBounds = true
         
+        // Tap gesture
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapOnAvatar))
+        avatarImageView.isUserInteractionEnabled = true
+        avatarImageView.addGestureRecognizer(tapGesture)
+        
+        // Кнопка закрытия
+        returnAvatarButton.translatesAutoresizingMaskIntoConstraints = false
+        returnAvatarButton.alpha = 0
+        returnAvatarButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+        returnAvatarButton.tintColor = .black
+        returnAvatarButton.addTarget(self, action: #selector(returnAvatarToOrigin), for: .touchUpInside)
+        
+        // Фон для анимации (БЕЗ использования UIScreen.main)
+        avatarBackground.translatesAutoresizingMaskIntoConstraints = false
+        avatarBackground.backgroundColor = .darkGray
+        avatarBackground.isHidden = true
+        avatarBackground.alpha = 0
+        
+        // Добавляем на экран
+        addSubviews(avatarBackground, avatarImageView, returnAvatarButton)
+        
+        NSLayoutConstraint.activate([
+            // Констрейнты для ФОНА (растягиваем на всё окно/вью)
+            avatarBackground.topAnchor.constraint(equalTo: topAnchor),
+            avatarBackground.leadingAnchor.constraint(equalTo: leadingAnchor),
+            avatarBackground.trailingAnchor.constraint(equalTo: trailingAnchor),
+            avatarBackground.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            // Констрейнты для Аватара
+            avatarImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
+            avatarImageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            avatarImageView.widthAnchor.constraint(equalToConstant: 128),
+            avatarImageView.heightAnchor.constraint(equalTo: avatarImageView.widthAnchor),
+            
+            // Констрейнты для Кнопки
+            returnAvatarButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
+            returnAvatarButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16)
+        ])
+    }
+    /*/
+    private func setupAvatarImage() {
+        avatarImageView.translatesAutoresizingMaskIntoConstraints = false
+        avatarImageView.image = UIImage(named: "teo")
+        avatarImageView.layer.cornerRadius = 64
+        avatarImageView.layer.borderWidth = 13
+        avatarImageView.layer.borderColor = UIColor.black.cgColor
+        avatarImageView.clipsToBounds = true
+        
         // add a tap gesture
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapOnAvatar))
         tapGesture.numberOfTapsRequired = 1
@@ -135,7 +183,8 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         
         // translucent background for the modal animation mode
         guard let windowScene = self.window?.windowScene else { return }
-        let screenBounds = windowScene.screen.bounds
+        //let screenBounds = windowScene.screen.bounds
+        let screenBounds = UIScreen.instancesRespond(to: #selector(getter: UIScreen.main)) ? UIScreen.main.bounds : .zero
         avatarBackground = UIView(frame: CGRect(x: 0, y: 0, width: screenBounds.width, height: screenBounds.height))
         avatarBackground.backgroundColor = .darkGray
         avatarBackground.isHidden = true
@@ -153,6 +202,7 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
             returnAvatarButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
         ])
     }
+     */
     
     // MARK: - Event handlers
     
