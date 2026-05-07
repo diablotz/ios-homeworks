@@ -12,6 +12,8 @@ final class ProfileViewController: UIViewController {
     static let photoIdent = "photo"
     static let postIdent = "post"
     
+    private let user: User
+    
     static var postTableView: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
         table.translatesAutoresizingMaskIntoConstraints = false
@@ -21,6 +23,13 @@ final class ProfileViewController: UIViewController {
         return table
     }()
     
+    init(user: User) {
+        self.user = user
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     // MARK: - Setup section
     
     override func viewDidLoad() {
@@ -92,13 +101,22 @@ extension ProfileViewController: UITableViewDelegate {
             return UITableViewCell()
         }
     }
-
+/*
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard section == 0 else { return nil }
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: Self.headerIdent) as! ProfileHeaderView
         return headerView
     }
-
+*/
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+            guard section == 0 else { return nil }
+            let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: Self.headerIdent) as! ProfileHeaderView
+            headerView.fullNameLabel.text = user.fullName
+            headerView.statusLabel.text = user.status
+            headerView.avatarImageView.image = user.avatar
+            return headerView
+        }
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return section == 0 ? 220 : 0
     }
