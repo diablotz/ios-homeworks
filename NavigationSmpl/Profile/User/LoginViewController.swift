@@ -9,6 +9,8 @@ final class LoginViewController: UIViewController {
     
     // MARK: Visual content
     
+    var loginDelegate: LoginViewControllerDelegate?
+    
     var loginScrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -105,7 +107,10 @@ final class LoginViewController: UIViewController {
             #else
             return CurrentUserService(
                 user: User(
-                    login: "John", fullName: "John Smith", avatar: UIImage(named: "johnsmith"), status: "Hello!"
+                    login: "John", 
+                    fullName: "John Smith",
+                    avatar: UIImage(named: "johnsmith"),
+                    status: "Hello!"
                 )
             )
             #endif
@@ -185,13 +190,39 @@ final class LoginViewController: UIViewController {
 
     }
     
-    private func showLoginError() {
-            let alert = UIAlertController(title: "Error", message: "User not found", preferredStyle: .alert)
+    private func showLoginError(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
         }
     // MARK: - Event handlers
-
+    
+    @objc private func touchLoginButton() {
+            guard let login = loginField.text,
+            let password = passwordField.text
+            else { return }
+            let isValid = loginDelegate?.check(login: login, password: password) ?? false
+            if isValid {
+                if let user = userService.getUser(by: login) {
+                    let profileVC = ProfileViewController(user: user)
+                    navigationController?.setViewControllers([profileVC], animated: true)
+                    print(user, " это юзер")
+                }
+                else {
+                    showLoginError(message: "Такого пользователя не существует")
+                }
+            }
+            else {
+                showLoginError(message: "Неправильный логин или пароль")
+            }
+        /*
+            print("LOGIN - ", login)
+            print(" PASSWORD - ", password)
+            print("errror - ", userService.getUser(by: login))
+            print("LoginDelegate", loginDelegate)
+         */
+        }
+/*
     @objc private func touchLoginButton() {
         guard let login = loginField.text else { return }
                 if let user = userService.getUser(by: login) {
@@ -205,7 +236,7 @@ final class LoginViewController: UIViewController {
         //let profileVC = ProfileViewController()
         //navigationController?.setViewControllers([profileVC], animated: true)
     }
-
+*/
     @objc private func keyboardShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             loginScrollView.contentOffset.y = keyboardSize.height - (loginScrollView.frame.height - loginButton.frame.minY)

@@ -23,5 +23,12 @@ final class User {
 }
 
 protocol UserService {
+    var user: User { get }
     func getUser(by login: String) -> User?
+}
+
+extension UserService {
+    func getUser(by login: String) -> User? {
+        return login == user.login ? user : nil
+    }
 }

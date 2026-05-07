@@ -13,7 +13,7 @@ final class ProfileViewController: UIViewController {
     static let postIdent = "post"
     
     private let user: User
-    
+    private let tableView = UITableView(frame: .zero, style: .grouped)
     static var postTableView: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
         table.translatesAutoresizingMaskIntoConstraints = false

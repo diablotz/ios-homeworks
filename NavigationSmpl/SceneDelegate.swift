@@ -16,11 +16,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
         // 2. Создаем контроллеры
-        let loginVC = LoginViewController()
-        let profileNC = UINavigationController(rootViewController: loginVC)
-        profileNC.tabBarItem = UITabBarItem(title: "Profile",
-                                            image: UIImage(systemName: "person.crop.circle"),
-                                            selectedImage: UIImage(systemName: "person.crop.circle.fill"))
+        /*
+        let loginViewController = LoginViewController()
+        //loginViewController.loginDelegate = LoginInspector()
+        let factory = MyLoginFactory()
+        loginViewController.loginDelegate = factory.makeLoginInspector()
+        loginViewController.view.backgroundColor = .white
+        //let loginVC = LoginViewController()
+        //let profileNC = UINavigationController(rootViewController: loginVC)
+        //profileNC.tabBarItem = UITabBarItem(title: "Profile",
+        //                                    image: UIImage(systemName: "person.crop.circle"),
+        //                                    selectedImage: UIImage(systemName: "person.crop.circle.fill"))
         
         let feedVC = FeedViewController()
         let feedNC = UINavigationController(rootViewController: feedVC)
@@ -28,9 +34,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                                          image: UIImage(systemName: "text.bubble"),
                                          selectedImage: UIImage(systemName: "text.bubble.fill"))
 
+        loginViewController.tabBarItem = UITabBarItem(title: "Profile",                                                                                           image: UIImage(systemName: "person.crop.circle"),
+                        selectedImage: UIImage(systemName: "person.crop.circle.fill"))
+        
+        
         let tabBarController = UITabBarController()
         tabBarController.tabBar.backgroundColor = .white
-        tabBarController.viewControllers = [profileNC, feedNC]
+        tabBarController.viewControllers = [loginViewController, feedNC]
         
         // 3. Инициализируем window через windowScene (исправляет Deprecated warning)
         let window = UIWindow(windowScene: windowScene)
@@ -39,5 +49,35 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // 4. Сохраняем ссылку и показываем
         self.window = window
         window.makeKeyAndVisible()
+         */
+        let window = UIWindow(windowScene: windowScene)
+        
+        let feedViewController = FeedViewController()
+        feedViewController.view.backgroundColor = .systemRed
+        
+//        let profileViewController = ProfileViewController()
+//        profileViewController.view.backgroundColor = .white
+        
+        let loginViewController = LoginViewController()
+        //loginViewController.loginDelegate = LoginInspector()
+        let factory = MyLoginFactory()
+        loginViewController.loginDelegate = factory.makeLoginInspector()
+        loginViewController.view.backgroundColor = .white
+        
+        let tabBarController = UITabBarController()
+        
+        feedViewController.tabBarItem = UITabBarItem(title: "Лента", image: UIImage(systemName: "list.bullet"), tag: 0)
+        loginViewController.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage(systemName: "person.crop.circle"), tag: 1)
+        
+        let controllers = [feedViewController, loginViewController]
+        tabBarController.viewControllers = controllers.map {
+            UINavigationController(rootViewController: $0)
+        }
+        tabBarController.selectedIndex = 1
+        
+        window.rootViewController = tabBarController
+        window.makeKeyAndVisible( )
+        
+        self.window = window
     }
 }
