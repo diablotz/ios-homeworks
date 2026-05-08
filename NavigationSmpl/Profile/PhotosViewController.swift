@@ -4,10 +4,16 @@
 //
 
 import UIKit
+import iOSIntPackage
 
 class PhotosViewController: UIViewController {
     
+    
     let photoIdent = "photoCell"
+    
+    let imagePublisherFacade = ImagePublisherFacade()
+    
+    private var photos: [UIImage] = []
 
     // MARK: Visual objects
     
@@ -38,8 +44,13 @@ class PhotosViewController: UIViewController {
         self.photosCollectionView.dataSource = self
         self.photosCollectionView.delegate = self
         setupConstraints()
+        
+        imagePublisherFacade.subscribe(self)
+        imagePublisherFacade.addImagesWithTimer(time: 0.5, repeat: 12)
     }
-    
+    deinit {
+        imagePublisherFacade.removeSubscription(for: self)
+    }
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             photosCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor),
@@ -75,13 +86,31 @@ extension PhotosViewController: UICollectionViewDelegateFlowLayout {
 extension PhotosViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return Photos.shared.examples.count
+        //return Photos.shared.examples.count
+        return photos.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        //let imageView = UIImageView()
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: photoIdent, for: indexPath) as? PhotosCollectionViewCell else { return UICollectionViewCell()}
-        cell.configCellCollection(photo: Photos.shared.examples[indexPath.item])
+        //cell.configCellCollection(photo: Photos.shared.examples[indexPath.item])
+        cell.configCellCollection(photo: photos[indexPath.item])
+        //cell.imageView.image = photos[indexPath.item]
         return cell
+    }
+}
+
+
+extension PhotosViewController: ImageLibrarySubscriber {
+    
+     nonisolated func receive(images: [UIImage]) {
+
+        let loadedImages = images.compactMap { $0 }
+        Task { @MainActor in
+             photos.append(contentsOf: loadedImages)
+             
+             photosCollectionView.reloadData()
+         }
     }
 }
 
