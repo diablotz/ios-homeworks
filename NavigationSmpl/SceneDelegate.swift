@@ -53,7 +53,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         
         let feedViewController = FeedViewController()
-        feedViewController.view.backgroundColor = .systemRed
+        feedViewController.view.backgroundColor = .gray
         
 //        let profileViewController = ProfileViewController()
 //        profileViewController.view.backgroundColor = .white

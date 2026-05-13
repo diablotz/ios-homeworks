@@ -50,6 +50,9 @@ class PhotosViewController: UIViewController {
     }
     deinit {
         imagePublisherFacade.removeSubscription(for: self)
+        
+        // выдает такое предупреждение Main actor-isolated conformance of 'PhotosViewController' to 'ImageLibrarySubscriber' cannot be used in nonisolated context; this is an error in the Swift 6 language mode,
+        // поэтому в ДЗ №5 в extension PhotosViewController: ImageLibrarySubscriber использовал nonisolated func receive - запрашивал у АИ
     }
     private func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -102,7 +105,7 @@ extension PhotosViewController: UICollectionViewDataSource {
 
 
 extension PhotosViewController: ImageLibrarySubscriber {
-    
+    /*
      nonisolated func receive(images: [UIImage]) {
 
         let loadedImages = images.compactMap { $0 }
@@ -111,6 +114,11 @@ extension PhotosViewController: ImageLibrarySubscriber {
              
              photosCollectionView.reloadData()
          }
+    }
+     */
+    func receive(images: [UIImage]) {
+        photos = images
+        photosCollectionView.reloadData()
     }
 }
 

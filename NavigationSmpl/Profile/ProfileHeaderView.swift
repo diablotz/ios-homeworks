@@ -13,12 +13,22 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     var avatarImageView = UIImageView()
     var statusLabel = UILabel()
     var statusTextField = UITextField()
-    var setStatusButton = UIButton()
+    //var setStatusButton = UIButton()
     var returnAvatarButton = UIButton()
     var avatarBackground = UIView()
     
     private var statusText = "Ready to help"
     private var avatarOriginPoint = CGPoint()
+    
+    lazy var setStatusButton = CustomButton(title: "Set status", titleColor: .white,
+        action: {
+        [weak self] in
+        guard let self else {return}
+        self.statusLabel.text = self.statusText
+        },
+        backgroundColor: .systemBlue, cornerRadius: LayoutConstants.cornerRadius
+    )
+                                            
     
     // MARK: - Setup section
     
@@ -89,17 +99,17 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     }
     
     private func setupStatusButton() {
-        setStatusButton.translatesAutoresizingMaskIntoConstraints = false
-        setStatusButton.backgroundColor = .systemBlue
-        setStatusButton.layer.cornerRadius = LayoutConstants.cornerRadius
+        //setStatusButton.translatesAutoresizingMaskIntoConstraints = false
+        //setStatusButton.backgroundColor = .systemBlue
+        //setStatusButton.layer.cornerRadius = LayoutConstants.cornerRadius
         setStatusButton.layer.shadowOffset = CGSize(width: 4, height: 4)
         setStatusButton.layer.shadowColor = UIColor.black.cgColor
         setStatusButton.layer.shadowRadius = 4
         setStatusButton.layer.shadowOpacity = 0.7
         setStatusButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        setStatusButton.setTitle("Show status", for: .normal)
-        setStatusButton.setTitleColor(.white, for: .normal)
-        setStatusButton.addTarget(self, action: #selector(statusButtonPressed), for: .touchUpInside)
+        //setStatusButton.setTitle("Show status", for: .normal)
+        //setStatusButton.setTitleColor(.white, for: .normal)
+        //setStatusButton.addTarget(self, action: #selector(statusButtonPressed), for: .touchUpInside)
         addSubview(setStatusButton)
         NSLayoutConstraint.activate([
             setStatusButton.topAnchor.constraint(equalTo: statusTextField.bottomAnchor, constant: 16),
@@ -209,10 +219,11 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     @objc private func statusTextChanged(_ textField: UITextField) {
         statusText = textField.text ?? ""
     }
-    
+    /*
     @objc private func statusButtonPressed() {
         statusLabel.text = statusText
     }
+     */
     
     @objc private func didTapOnAvatar() {
         // create an animation
