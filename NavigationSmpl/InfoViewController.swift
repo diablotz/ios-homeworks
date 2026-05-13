@@ -16,12 +16,13 @@ final class InfoViewController: UIViewController {
     }
     
     private func createAlertButton() {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Alert", for: .normal)
-        button.backgroundColor = .systemPink
-        button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = LayoutConstants.cornerRadius
+        //let button = UIButton()
+        let button = CustomButton(title: "Alert", titleColor: .black, backgroundColor: .systemBlue, cornerRadius: LayoutConstants.cornerRadius)
+        //button.translatesAutoresizingMaskIntoConstraints = false
+        //button.setTitle("Alert", for: .normal)
+        //button.backgroundColor = .systemPink
+        //button.setTitleColor(.white, for: .normal)
+        //button.layer.cornerRadius = LayoutConstants.cornerRadius
         button.addTarget(self, action: #selector(tapAlertButton), for: .touchUpInside)
                 
         view.addSubview(button)
