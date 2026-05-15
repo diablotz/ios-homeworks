@@ -48,12 +48,12 @@ class PhotosViewController: UIViewController {
         imagePublisherFacade.subscribe(self)
         imagePublisherFacade.addImagesWithTimer(time: 0.5, repeat: 12)
     }
-    deinit {
-        imagePublisherFacade.removeSubscription(for: self)
-        
-        // выдает такое предупреждение Main actor-isolated conformance of 'PhotosViewController' to 'ImageLibrarySubscriber' cannot be used in nonisolated context; this is an error in the Swift 6 language mode,
-        // поэтому в ДЗ №5 в extension PhotosViewController: ImageLibrarySubscriber использовал nonisolated func receive - запрашивал у АИ
-    }
+//    deinit {
+//        imagePublisherFacade.removeSubscription(for: self)
+//        
+//        // выдает такое предупреждение Main actor-isolated conformance of 'PhotosViewController' to 'ImageLibrarySubscriber' cannot be used in nonisolated context; this is an error in the Swift 6 language mode,
+//        // поэтому в ДЗ №5 в extension PhotosViewController: ImageLibrarySubscriber использовал nonisolated func receive - запрашивал у АИ
+//    }
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             photosCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor),
@@ -71,6 +71,11 @@ class PhotosViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.navigationBar.isHidden = true
+        
+        imagePublisherFacade.removeSubscription(for: self)
+//       избавился от предупреждения Main actor-isolated conformance of 'PhotosViewController' to 'ImageLibrarySubscriber' cannot be used in nonisolated context; this is an error in the Swift 6 language mode
+//
+//        
     }
 }
 

@@ -39,7 +39,7 @@ class CustomButton: UIButton {
     }
     
     @objc private func buttonTapped() {
-        print("Кнопка нажата")
+        print("Кнопка нажата ", titleLabel?.text ?? "")
         action?()
     }
 }

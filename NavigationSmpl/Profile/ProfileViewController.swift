@@ -12,7 +12,10 @@ final class ProfileViewController: UIViewController {
     static let photoIdent = "photo"
     static let postIdent = "post"
     
-    private let user: User
+    //private let user: User
+    
+    private let viewModel: ProfileViewModel
+    
     private let tableView = UITableView(frame: .zero, style: .grouped)
     static var postTableView: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
@@ -23,10 +26,16 @@ final class ProfileViewController: UIViewController {
         return table
     }()
     
-    init(user: User) {
-        self.user = user
+//    init(user: User) {
+//        self.user = user
+//        super.init(nibName: nil, bundle: nil)
+//    }
+    init(viewModel: ProfileViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
+    
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -73,7 +82,8 @@ extension ProfileViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0: return 1
-        case 1: return postExamples.count
+        //case 1: return postExamples.count
+        case 1: return viewModel.postsCount
         default:
             assertionFailure("no registered section")
             return 1
@@ -94,7 +104,8 @@ extension ProfileViewController: UITableViewDelegate {
             return cell
         case 1:
             let cell = Self.postTableView.dequeueReusableCell(withIdentifier: Self.postIdent, for: indexPath) as! PostTableViewCell
-            cell.configPostArray(post: postExamples[indexPath.row])
+            //cell.configPostArray(post: postExamples[indexPath.row])
+            cell.configPostArray(post: viewModel.post(at: indexPath.row))
             return cell
         default:
             assertionFailure("no registered section")
@@ -111,9 +122,9 @@ extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
             guard section == 0 else { return nil }
             let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: Self.headerIdent) as! ProfileHeaderView
-            headerView.fullNameLabel.text = user.fullName
-            headerView.statusLabel.text = user.status
-            headerView.avatarImageView.image = user.avatar
+            headerView.fullNameLabel.text = viewModel.fullName
+            headerView.statusLabel.text = viewModel.status
+            headerView.avatarImageView.image = viewModel.avatar
             return headerView
         }
     

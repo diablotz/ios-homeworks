@@ -204,7 +204,10 @@ final class LoginViewController: UIViewController {
             let isValid = loginDelegate?.check(login: login, password: password) ?? false
             if isValid {
                 if let user = userService.getUser(by: login) {
-                    let profileVC = ProfileViewController(user: user)
+                    //let profileVC = ProfileViewController(user: user)
+                    let viewModel = ProfileViewModel(user: user)
+                    let profileVC = ProfileViewController(viewModel: viewModel)
+                    
                     navigationController?.setViewControllers([profileVC], animated: true)
                     print(user, " это юзер")
                 }

@@ -14,6 +14,8 @@ final class FeedViewController: UIViewController {
         passwordText.backgroundColor = .white
         passwordText.translatesAutoresizingMaskIntoConstraints = false
         passwordText.placeholder = "Введите пароль"
+        passwordText.autocapitalizationType = .none
+        passwordText.autocorrectionType = .no
         //NSLayoutConstraint.activate([
          //   passwordText.topAnchor.constraint(equalTo: <#T##NSLayoutAnchor<NSLayoutYAxisAnchor>#>, constant: <#T##CGFloat#>)
         //])
@@ -36,7 +38,8 @@ final class FeedViewController: UIViewController {
     }()
     
     
-    var feedModel = FeedModel()
+    //var feedModel = FeedModel()
+    var viewModel = FeedViewModel(model: FeedModel())
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,9 +59,10 @@ final class FeedViewController: UIViewController {
             checkPasswordStatusLabel.textColor = .systemRed
             return
         }
-        let isCorrect = feedModel.check(word: passw)
-        checkPasswordStatusLabel.text = isCorrect ? "Пароль введен правильно!" : "Пароль неверный!"
-        checkPasswordStatusLabel.textColor = isCorrect ? .green : .red
+        //let isCorrect = feedModel.check(word: passw)
+        let result = viewModel.check(passw: passwordTextField.text)
+        checkPasswordStatusLabel.text = result.text
+        checkPasswordStatusLabel.textColor = result.color
     }
     
     private func setupConstraints() {
@@ -114,7 +118,9 @@ final class FeedViewController: UIViewController {
             [weak self] in
             guard let self else {return}
             //self.statusLabel.text = self.statusText
-            let post = postExamples[0]
+            //let post = postExamples[0]
+            
+            let post = viewModel.post(at: 0)
             
             let postVC = PostViewController()
             postVC.post = post
