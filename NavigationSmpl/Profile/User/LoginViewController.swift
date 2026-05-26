@@ -7,6 +7,8 @@ import UIKit
 
 final class LoginViewController: UIViewController {
     
+    weak var coordinator: ProfileCoordinator?
+    
     // MARK: Visual content
     
     var loginDelegate: LoginViewControllerDelegate?
@@ -206,9 +208,15 @@ final class LoginViewController: UIViewController {
                 if let user = userService.getUser(by: login) {
                     //let profileVC = ProfileViewController(user: user)
                     let viewModel = ProfileViewModel(user: user)
+                    
                     let profileVC = ProfileViewController(viewModel: viewModel)
                     
-                    navigationController?.setViewControllers([profileVC], animated: true)
+                    
+                    
+                    //navigationController?.setViewControllers([profileVC], animated: true)
+                    
+                    coordinator?.openPhotos()
+                    
                     print(user, " это юзер")
                 }
                 else {

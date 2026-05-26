@@ -8,6 +8,8 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     
+    weak var coordinator: ProfileCoordinator?
+    
     static let headerIdent = "header"
     static let photoIdent = "photo"
     static let postIdent = "post"

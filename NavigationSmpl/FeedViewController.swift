@@ -7,6 +7,9 @@ import UIKit
 //import StorageService
 
 final class FeedViewController: UIViewController {
+    
+    weak var coordinator: FeedCoordinator?
+    
     //let safeArea = self.view.safeAreaLayoutGuide
     private lazy var passwordTextField: UITextField = {
         let passwordText = UITextField()
@@ -124,7 +127,10 @@ final class FeedViewController: UIViewController {
             
             let postVC = PostViewController()
             postVC.post = post
-            navigationController?.pushViewController(postVC, animated: true)
+            //navigationController?.pushViewController(postVC, animated: true)
+            
+            coordinator?.openPost(post)
+            
         }, backgroundColor: color, cornerRadius: LayoutConstants.cornerRadius)
         view.addArrangedSubview(button)
     }
