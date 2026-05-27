@@ -19,6 +19,8 @@ final class ProfileCoordinator: Coordinator {
     
     func start() {
         let loginVC = LoginViewController()
+        let factory = MyLoginFactory()
+        loginVC.loginDelegate = factory.makeLoginInspector()
         loginVC.coordinator = self
         
         loginVC.tabBarItem = UITabBarItem(
@@ -35,8 +37,14 @@ final class ProfileCoordinator: Coordinator {
         let viewModel = ProfileViewModel(user: user)
         let profileVC = ProfileViewController(viewModel: viewModel)
         profileVC.coordinator = self
-        
+         /*
+        let loginVC = LoginViewController()
+        //let factory = MyLoginFactory()
+        //loginVC.loginDelegate = factory.makeLoginInspector()
+        loginVC.coordinator = self
+        */
         navigationController.pushViewController(profileVC, animated: true)
+        //navigationController.pushViewController(loginVC, animated: true)
     }
     
     func openPhotos() {

@@ -45,7 +45,7 @@ final class LoginViewController: UIViewController {
         return stack
     }()
     
-    var loginButton: UIButton = {
+    lazy var loginButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         
@@ -58,7 +58,7 @@ final class LoginViewController: UIViewController {
 
         button.setTitle("Login", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.addTarget(nil, action: #selector(touchLoginButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(touchLoginButton), for: .touchUpInside)
         button.layer.cornerRadius = LayoutConstants.cornerRadius
         button.clipsToBounds = true
         return button
@@ -204,18 +204,19 @@ final class LoginViewController: UIViewController {
             let password = passwordField.text
             else { return }
             let isValid = loginDelegate?.check(login: login, password: password) ?? false
+            print ("loginDelegate: ", loginDelegate)
             if isValid {
                 if let user = userService.getUser(by: login) {
                     //let profileVC = ProfileViewController(user: user)
-                    let viewModel = ProfileViewModel(user: user)
+                    //let viewModel = ProfileViewModel(user: user)
                     
-                    let profileVC = ProfileViewController(viewModel: viewModel)
+                    //let profileVC = ProfileViewController(viewModel: viewModel)
                     
                     
                     
                     //navigationController?.setViewControllers([profileVC], animated: true)
                     
-                    coordinator?.openPhotos()
+                    coordinator?.openProfile(user: user)
                     
                     print(user, " это юзер")
                 }
@@ -225,6 +226,7 @@ final class LoginViewController: UIViewController {
             }
             else {
                 showLoginError(message: "Неправильный логин или пароль")
+                print("login - ", login, "password - ", password)
             }
         /*
             print("LOGIN - ", login)
