@@ -3,17 +3,26 @@
 //  Navigation
 //
 
+//
+//  PhotosViewController.swift
+//  Navigation
+//
+
 import UIKit
 import iOSIntPackage
 
 class PhotosViewController: UIViewController {
     
+    // Класс обработки изображений из iOSIntPackage
+    private let imageProcessor = ImageProcessor()
     
     let photoIdent = "photoCell"
     
-    let imagePublisherFacade = ImagePublisherFacade()
+    //let imagePublisherFacade = ImagePublisherFacade()
     
     private var photos: [UIImage] = []
+    
+    
 
     // MARK: Visual objects
     
@@ -44,9 +53,11 @@ class PhotosViewController: UIViewController {
         self.photosCollectionView.dataSource = self
         self.photosCollectionView.delegate = self
         setupConstraints()
+        loadImages()
+        processImages()
         
-        imagePublisherFacade.subscribe(self)
-        imagePublisherFacade.addImagesWithTimer(time: 0.5, repeat: 12)
+        //imagePublisherFacade.subscribe(self)
+        //imagePublisherFacade.addImagesWithTimer(time: 0.5, repeat: 12)
     }
 //    deinit {
 //        imagePublisherFacade.removeSubscription(for: self)
@@ -54,6 +65,74 @@ class PhotosViewController: UIViewController {
 //        // выдает такое предупреждение Main actor-isolated conformance of 'PhotosViewController' to 'ImageLibrarySubscriber' cannot be used in nonisolated context; this is an error in the Swift 6 language mode,
 //        // поэтому в ДЗ №5 в extension PhotosViewController: ImageLibrarySubscriber использовал nonisolated func receive - запрашивал у АИ
 //    }
+    
+    // MARK: - Load Images
+
+    private func loadImages() {
+
+        // Загружаем изображения из assets
+        for index in 1...20 {
+
+            // Проверяем наличие изображения
+            if let image = UIImage(named: "\(index)") {
+
+                // Добавляем изображение в массив
+                photos.append(image)
+            }
+        }
+    }
+    
+    
+    // MARK: - Image Processing
+
+    private func processImages() {
+
+        // Засекаем время начала обработки
+        let startTime = CFAbsoluteTimeGetCurrent()
+        let q0s: QualityOfService = .userInitiated
+        // Обработка изображений в отдельном потоке
+        imageProcessor.processImagesOnThread(
+
+            // Исходные изображения
+            sourceImages: photos,
+
+            // Фильтр обработки
+            filter: .chrome,
+
+            // Приоритет потока
+            qos: q0s
+
+        ) { [weak self] processedImages in
+
+            // Защита от retain cycle
+            guard let self else { return }
+
+            // Время завершения обработки
+            let time = CFAbsoluteTimeGetCurrent() - startTime
+
+            print("Затраченное время: \(time) секунд - .\(q0s.description)")
+            //________ Различное время выполнения при установленном filter: .chrome в зависимости от QoS ______
+            //Затраченное время: 1.0515469312667847 секунд - .userInitiated
+            //Затраченное время: 3.517359972000122 секунд - .background
+            //Затраченное время: 0.9997611045837402 секунд - .default
+            //Затраченное время: 0.9046719074249268 секунд - .userInteractive
+            //Затраченное время: 0.9200000762939453 секунд - .utility
+
+            // Обновляем UI в главном потоке
+            DispatchQueue.main.async {
+
+                // Сохраняем обработанные изображения
+                self.photos = processedImages.compactMap {
+                image in
+                    guard let image else { return nil }
+                    return UIImage(cgImage: image)
+                }
+
+                // Обновляем collectionView
+                self.photosCollectionView.reloadData()
+            }
+        }
+    }
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             photosCollectionView.topAnchor.constraint(equalTo: self.view.topAnchor),
@@ -72,7 +151,7 @@ class PhotosViewController: UIViewController {
         super.viewWillDisappear(animated)
         navigationController?.navigationBar.isHidden = true
         
-        imagePublisherFacade.removeSubscription(for: self)
+        //imagePublisherFacade.removeSubscription(for: self)
 //       избавился от предупреждения Main actor-isolated conformance of 'PhotosViewController' to 'ImageLibrarySubscriber' cannot be used in nonisolated context; this is an error in the Swift 6 language mode
 //
 //        
@@ -124,6 +203,27 @@ extension PhotosViewController: ImageLibrarySubscriber {
     func receive(images: [UIImage]) {
         photos = images
         photosCollectionView.reloadData()
+    }
+}
+
+
+extension QualityOfService {
+
+    var description: String {
+        switch self {
+        case .background:
+            return "background"
+        case .utility:
+            return "utility"
+        case .default:
+            return "default"
+        case .userInitiated:
+            return "userInitiated"
+        case .userInteractive:
+            return "userInteractive"
+        default:
+            return "unspecified"
+        }
     }
 }
 
