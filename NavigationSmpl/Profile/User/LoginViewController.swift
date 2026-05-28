@@ -204,7 +204,7 @@ final class LoginViewController: UIViewController {
             let password = passwordField.text
             else { return }
             let isValid = loginDelegate?.check(login: login, password: password) ?? false
-            print ("loginDelegate: ", loginDelegate)
+            //print ("loginDelegate: ", loginDelegate)
             if isValid {
                 if let user = userService.getUser(by: login) {
                     //let profileVC = ProfileViewController(user: user)
