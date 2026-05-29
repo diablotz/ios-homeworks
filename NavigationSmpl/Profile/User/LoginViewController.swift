@@ -9,6 +9,8 @@ final class LoginViewController: UIViewController {
     
     weak var coordinator: ProfileCoordinator?
     
+    let bruteForceService = BruteForce()
+    
     // MARK: Visual content
     
     var loginDelegate: LoginViewControllerDelegate?
@@ -103,6 +105,28 @@ final class LoginViewController: UIViewController {
             
         )
      */
+    
+    
+    lazy var bruteForceButton = CustomButton(
+        title: "Подобрать пароль",
+        titleColor: .white,
+        action: {
+            [weak self] in
+            self?.startBruteForce()
+        },
+        backgroundColor: .red,
+        cornerRadius: LayoutConstants.cornerRadius
+    )
+    
+    private let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .systemBlue
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
     private let userService: UserService = {
             #if DEBUG
             return TestUserService()
@@ -133,7 +157,7 @@ final class LoginViewController: UIViewController {
         view.addSubview(loginScrollView)
         loginScrollView.addSubview(contentView)
         
-        contentView.addSubviews(vkLogo, loginStackView, loginButton)
+        contentView.addSubviews(vkLogo, loginStackView, loginButton, bruteForceButton, activityIndicator)
         
         loginStackView.addArrangedSubview(loginField)
         loginStackView.addArrangedSubview(passwordField)
@@ -173,6 +197,16 @@ final class LoginViewController: UIViewController {
             loginButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: LayoutConstants.leadingMargin),
             loginButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: LayoutConstants.trailingMargin),
             loginButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            bruteForceButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: LayoutConstants.indent),
+            bruteForceButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: LayoutConstants.leadingMargin),
+            bruteForceButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: LayoutConstants.trailingMargin),
+            bruteForceButton.heightAnchor.constraint(equalToConstant: 50),
+            
+            activityIndicator.topAnchor.constraint(equalTo: bruteForceButton.bottomAnchor, constant: LayoutConstants.indent),
+            activityIndicator.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: LayoutConstants.leadingMargin),
+            activityIndicator.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: LayoutConstants.trailingMargin),
+            activityIndicator.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
     
@@ -260,6 +294,38 @@ final class LoginViewController: UIViewController {
     @objc private func keyboardHide(notification: NSNotification) {
         loginScrollView.contentOffset = CGPoint(x: 0, y: 0)
     }
+    
+    
+    private func startBruteForce() {
+        
+        let generatePassword = bruteForceService.generatePassword(length: 5)
+        
+        activityIndicator.startAnimating()
+        
+        passwordField.isSecureTextEntry = true
+        
+        
+        // старт подбюора не в Main thread
+        DispatchQueue.global(qos: .userInitiated).async {
+            [weak self] in
+            guard let self else { return }
+            
+            let password = bruteForceService.bruteForce(password: generatePassword)
+            
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+                self.passwordField.isEnabled = true
+                self.passwordField.isSecureTextEntry = false
+                self.passwordField.text = password
+            }
+        }
+        
+        
+        
+        
+    }
+    
+    
 }
 
 // MARK: - Extension
