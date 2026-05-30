@@ -299,7 +299,7 @@ final class LoginViewController: UIViewController {
     private func startBruteForce() {
         
         let generatePassword = bruteForceService.generatePassword(length: 5)
-        
+        let startTime = CFAbsoluteTimeGetCurrent()
         activityIndicator.startAnimating()
         
         passwordField.isSecureTextEntry = true
@@ -311,7 +311,8 @@ final class LoginViewController: UIViewController {
             guard let self else { return }
             
             let password = bruteForceService.bruteForce(password: generatePassword)
-            
+            let time = CFAbsoluteTimeGetCurrent() - startTime
+            print("Потрачено времени: \(time) секунд")
             DispatchQueue.main.async {
                 self.activityIndicator.stopAnimating()
                 self.passwordField.isEnabled = true
