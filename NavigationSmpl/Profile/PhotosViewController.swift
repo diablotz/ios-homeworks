@@ -18,6 +18,9 @@ class PhotosViewController: UIViewController {
     
     let photoIdent = "photoCell"
     
+    // таймер для смены картинок
+    private var photoTimer: Timer?
+    
     //let imagePublisherFacade = ImagePublisherFacade()
     
     private var photos: [UIImage] = []
@@ -55,6 +58,8 @@ class PhotosViewController: UIViewController {
         setupConstraints()
         loadImages()
         processImages()
+        
+        startPhotoTimer()
         
         //imagePublisherFacade.subscribe(self)
         //imagePublisherFacade.addImagesWithTimer(time: 0.5, repeat: 12)
@@ -151,10 +156,53 @@ class PhotosViewController: UIViewController {
         super.viewWillDisappear(animated)
         navigationController?.navigationBar.isHidden = true
         
+        photoTimer?.invalidate()
+        photoTimer = nil
+        
         //imagePublisherFacade.removeSubscription(for: self)
 //       избавился от предупреждения Main actor-isolated conformance of 'PhotosViewController' to 'ImageLibrarySubscriber' cannot be used in nonisolated context; this is an error in the Swift 6 language mode
 //
 //        
+    }
+    // timer для смены картинок
+    private func startPhotoTimer() {
+        /*var counter = 10
+        let interval = 1.0
+        photoTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) {
+            [weak self] timer in counter -= 1
+            let upToFinish = Double(counter) * interval
+            print ("Осталось \(counter) секунд, осталось \(upToFinish) секунд"   )
+                
+            if counter == 0 {
+                //timer.invalidate()
+                self?.changePhoto()
+            }
+            
+        }
+         */
+        photoTimer = Timer.scheduledTimer(
+            timeInterval: 10,
+            target: self,
+            selector: #selector(changePhoto),
+            userInfo: nil,
+            repeats: true
+        )
+    }
+    
+    // смена фоток
+    @objc private func changePhoto() {
+        // очищаем коллекцию фоток
+        photos.removeAll()
+        
+        DispatchQueue.main.async {
+
+            // Сохраняем обработанные изображения
+            self.photos = Photos.shared.examples.shuffled()
+
+            // Обновляем collectionView
+            self.photosCollectionView.reloadData()
+        }
+        
     }
 }
 
