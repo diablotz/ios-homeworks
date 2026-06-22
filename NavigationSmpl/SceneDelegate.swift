@@ -23,6 +23,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let window = UIWindow(windowScene: windowScene)
+        
+        let appConfiguration: AppConfiguration
+        switch Int.random(in: 1...3) {
+        case 1:
+            appConfiguration = .people(
+                URL(string: "https://jsonplaceholder.typicode.com/posts/1")!)
+            
+        case 2:
+            appConfiguration = .starships(
+                URL(string: "https://jsonplaceholder.typicode.com/posts/2")!)
+            
+        default:
+            appConfiguration = .planets(
+                URL(string: "https://jsonplaceholder.typicode.com/posts/3")!)
+        }
+        
+        NetworkService.request(for: appConfiguration)
+    
         coordinator = AppCoordinator(window: window)
         coordinator?.start()
         
