@@ -11,13 +11,52 @@ final class InfoViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .systemGray6
-        
+        view.addSubview(titleLabel)
+        view.addSubview(orbitalPeriodLabel)
+        NSLayoutConstraint.activate([
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
+            //titleLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor - 50),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            
+            orbitalPeriodLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            orbitalPeriodLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
+            orbitalPeriodLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            orbitalPeriodLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+        ])
+        loadTodo()
+        loadPlanet()
         createAlertButton()
     }
+ 
+    // ДЗ №2.1 - работа с данными
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 20, weight: .bold)
+        //label.text = "Hello, World!"
+        label.textColor = .red
+        return label
+    } ()
+    
+    // ДЗ №2.2 - работа с данными
+    private let orbitalPeriodLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 20, weight: .bold)
+        //label.text = "Hello, World!"
+        label.textColor = .blue
+        return label
+    } ()
     
     private func createAlertButton() {
         //let button = UIButton()
-        let button = CustomButton(title: "Alert", titleColor: .black, backgroundColor: .systemBlue, cornerRadius: LayoutConstants.cornerRadius)
+        let button = CustomButton(title: "Alert!", titleColor: .white, backgroundColor: .systemBlue, cornerRadius: LayoutConstants.cornerRadius)
         //button.translatesAutoresizingMaskIntoConstraints = false
         //button.setTitle("Alert", for: .normal)
         //button.backgroundColor = .systemPink
@@ -33,6 +72,72 @@ final class InfoViewController: UIViewController {
             button.heightAnchor.constraint(equalToConstant: 50),
             button.widthAnchor.constraint(equalToConstant: 100)
         ])
+    }
+    
+
+    private func loadTodo() {
+        guard let url = URL(string: "https://jsonplaceholder.typicode.com/todos/2") else {
+            return }
+        
+        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+            
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            guard let data = data else { return }
+            
+            do {
+                let json = try JSONSerialization.jsonObject(with: data)
+                
+                if let dictionary = json as? [String: Any],
+                   let title = dictionary["title"] as? String {
+                    
+                    DispatchQueue.main.async {
+                        self?.titleLabel.text = title
+                    }
+                }
+                
+            } catch {
+                print("Ошибка JSON:", error)
+            }
+            
+        }.resume()
+        
+    }
+    
+    private func loadPlanet() {
+        guard let url = URL(string: "https://swapi.dev/api/planets/1") else {
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+            
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            guard let data = data else { return }
+            
+            do {
+                let planet = try JSONDecoder().decode(Planet.self, from: data)
+                print(planet)
+                
+                
+                    
+                    DispatchQueue.main.async {
+                        self?.orbitalPeriodLabel.text = "Период вращения планеты \(planet.name): \(planet.orbitalPeriod)"
+                    }
+                
+                
+            } catch {
+                print("Ошибка декодироввания JSON:", error)
+            }
+            
+        }.resume()
+        
     }
     
     @objc func tapAlertButton() {
