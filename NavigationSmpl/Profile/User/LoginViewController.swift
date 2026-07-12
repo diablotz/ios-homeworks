@@ -4,6 +4,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 final class LoginViewController: UIViewController {
     
@@ -79,6 +80,7 @@ final class LoginViewController: UIViewController {
         login.font = UIFont.systemFont(ofSize: 16)
         login.autocapitalizationType = .none
         login.returnKeyType = .done
+        
         return login
     }()
     
@@ -95,6 +97,7 @@ final class LoginViewController: UIViewController {
         password.font = UIFont.systemFont(ofSize: 16)
         password.autocapitalizationType = .none
         password.returnKeyType = .done
+        
         return password
     }()
     /*
@@ -126,21 +129,24 @@ final class LoginViewController: UIViewController {
         indicator.hidesWhenStopped = true
         return indicator
     }()
-    
+    /*
     private let userService: UserService = {
             #if DEBUG
             return TestUserService()
             #else
             return CurrentUserService(
                 user: User(
-                    login: "John", 
-                    fullName: "John Smith",
+                    login: fireBaseUser.email ?? "",
+                    fullName: fireBaseUser.email ?? "",
                     avatar: UIImage(named: "johnsmith"),
-                    status: "Hello!"
+                    status: "Online"
                 )
             )
+            
             #endif
         }()
+     */
+    
     
     // MARK: - Setup section
     
@@ -151,6 +157,8 @@ final class LoginViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         
         setupViews()
+        loginField.addTarget(self, action: #selector(textChanged), for: .editingChanged)
+        passwordField.addTarget(self, action: #selector(textChanged), for: .editingChanged)
     }
     
     private func setupViews() {
@@ -232,7 +240,7 @@ final class LoginViewController: UIViewController {
             present(alert, animated: true, completion: nil)
         }
     // MARK: - Event handlers
-    
+    /*
     @objc private func touchLoginButton() {
             guard let login = loginField.text,
             let password = passwordField.text
@@ -269,6 +277,79 @@ final class LoginViewController: UIViewController {
             print("LoginDelegate", loginDelegate)
          */
         }
+     */
+    
+    private func openUserProfile() {
+        guard let fireBaseUser = Auth.auth().currentUser else { return }
+        
+        let user = User(
+            login: fireBaseUser.email ?? "",
+            fullName: fireBaseUser.email ?? "",
+            avatar: UIImage(named: "johnsmith"),
+            status: "Online"
+        )
+
+       
+            coordinator?.openProfile(user: user)
+        
+    }
+    
+    @objc private func touchLoginButton() {
+
+        guard
+            let email = loginField.text,
+            let password = passwordField.text
+        else { return }
+
+        guard !email.isEmpty, !password.isEmpty else {
+            showLoginError(message: "Заполните все поля")
+            return
+        }
+
+        loginDelegate?.checkCredentials(email: email, password: password) { [weak self] result in
+
+            DispatchQueue.main.async {
+
+                switch result {
+
+                case .success:
+                    guard let self else { return }
+                    self.openUserProfile()
+                   
+
+                case .failure:
+
+                    self?.loginDelegate?.signUp(email: email, password: password) { result in
+
+                        DispatchQueue.main.async {
+
+                            switch result {
+
+                            case .success:
+                                guard let self else { return }
+                                self.openUserProfile()
+                                
+
+                            case .failure(let error):
+
+                                let nsError = error as NSError
+
+                                if nsError.code == AuthErrorCode.emailAlreadyInUse.rawValue {
+
+                                    self?.showLoginError(message: "Неверный пароль")
+
+                                } else {
+
+                                    self?.showLoginError(message: error.localizedDescription)
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 /*
     @objc private func touchLoginButton() {
         guard let login = loginField.text else { return }
@@ -324,6 +405,41 @@ final class LoginViewController: UIViewController {
         
         
         
+    }
+    
+    private func register(
+        email: String,
+        password: String
+    ) {
+        loginDelegate?.signUp(
+            email: email,
+            password: password)
+        {
+            [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self?.openUserProfile()
+                
+                case .failure(let error):
+                    print(error)
+                    print((error as NSError).code)
+                    print((error as NSError).userInfo)
+                    self?.showLoginError(message: error.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    private func updateLoginButton() {
+        let enabled =
+        !(loginField.text ?? "").isEmpty && !(passwordField.text ?? "").isEmpty
+        
+        loginButton.isEnabled = enabled
+    }
+    
+    @objc private func textChanged() {
+        updateLoginButton()
     }
     
     

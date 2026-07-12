@@ -5,6 +5,7 @@
 //  Created by Timur Zakirov on 06/05/26.
 //
 import UIKit
+/*
 final class CurrentUserService: UserService {
    
     let user: User
@@ -14,7 +15,7 @@ final class CurrentUserService: UserService {
     
     
 }
-/*
+
  class CurrentUserService: UserService {
  private let user: User
  
