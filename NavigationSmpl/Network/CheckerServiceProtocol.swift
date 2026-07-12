@@ -1,14 +1,13 @@
 //
-//  LoginViewControllerDelegate.swift
+//  CheckerServiceProtocol.swift
 //  NavigationSmpl
 //
-//  Created by Timur Zakirov on 07/05/26.
+//  Created by Timur Zakirov on 10/07/26.
 //
 
-import UIKit
+import Foundation
 
-protocol LoginViewControllerDelegate: AnyObject {
-    //func check(login: String, password: String) -> Bool
+protocol CheckerServiceProtocol {
     
     func checkCredentials(
         email: String,
@@ -21,5 +20,4 @@ protocol LoginViewControllerDelegate: AnyObject {
         password: String,
         completion: @escaping (Result<Void, Error>) -> Void
     )
-    
 }
