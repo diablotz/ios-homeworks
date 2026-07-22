@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C383E48F300B7DF800E7FFB5 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = C383E48E300B7DF800E7FFB5 /* KeychainAccess */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		C383E3FB30064C8600E7FFB5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -55,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C383E48F300B7DF800E7FFB5 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,6 +118,7 @@
 			);
 			name = Documents;
 			packageProductDependencies = (
+				C383E48E300B7DF800E7FFB5 /* KeychainAccess */,
 			);
 			productName = Documents;
 			productReference = C383E3E430064C8500E7FFB5 /* Documents.app */;
@@ -190,6 +196,9 @@
 			);
 			mainGroup = C383E3DB30064C8500E7FFB5;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C383E48D300B7DF800E7FFB5 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C383E3E530064C8500E7FFB5 /* Products */;
 			projectDirPath = "";
@@ -563,6 +572,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C383E48D300B7DF800E7FFB5 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C383E48E300B7DF800E7FFB5 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C383E48D300B7DF800E7FFB5 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C383E3DC30064C8500E7FFB5 /* Project object */;
 }
