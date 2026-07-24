@@ -7,6 +7,38 @@
 
 import UIKit
 
+
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    var window: UIWindow?
+    
+    var coordinator: PagesCoordinator?
+    
+    func scene(
+        
+        _ scene: UIScene,
+        willConnectTo session: UISceneSession,
+        options connectionOptions: UIScene.ConnectionOptions
+        
+    ) {
+        
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        
+        let window = UIWindow(windowScene: windowScene)
+        
+        
+    
+        coordinator = PagesCoordinator(window: window)
+        coordinator?.start()
+        
+        self.window = window
+    }
+    
+    
+    
+}
+/*
+import UIKit
+
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
@@ -49,4 +81,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
 }
-
+*/
