@@ -20,6 +20,10 @@ final class AppCoordinator {
         navigationController: UINavigationController()
     )
     
+    private let favoriteCoordinator = FavoriteCoordinator(
+        navigationController: UINavigationController()
+    )
+    
     init(window: UIWindow?) {
         self.window = window
     }
@@ -27,10 +31,12 @@ final class AppCoordinator {
     func start() {
         feedCoordinator.start()
         profileCoordinator.start()
+        favoriteCoordinator.start()
         
         tabBarController.viewControllers = [
             feedCoordinator.navigationController,
             profileCoordinator.navigationController,
+            favoriteCoordinator.navigationController,
         ]
         
         window?.rootViewController = tabBarController
