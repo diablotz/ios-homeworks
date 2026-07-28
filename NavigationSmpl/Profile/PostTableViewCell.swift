@@ -9,6 +9,8 @@ import StorageService
 class PostTableViewCell: UITableViewCell {
     
     private var viewCounter = 0
+    
+    var onDoubleTap: (() -> Void)?
 
     // MARK: Visual objects
     
@@ -62,6 +64,12 @@ class PostTableViewCell: UITableViewCell {
         contentView.addSubviews(postAuthor, postImage, postDescription, postLikes, postViews)
         setupConstraints()
         self.selectionStyle = .default
+        
+        let recognizer = UITapGestureRecognizer(
+            target: self, action: #selector(doubleTap)
+        )
+        recognizer.numberOfTapsRequired = 2
+        contentView.addGestureRecognizer(recognizer)
     }
 
     required init?(coder: NSCoder) {
@@ -107,5 +115,10 @@ class PostTableViewCell: UITableViewCell {
         viewCounter += 1
         postViews.text = "Views: \(viewCounter)"
     }
+    // добавление в избранное ДЗ№7
+    @objc private func doubleTap() {
+        onDoubleTap?()
+    }
+
 }
 

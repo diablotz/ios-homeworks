@@ -75,6 +75,12 @@ final class ProfileViewController: UIViewController {
         Self.postTableView.reloadData()
         Self.postTableView.refreshControl?.endRefreshing()
     }
+    
+    /*
+    @objc private func doubleTap() {
+        onDoubleTap?()
+    }
+     */
 }
 
 // MARK: - Extensions
@@ -108,6 +114,40 @@ extension ProfileViewController: UITableViewDelegate {
             let cell = Self.postTableView.dequeueReusableCell(withIdentifier: Self.postIdent, for: indexPath) as! PostTableViewCell
             //cell.configPostArray(post: postExamples[indexPath.row])
             cell.configPostArray(post: viewModel.post(at: indexPath.row))
+            
+            // добавление в избранное ДЗ№7
+            cell.onDoubleTap = {
+                
+                [weak self] in
+                guard let self else {return}
+                
+                switch CoreDataManager.shared.save(post: self.viewModel.post(at: indexPath.row)) {
+                case .saved:
+                    let alert = UIAlertController(
+                        title: "Отлично!",
+                        message: "Пост добавлен в избранное!",
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(title: "Ok", style: .default))
+                    self.present(alert, animated: true)
+                case .dublicate:
+                    let alert = UIAlertController(
+                        title: "Внимание!",
+                        message: "Вы пытаетесь добавить дубликат!",
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(title: "Ok", style: .cancel))
+                    self.present(alert, animated: true)
+                }
+//                CoreDataManager.shared.save(post: self.viewModel.post(at: indexPath.row))
+//                let alert = UIAlertController(
+//                    title: "Внимание!!!",
+//                    message: "Пост добавлен в избранное",
+//                    preferredStyle: .alert
+//                )
+//                alert.addAction(UIAlertAction(title: "OK", style: .default))
+//                self.present(alert, animated: true )
+            }
             return cell
         default:
             assertionFailure("no registered section")

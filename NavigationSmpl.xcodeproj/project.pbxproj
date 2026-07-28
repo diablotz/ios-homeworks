@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C3194C6230173ADE00A40E0E /* Navigation.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C3194C6030173ADE00A40E0E /* Navigation.xcdatamodeld */; };
 		C38234042FC70F4500E5147D /* iOSIntPackage in Frameworks */ = {isa = PBXBuildFile; productRef = C38234032FC70F4500E5147D /* iOSIntPackage */; };
 		C3A6DDF42FAB221600E803DE /* StorageService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3A6DDDF2FAB221600E803DE /* StorageService.framework */; };
 		C3A6DDF52FAB221600E803DE /* StorageService.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C3A6DDDF2FAB221600E803DE /* StorageService.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -40,6 +41,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C3194C6130173ADE00A40E0E /* Navigation.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Navigation.xcdatamodel; sourceTree = "<group>"; };
 		C3A6DD802FAB112000E803DE /* NavigationSmpl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NavigationSmpl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3A6DDDF2FAB221600E803DE /* StorageService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = StorageService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -99,6 +101,7 @@
 				C3A6DD822FAB112000E803DE /* NavigationSmpl */,
 				C3A6DDE02FAB221600E803DE /* StorageService */,
 				C3A6DD812FAB112000E803DE /* Products */,
+				C3194C6030173ADE00A40E0E /* Navigation.xcdatamodeld */,
 			);
 			sourceTree = "<group>";
 		};
@@ -239,6 +242,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3194C6230173ADE00A40E0E /* Navigation.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -590,6 +594,19 @@
 			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		C3194C6030173ADE00A40E0E /* Navigation.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				C3194C6130173ADE00A40E0E /* Navigation.xcdatamodel */,
+			);
+			currentVersion = C3194C6130173ADE00A40E0E /* Navigation.xcdatamodel */;
+			path = Navigation.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = C3A6DD782FAB112000E803DE /* Project object */;
 }
