@@ -18,6 +18,23 @@ final class FavoriteViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(
+                //image: UIImage(systemName: "line.3.horizontal.decrease.circle"),
+                image: UIImage(systemName: "magnifyingglass"),
+                style: .plain,
+                target: self,
+                action: #selector(showFilterAlert)
+            ),
+            UIBarButtonItem(
+                image: UIImage(systemName: "xmark.circle"),
+                style: .plain,
+                target: self,
+                action: #selector(clearFilter)
+            )
+        
+        ]
 
         title = "Избранное"
         view.backgroundColor = .systemBackground
@@ -71,8 +88,37 @@ extension FavoriteViewController: UITableViewDataSource {
 
         return cell
     }
+    
+    @objc private func showFilterAlert() {
+        let alert = UIAlertController(
+            title: "Поиск поста по автору",
+            message: nil,
+            preferredStyle: .alert
+        )
+        
+        alert.addTextField ()
+        
+        let aooly = UIAlertAction(
+            title: "Показать",
+            style: .default
+        ) { [weak self] _ in
+            guard let author = alert.textFields?.first?.text else { return }
+            self?.favoritePosts = CoreDataManager.shared.fetchPosts(author: author)
+            
+            self?.tableView.reloadData()
+        }
+        alert.addAction(aooly)
+        present(alert, animated: true)
+    }
+    
+    @objc private func clearFilter() {
+        favoritePosts = CoreDataManager.shared.fetchPosts()
+        tableView.reloadData()
+    }
+    
+    
 }
-
+/*
 extension FavoriteViewController: UITableViewDelegate {
 
     func tableView(
@@ -90,5 +136,69 @@ extension FavoriteViewController: UITableViewDelegate {
         favoritePosts.remove(at: indexPath.row)
 
         tableView.deleteRows(at: [indexPath], with: .automatic)
+    }
+}
+*/
+extension FavoriteViewController: UITableViewDelegate {
+
+    func tableView(
+        _ tableView: UITableView,
+        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
+    ) -> UISwipeActionsConfiguration? {
+
+        let deleteAction = UIContextualAction(
+            style: .destructive,
+            title: "Удалить"
+        ) { [weak self] _, _, completion in
+
+            guard let self else { return }
+            
+            
+
+            let post = favoritePosts[indexPath.row]
+            let author = post.author ?? ""
+
+            let alert = UIAlertController(
+                title: "Внимание!",
+                message: "Вы уверены, что хотите удалить пост автора \(author) из избранного?",
+                preferredStyle: .alert
+            )
+            let cancelAction = UIAlertAction(title: "Отмена", style: .cancel) {_ in
+                completion(false)
+            }
+            let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) {_ in
+                
+                CoreDataManager.shared.deletePost(post: post)
+
+                self.favoritePosts.remove(at: indexPath.row)
+
+                tableView.deleteRows(
+                    at: [indexPath],
+                    with: .automatic
+                )
+                let alertInfo = UIAlertController(
+                    title: "Внимание!",
+                    message: "Вы удалили пост \(author) из избранного!",
+                    preferredStyle: .alert
+                )
+                alertInfo.addAction(UIAlertAction(title: "Ok", style: .default))
+                self.present(alertInfo, animated: true)
+                completion(true)
+            }
+            alert.addAction(cancelAction)
+            alert.addAction(deleteAction)
+            self.present(alert, animated: true)
+            
+            
+            
+            print("Author \(author) deleted")
+            
+            
+            
+            //completion(true)
+        }
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        configuration.performsFirstActionWithFullSwipe = false
+        return configuration
     }
 }

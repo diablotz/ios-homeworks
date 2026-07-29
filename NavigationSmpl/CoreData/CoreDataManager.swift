@@ -27,10 +27,14 @@ final class CoreDataManager {
         }
         return container
     }()
+    // меняем переменную для работы в фоне
+//    var context: NSManagedObjectContext {
+//        persistentContainer.viewContext
+//    }
+    private lazy var backgroundContext: NSManagedObjectContext = {
+        persistentContainer.newBackgroundContext()
+    }()
     
-    var context: NSManagedObjectContext {
-        persistentContainer.viewContext
-    }
     
     enum SavePostResults {
         case saved
@@ -49,7 +53,7 @@ final class CoreDataManager {
             return .dublicate
         }
      
-        let favorite = FavoritePost(context: context)
+        let favorite = FavoritePost(context: backgroundContext)
         
         favorite.author = post.author
         favorite.descriptionText = post.description
@@ -58,7 +62,7 @@ final class CoreDataManager {
         favorite.views = Int64(post.views)
         
         do {
-            try context.save()
+            try backgroundContext.save()
         }
         catch {print (error)}
         
@@ -72,18 +76,35 @@ final class CoreDataManager {
         let request: NSFetchRequest<FavoritePost> = FavoritePost.fetchRequest()
         
         do {
-            return try context.fetch(request)
+            return try backgroundContext.fetch(request)
         }
         catch {return []}
         
+    }
+    // перегруженный метод для поиска по автору
+    func fetchPosts(author: String) -> [FavoritePost] {
+
+        let request: NSFetchRequest<FavoritePost> =
+            FavoritePost.fetchRequest()
+
+        request.predicate = NSPredicate(
+            format: "author CONTAINS[cd] %@",
+            author
+        )
+
+        do {
+            return try backgroundContext.fetch(request)
+        } catch {
+            return []
+        }
     }
     
     // удаление
     
     func deletePost(post: FavoritePost) {
-        context.delete(post)
+        backgroundContext.delete(post)
         do {
-            try context.save()
+            try backgroundContext.save()
         }
         catch {print (error)}
     }
@@ -99,7 +120,7 @@ final class CoreDataManager {
         )
         
         do {
-            return try context.count(for: request) > 0
+            return try backgroundContext.count(for: request) > 0
         }
         catch {
             print("Пост уже был добавлен ", error)
