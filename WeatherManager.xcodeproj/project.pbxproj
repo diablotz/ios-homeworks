@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C3D1CB663021B55A006EFE45 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = C3D1CB653021B55A006EFE45 /* Alamofire */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		C3D1CB473021B3A0006EFE45 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -48,16 +52,6 @@
 			path = WeatherManager;
 			sourceTree = "<group>";
 		};
-		C3D1CB493021B3A0006EFE45 /* WeatherManagerTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = WeatherManagerTests;
-			sourceTree = "<group>";
-		};
-		C3D1CB533021B3A0006EFE45 /* WeatherManagerUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = WeatherManagerUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3D1CB663021B55A006EFE45 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,8 +84,6 @@
 			isa = PBXGroup;
 			children = (
 				C3D1CB2F3021B39E006EFE45 /* WeatherManager */,
-				C3D1CB493021B3A0006EFE45 /* WeatherManagerTests */,
-				C3D1CB533021B3A0006EFE45 /* WeatherManagerUITests */,
 				C3D1CB2E3021B39E006EFE45 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -125,6 +118,7 @@
 			);
 			name = WeatherManager;
 			packageProductDependencies = (
+				C3D1CB653021B55A006EFE45 /* Alamofire */,
 			);
 			productName = WeatherManager;
 			productReference = C3D1CB2D3021B39E006EFE45 /* WeatherManager.app */;
@@ -142,9 +136,6 @@
 			);
 			dependencies = (
 				C3D1CB483021B3A0006EFE45 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				C3D1CB493021B3A0006EFE45 /* WeatherManagerTests */,
 			);
 			name = WeatherManagerTests;
 			packageProductDependencies = (
@@ -165,9 +156,6 @@
 			);
 			dependencies = (
 				C3D1CB523021B3A0006EFE45 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				C3D1CB533021B3A0006EFE45 /* WeatherManagerUITests */,
 			);
 			name = WeatherManagerUITests;
 			packageProductDependencies = (
@@ -208,6 +196,9 @@
 			);
 			mainGroup = C3D1CB243021B39E006EFE45;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C3D1CB643021B55A006EFE45 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C3D1CB2E3021B39E006EFE45 /* Products */;
 			projectDirPath = "";
@@ -293,7 +284,6 @@
 				INFOPLIST_FILE = WeatherManager/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -324,7 +314,6 @@
 				INFOPLIST_FILE = WeatherManager/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -583,6 +572,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C3D1CB643021B55A006EFE45 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.12.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C3D1CB653021B55A006EFE45 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C3D1CB643021B55A006EFE45 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C3D1CB253021B39E006EFE45 /* Project object */;
 }
