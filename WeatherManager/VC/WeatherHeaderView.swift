@@ -16,12 +16,13 @@ final class WeatherHeaderView: UIView {
         return button
     }()
     
-    let cityLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Tashkent"
-        label.font = .systemFont(ofSize: 24)
-        label.adjustsFontForContentSizeCategory = true
-        return label
+    let cityLabel: UIButton = {
+        let button = UIButton()
+        button.setTitle("Tashkent", for: .normal)
+        button.setTitleColor(UIColor.black.withAlphaComponent(0.8), for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
+        
+        return button
     }()
     
     let addButton: UIButton = {
@@ -33,7 +34,7 @@ final class WeatherHeaderView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+        //backgroundColor = .systemBlue
         setupViews()
         
     }

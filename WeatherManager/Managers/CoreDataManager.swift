@@ -21,7 +21,11 @@ final class CoreDataManager {
             .viewContext
     }
     // сохранение
-    func saveWeather(from weather: CurrentWeatherResponse, latitude: Double, longitude: Double) {
+    func saveWeather(from weather: CurrentWeatherResponse, latitude: Double, longitude: Double) -> Bool {
+        
+        if weatherExists(latitude: latitude, longitude: longitude) {
+            return false
+        }
         let city = CityWeather(context: context)
         
         city.cityName = weather.name
@@ -41,7 +45,11 @@ final class CoreDataManager {
             print(error.localizedDescription)
         }
         
+        return true
+        
     }
+    
+    
     // получение данных
     func fetchWeather() -> [CityWeather] {
         let request: NSFetchRequest<CityWeather> = CityWeather.fetchRequest()
@@ -56,7 +64,7 @@ final class CoreDataManager {
     }
     
     //удаление города
-    func delete(_ city: CityWeather) {
+    func deleteCity(_ city: CityWeather) {
         context.delete(city)
         
         do {
@@ -65,5 +73,33 @@ final class CoreDataManager {
             print(error.localizedDescription)
         }
     }
+    
+    // проверка на дублирование (по координатам)
+    func weatherExists(
+        latitude: Double,
+        longitude: Double
+    ) -> Bool {
+
+        
+
+        let request: NSFetchRequest<CityWeather> =
+        CityWeather.fetchRequest()
+
+        request.predicate = NSPredicate(
+            format: "latitude == %lf AND longitude == %lf",
+            latitude,
+            longitude
+        )
+
+        request.fetchLimit = 1
+
+        do {
+            return try context.count(for: request) > 0
+        } catch {
+            print("Ошибка проверки города: \(error)")
+            return false
+        }
+    }
+
     
 }
