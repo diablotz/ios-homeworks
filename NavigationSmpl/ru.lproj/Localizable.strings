@@ -1,0 +1,50 @@
+/* 
+  Localizable.strings
+  NavigationSmpl
+
+  Created by Timur Zakirov on 20/08/26.
+  
+*/
+"welcome_key" = "Добро пожаловать";
+"delete_key" = "Удалить";
+"cancel_key" = "Отмена";
+"alert_key" = "Внимание!";
+"favorite_key" = "Избранное";
+"profile_key" = "Профиль";
+"photos_key" = "Фотографии";
+"photo_gallary_key" = "Фотогалерея";
+"likes_key" = "Лайки";
+"views_key" = "Просмотры";
+"status_key" = "Готов помочь";
+"set_status_key" = "Установить статус";
+"perfectly_key" = "Отлично!";
+"post_added_favorites_key" = "Пост добавлен в избранное!";
+"add_duplicate_key" = "Вы пытаетесь добавить дубликат!";
+"post_number_one_key" = "Пост номер Один";
+"post_number_two_key" = "Пост номер Два";
+"rotation_period_key" = "Период вращения планеты";
+"how_feeling_key" = "Как вы себя чувствуете?";
+"fine_key" = "Отлично!";
+"soso_key" = "Так себе...";
+"description1_key" = "Группа Zelda Metal Band Master Sword запускает краудфандинговую кампанию для своего нового альбома, и у нас есть эксклюзивная информация.";
+"description2_key" = "Ежедневная дискуссия: Увидим ли мы когда-нибудь продолжение «Четырех мечей»?";
+"description3_key" = "Какие будущие итерации нулевого мастер-цикла вы хотели бы увидеть?";
+"description4_key" = "Сегодня выходит новый Lo-Fi фанатский альбом Ocarina of Vibes.";
+"feed_key" = "Лента";
+"password_correct_key" = "Пароль введен правильно!";
+"password_wrong_key" = "Пароль неверный!";
+"enter_password_key" = "Введите пароль!";
+"password_check_key" = "Проверка пароля";
+"found_password_key" = "Найден пароль: ";
+"total_attempts_key" = "Общее количество операций по поиску нужной комбинации: ";
+"login_key" = "Логин";
+"password_key" = "Пароль";
+"bruteforce_password_key" = "Подобрать пароль";
+"error_key" = "Ошибка";
+"online_key" = "Онлайн";
+"fill_fields_key" = "Заполните все поля";
+"wasted_time_key" = "Потрачено времени:";
+"seconds_key" = " секунд";
+"info_key" = "Информация";
+"search_post_key" = "Поиск поста по автору";
+"show_key" = "Показать";

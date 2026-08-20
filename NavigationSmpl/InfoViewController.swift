@@ -56,7 +56,7 @@ final class InfoViewController: UIViewController {
     
     private func createAlertButton() {
         //let button = UIButton()
-        let button = CustomButton(title: "Alert!", titleColor: .white, backgroundColor: .systemBlue, cornerRadius: LayoutConstants.cornerRadius)
+        let button = CustomButton(title: "alert_key".localized, titleColor: .white, backgroundColor: .systemBlue, cornerRadius: LayoutConstants.cornerRadius)
         //button.translatesAutoresizingMaskIntoConstraints = false
         //button.setTitle("Alert", for: .normal)
         //button.backgroundColor = .systemPink
@@ -128,7 +128,7 @@ final class InfoViewController: UIViewController {
                 
                     
                     DispatchQueue.main.async {
-                        self?.orbitalPeriodLabel.text = "Период вращения планеты \(planet.name): \(planet.orbitalPeriod)"
+                        self?.orbitalPeriodLabel.text = "rotation_period_key".localized + " \(planet.name): \(planet.orbitalPeriod)"
                     }
                 
                 
@@ -141,17 +141,17 @@ final class InfoViewController: UIViewController {
     }
     
     @objc func tapAlertButton() {
-        let alert = UIAlertController(title: "Attention",
-                                      message: "How are you feeling?",
+        let alert = UIAlertController(title: "alert_key".localized,
+                                      message: "how_feeling_key".localized,
                                       preferredStyle: .alert)
         // add two buttons
-        let fine = UIAlertAction(title: "Fine", style: .default) { _ in
-            print("Fine")
+        let fine = UIAlertAction(title: "fine_key".localized, style: .default) { _ in
+            print("fine_key".localized)
         }
         alert.addAction(fine)
         
-        let so = UIAlertAction(title: "So-so", style: .destructive) { _ in
-            print("So-so")
+        let so = UIAlertAction(title: "soso_key".localized, style: .destructive) { _ in
+            print("soso_key".localized)
         }
         alert.addAction(so)
 

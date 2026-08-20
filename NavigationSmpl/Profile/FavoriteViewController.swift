@@ -36,7 +36,7 @@ final class FavoriteViewController: UIViewController {
         
         ]
 
-        title = "Избранное"
+        title = "favorite_key".localized
         view.backgroundColor = .systemBackground
 
         tableView.frame = view.bounds
@@ -79,8 +79,10 @@ extension FavoriteViewController: UITableViewDataSource {
 
         cell.postAuthor.text = post.author
         //cell.postDescription.text = post.description
-        cell.postLikes.text = "Likes: \(post.likes)"
-        cell.postViews.text = "Views: \(post.views)"
+        //cell.postLikes.text = "Likes: \(post.likes)"
+        cell.postLikes.text = "likes_key".getLikesString(Int(post.likes))
+        //cell.postViews.text = "Views: \(post.views)"
+        cell.postViews.text = "views_key".getViewsString(Int(post.views))
 
         if let imageName = post.imageName {
             cell.postImage.image = UIImage(named: imageName)
@@ -91,7 +93,7 @@ extension FavoriteViewController: UITableViewDataSource {
     
     @objc private func showFilterAlert() {
         let alert = UIAlertController(
-            title: "Поиск поста по автору",
+            title: "search_post_key".localized,
             message: nil,
             preferredStyle: .alert
         )
@@ -99,7 +101,7 @@ extension FavoriteViewController: UITableViewDataSource {
         alert.addTextField ()
         
         let aooly = UIAlertAction(
-            title: "Показать",
+            title: "show_key".localized,
             style: .default
         ) { [weak self] _ in
             guard let author = alert.textFields?.first?.text else { return }
@@ -148,7 +150,7 @@ extension FavoriteViewController: UITableViewDelegate {
 
         let deleteAction = UIContextualAction(
             style: .destructive,
-            title: "Удалить"
+            title: NSLocalizedString("delete_key", comment: "")
         ) { [weak self] _, _, completion in
 
             guard let self else { return }
@@ -159,14 +161,14 @@ extension FavoriteViewController: UITableViewDelegate {
             let author = post.author ?? ""
 
             let alert = UIAlertController(
-                title: "Внимание!",
+                title: "alert_key".localized,
                 message: "Вы уверены, что хотите удалить пост автора \(author) из избранного?",
                 preferredStyle: .alert
             )
-            let cancelAction = UIAlertAction(title: "Отмена", style: .cancel) {_ in
+            let cancelAction = UIAlertAction(title: "cancel_key".localized, style: .cancel) {_ in
                 completion(false)
             }
-            let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) {_ in
+            let deleteAction = UIAlertAction(title: "delete_key".localized, style: .destructive) {_ in
                 
                 CoreDataManager.shared.deletePost(post: post)
 
@@ -177,7 +179,7 @@ extension FavoriteViewController: UITableViewDelegate {
                     with: .automatic
                 )
                 let alertInfo = UIAlertController(
-                    title: "Внимание!",
+                    title: "alert_key".localized,
                     message: "Вы удалили пост \(author) из избранного!",
                     preferredStyle: .alert
                 )

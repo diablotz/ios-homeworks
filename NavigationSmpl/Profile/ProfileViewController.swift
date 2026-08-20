@@ -124,16 +124,16 @@ extension ProfileViewController: UITableViewDelegate {
                 switch CoreDataManager.shared.save(post: self.viewModel.post(at: indexPath.row)) {
                 case .saved:
                     let alert = UIAlertController(
-                        title: "Отлично!",
-                        message: "Пост добавлен в избранное!",
+                        title: "perfectly_key".localized,
+                        message: "post_added_favorites_key".localized,
                         preferredStyle: .alert
                     )
                     alert.addAction(UIAlertAction(title: "Ok", style: .default))
                     self.present(alert, animated: true)
                 case .dublicate:
                     let alert = UIAlertController(
-                        title: "Внимание!",
-                        message: "Вы пытаетесь добавить дубликат!",
+                        title: "alert_key".localized,
+                        message: "add_duplicate_key".localized,
                         preferredStyle: .alert
                     )
                     alert.addAction(UIAlertAction(title: "Ok", style: .cancel))

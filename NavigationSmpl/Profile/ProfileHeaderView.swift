@@ -17,10 +17,10 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     var returnAvatarButton = UIButton()
     var avatarBackground = UIView()
     
-    private var statusText = "Ready to help"
+    private var statusText = "status_key".localized
     private var avatarOriginPoint = CGPoint()
     
-    lazy var setStatusButton = CustomButton(title: "Set status", titleColor: .white,
+    lazy var setStatusButton = CustomButton(title: "set_status_key".localized, titleColor: .white,
         action: {
         [weak self] in
         guard let self else {return}

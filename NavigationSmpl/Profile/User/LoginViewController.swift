@@ -59,7 +59,7 @@ final class LoginViewController: UIViewController {
             button.setBackgroundImage(pixel.image(alpha: 0.4), for: .disabled)
         }
 
-        button.setTitle("Login", for: .normal)
+        button.setTitle("login_key".localized, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(touchLoginButton), for: .touchUpInside)
         button.layer.cornerRadius = LayoutConstants.cornerRadius
@@ -70,7 +70,7 @@ final class LoginViewController: UIViewController {
     var loginField: UITextField = {
         let login = UITextField()
         login.translatesAutoresizingMaskIntoConstraints = false
-        login.placeholder = "Log In"
+        login.placeholder = "login_key".localized
         login.layer.borderColor = UIColor.lightGray.cgColor
         login.layer.borderWidth = 0.25
         login.leftViewMode = .always
@@ -88,7 +88,7 @@ final class LoginViewController: UIViewController {
         let password = UITextField()
         password.translatesAutoresizingMaskIntoConstraints = false
         password.leftViewMode = .always
-        password.placeholder = "Password"
+        password.placeholder = "password_key".localized
         password.layer.borderColor = UIColor.lightGray.cgColor
         password.layer.borderWidth = 0.25
         password.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: password.frame.height))
@@ -111,7 +111,7 @@ final class LoginViewController: UIViewController {
     
     
     lazy var bruteForceButton = CustomButton(
-        title: "Подобрать пароль",
+        title: "bruteforce_password_key".localized,
         titleColor: .white,
         action: {
             [weak self] in
@@ -235,7 +235,7 @@ final class LoginViewController: UIViewController {
     }
     
     private func showLoginError(message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: "error_key".localized, message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
         }
@@ -286,7 +286,7 @@ final class LoginViewController: UIViewController {
             login: fireBaseUser.email ?? "",
             fullName: fireBaseUser.email ?? "",
             avatar: UIImage(named: "johnsmith"),
-            status: "Online"
+            status: "online_key".localized
         )
 
        
@@ -302,7 +302,7 @@ final class LoginViewController: UIViewController {
         else { return }
 
         guard !email.isEmpty, !password.isEmpty else {
-            showLoginError(message: "Заполните все поля")
+            showLoginError(message: "fill_fields_key".localized)
             return
         }
 
@@ -336,7 +336,7 @@ final class LoginViewController: UIViewController {
 
                                 if nsError.code == AuthErrorCode.emailAlreadyInUse.rawValue {
 
-                                    self?.showLoginError(message: "Неверный пароль")
+                                    self?.showLoginError(message: "password_wrong_key".localized)
 
                                 } else {
 
@@ -393,7 +393,7 @@ final class LoginViewController: UIViewController {
             
             let password = bruteForceService.bruteForce(password: generatePassword)
             let time = CFAbsoluteTimeGetCurrent() - startTime
-            print("Потрачено времени: \(time) секунд")
+            print("wasted_time_key".localized + " \(time)" + "seconds_key".localized)
             DispatchQueue.main.async {
                 self.activityIndicator.stopAnimating()
                 self.passwordField.isEnabled = true

@@ -1,0 +1,50 @@
+/* 
+  Localizable.strings
+  NavigationSmpl
+
+  Created by Timur Zakirov on 20/08/26.
+  
+*/
+"welcome_key" = "Welcome";
+"delete_key" = "Delete";
+"cancel_key" = "Cancel";
+"alert_key" = "Alert!";
+"favorite_key" = "Favorite";
+"profile_key" = "Profile";
+"photos_key" = "Photos";
+"photo_gallary_key" = "Photo Gallary";
+"likes_key" = "Likes";
+"views_key" = "Views";
+"status_key" = "Ready to help";
+"set_status_key" = "Set status";
+"perfectly_key" = "Perfectly!";
+"post_added_favorites_key" = "The post has been added to Favorires!";
+"add_duplicate_key" = "You are trying to add a duplicate!";
+"enter_password_key" = "Enter password!";
+"password_check_key" = "Password check";
+"post_number_one_key" = "Post number One";
+"post_number_two_key" = "Post number Two";
+"rotation_period_key" = "Rotation period of ";
+"how_feeling_key" = "How are you feeling?";
+"fine_key" = "Fine!";
+"soso_key" = "So-so";
+"description1_key" = "Zelda Metal Band Master Sword is Kickstarting a New Album, and We’ve Got the Inside Scoop";
+"description2_key" = "Daily Debate: Will We Ever Receive Another Sequel to Four Swords?";
+"description3_key" = "What Future Iterations of the Master Cycle Zero Do You Want to See?";
+"description4_key" = "New Lo-Fi Fan Album Ocarina of Vibes Releases Today";
+"password_correct_key" = "Password is correct!";
+"password_wrong_key" = "Password is wrong!";
+"feed_key" = "Feed";
+"found_password_key" = "Found password: ";
+"total_attempts_key" = "Total attempts: ";
+"login_key" = "Login";
+"password_key" = "Password";
+"bruteforce_password_key" = "Brute force password";
+"error_key" = "Error";
+"online_key" = "Online";
+"fill_fields_key" = "Fill all fields";
+"wasted_time_key" = "Wasted time:";
+"seconds_key" = " seconds";
+"info_key" = "Info";
+"search_post_key" = "Search for a post by author";
+"show_key" = "Show";

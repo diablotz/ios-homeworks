@@ -20,7 +20,7 @@ final class FeedCoordinator: Coordinator {
         feedVC.coordinator = self
         
         feedVC.tabBarItem = UITabBarItem(
-            title: "Лентааааа",
+            title: "feed_key".localized,
             image: UIImage(systemName: "list.bullet"),
             tag: 0
             

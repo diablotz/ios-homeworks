@@ -24,7 +24,7 @@ final class ProfileCoordinator: Coordinator {
         loginVC.coordinator = self
         
         loginVC.tabBarItem = UITabBarItem(
-            title: "Профилььььь",
+            title: "profile_key".localized,
             image: UIImage(systemName: "person.crop.circle"),
             tag: 1
             
