@@ -106,19 +106,25 @@ class PostTableViewCell: UITableViewCell {
         postAuthor.text = post.author
         postDescription.text = post.description
         postImage.image = UIImage(named: post.image)
-        postLikes.text = "Likes: \(post.likes)"
+        //postLikes.text = "likes_key".localized + ": \(post.likes)"
+        //postLikes.text = getLikesString(likes: post.likes)
+        postLikes.text = "likes_key".getLikesString(post.likes)
         viewCounter = post.views
-        postViews.text = "Views: \(viewCounter)"
+        //postViews.text = "views_key".localized + ": \(viewCounter)"
+        postViews.text = "views_key".getViewsString(viewCounter)
     }
     
     func incrementPostViewsCounter() {
         viewCounter += 1
-        postViews.text = "Views: \(viewCounter)"
+        postViews.text = "views_key".localized + ": \(viewCounter)"
     }
     // добавление в избранное ДЗ№7
     @objc private func doubleTap() {
         onDoubleTap?()
     }
+    
+    
+    
 
 }
 

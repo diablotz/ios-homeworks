@@ -20,7 +20,7 @@ final class FavoriteCoordinator: Coordinator {
         favoriteVC.coordinator = self
         
         favoriteVC.tabBarItem = UITabBarItem(
-            title: "Избранное",
+            title: "favorite_key".localized,
             image: UIImage(systemName: "heart.fill"),
             tag: 2
             

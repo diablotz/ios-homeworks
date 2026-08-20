@@ -17,12 +17,12 @@ final class FeedViewModel {
     
     func check(passw: String?) ->(text: String, color: UIColor) {
         guard let passw, !passw.isEmpty else {
-            return ("Введите пароль!", .systemRed)
+            return ("enter_password_key".localized, .systemRed)
             
         }
         let isCorrect = model.check(word: passw)
         return isCorrect
-        ? ("Пароль введен правильно!", UIColor.green) : ("Пароль неверный!", .systemRed)
+        ? ("password_correct_key".localized, UIColor.green) : ("password_wrong_key".localized, .systemRed)
         
     }
     

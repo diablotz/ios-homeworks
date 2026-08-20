@@ -37,7 +37,7 @@ final class BruteForce {
                 attempts += 1
                 
                 if current == password {
-                    print ("Найден пароль = \(current) за перебор вариантов =  \(attempts)")
+                    print ("found_password_key".localized + " \(current). " + "total_attempts_key".localized + " =  \(attempts)")
                     return current
                 }
                 return nil

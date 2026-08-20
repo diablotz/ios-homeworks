@@ -16,7 +16,7 @@ final class FeedViewController: UIViewController {
         passwordText.textColor = .systemBlue
         passwordText.backgroundColor = .white
         passwordText.translatesAutoresizingMaskIntoConstraints = false
-        passwordText.placeholder = "Введите пароль"
+        passwordText.placeholder = "enter_password_key".localized
         passwordText.autocapitalizationType = .none
         passwordText.autocorrectionType = .no
         //NSLayoutConstraint.activate([
@@ -25,7 +25,7 @@ final class FeedViewController: UIViewController {
         
         return passwordText
     }()
-    private lazy var checkGuessButton = CustomButton(title: "Проверка пароля", titleColor: .white, action: {
+    private lazy var checkGuessButton = CustomButton(title: "password_check_key".localized, titleColor: .white, action: {
         [weak self] in
         //guard let self else {return}
         self?.checkPassword()
@@ -58,7 +58,7 @@ final class FeedViewController: UIViewController {
     
     private func checkPassword() {
         guard let passw = passwordTextField.text, !passw.isEmpty else {
-            checkPasswordStatusLabel.text = "Введите пароль!"
+            checkPasswordStatusLabel.text = "enter_password_key".localized
             checkPasswordStatusLabel.textColor = .systemRed
             return
         }
@@ -104,8 +104,8 @@ final class FeedViewController: UIViewController {
         ])
         //addPostButton(title: "Post number One", color: .systemPurple, to: stackView, selector: #selector(tapPostButton))
         //addPostButton(title: "Post number Two", color: .systemIndigo, to: stackView, selector: #selector(tapPostButton))
-        addPostButton(title: "Post number One", color: .systemPurple, to: stackView)
-        addPostButton(title: "Post number Two", color: .systemIndigo, to: stackView)
+        addPostButton(title: "post_number_one_key".localized, color: .systemPurple, to: stackView)
+        addPostButton(title: "post_number_two_key".localized, color: .systemIndigo, to: stackView)
     }
     
     //private func addPostButton(title: String, color: UIColor, to view: UIStackView, selector: Selector) {
