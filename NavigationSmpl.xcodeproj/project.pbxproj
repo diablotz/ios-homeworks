@@ -24,6 +24,13 @@
 			remoteGlobalIDString = C3A6DDDE2FAB221600E803DE;
 			remoteInfo = StorageService;
 		};
+		C3F982D430398BC80039CF42 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C3A6DD782FAB112000E803DE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C3A6DD7F2FAB112000E803DE;
+			remoteInfo = NavigationSmpl;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -44,6 +51,7 @@
 		C3194C6130173ADE00A40E0E /* Navigation.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Navigation.xcdatamodel; sourceTree = "<group>"; };
 		C3A6DD802FAB112000E803DE /* NavigationSmpl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NavigationSmpl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3A6DDDF2FAB221600E803DE /* StorageService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = StorageService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3F982D030398BC80039CF42 /* NavigationSmplTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NavigationSmplTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -70,6 +78,11 @@
 			path = StorageService;
 			sourceTree = "<group>";
 		};
+		C3F982D130398BC80039CF42 /* NavigationSmplTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = NavigationSmplTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +105,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C3F982CD30398BC80039CF42 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -100,6 +120,7 @@
 			children = (
 				C3A6DD822FAB112000E803DE /* NavigationSmpl */,
 				C3A6DDE02FAB221600E803DE /* StorageService */,
+				C3F982D130398BC80039CF42 /* NavigationSmplTests */,
 				C3A6DD812FAB112000E803DE /* Products */,
 				C3194C6030173ADE00A40E0E /* Navigation.xcdatamodeld */,
 			);
@@ -110,6 +131,7 @@
 			children = (
 				C3A6DD802FAB112000E803DE /* NavigationSmpl.app */,
 				C3A6DDDF2FAB221600E803DE /* StorageService.framework */,
+				C3F982D030398BC80039CF42 /* NavigationSmplTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -178,6 +200,29 @@
 			productReference = C3A6DDDF2FAB221600E803DE /* StorageService.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		C3F982CF30398BC80039CF42 /* NavigationSmplTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C3F982D630398BC80039CF42 /* Build configuration list for PBXNativeTarget "NavigationSmplTests" */;
+			buildPhases = (
+				C3F982CC30398BC80039CF42 /* Sources */,
+				C3F982CD30398BC80039CF42 /* Frameworks */,
+				C3F982CE30398BC80039CF42 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C3F982D530398BC80039CF42 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				C3F982D130398BC80039CF42 /* NavigationSmplTests */,
+			);
+			name = NavigationSmplTests;
+			packageProductDependencies = (
+			);
+			productName = NavigationSmplTests;
+			productReference = C3F982D030398BC80039CF42 /* NavigationSmplTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -185,7 +230,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2620;
+				LastSwiftUpdateCheck = 2660;
 				LastUpgradeCheck = 2650;
 				TargetAttributes = {
 					C3A6DD7F2FAB112000E803DE = {
@@ -193,6 +238,10 @@
 					};
 					C3A6DDDE2FAB221600E803DE = {
 						CreatedOnToolsVersion = 26.2;
+					};
+					C3F982CF30398BC80039CF42 = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = C3A6DD7F2FAB112000E803DE;
 					};
 				};
 			};
@@ -217,6 +266,7 @@
 			targets = (
 				C3A6DD7F2FAB112000E803DE /* NavigationSmpl */,
 				C3A6DDDE2FAB221600E803DE /* StorageService */,
+				C3F982CF30398BC80039CF42 /* NavigationSmplTests */,
 			);
 		};
 /* End PBXProject section */
@@ -230,6 +280,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C3A6DDDD2FAB221600E803DE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C3F982CE30398BC80039CF42 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -254,6 +311,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C3F982CC30398BC80039CF42 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -261,6 +325,11 @@
 			isa = PBXTargetDependency;
 			target = C3A6DDDE2FAB221600E803DE /* StorageService */;
 			targetProxy = C3A6DDF22FAB221600E803DE /* PBXContainerItemProxy */;
+		};
+		C3F982D530398BC80039CF42 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C3A6DD7F2FAB112000E803DE /* NavigationSmpl */;
+			targetProxy = C3F982D430398BC80039CF42 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -524,6 +593,48 @@
 			};
 			name = Release;
 		};
+		C3F982D730398BC80039CF42 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "ru.netoligy.IOS-64.NavigationSmplTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NavigationSmpl.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NavigationSmpl";
+			};
+			name = Debug;
+		};
+		C3F982D830398BC80039CF42 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "ru.netoligy.IOS-64.NavigationSmplTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NavigationSmpl.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NavigationSmpl";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -550,6 +661,15 @@
 			buildConfigurations = (
 				C3A6DDF72FAB221600E803DE /* Debug */,
 				C3A6DDF82FAB221600E803DE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C3F982D630398BC80039CF42 /* Build configuration list for PBXNativeTarget "NavigationSmplTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3F982D730398BC80039CF42 /* Debug */,
+				C3F982D830398BC80039CF42 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

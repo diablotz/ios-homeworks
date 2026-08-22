@@ -10,6 +10,8 @@ final class LoginViewController: UIViewController {
     
     weak var coordinator: ProfileCoordinator?
     
+    private let viewModel = LoginViewModel()
+    
     let bruteForceService = BruteForce()
     
     // MARK: Visual content
@@ -100,14 +102,7 @@ final class LoginViewController: UIViewController {
         
         return password
     }()
-    /*
-    let userService: UserService = CurrentUserService(
-            user: User(
-                login: "John", fullName: "John Smith", avatar: UIImage(named: "johnsmith"), status: "Test!"
-            )
-            
-        )
-     */
+ 
     
     
     lazy var bruteForceButton = CustomButton(
@@ -129,27 +124,10 @@ final class LoginViewController: UIViewController {
         indicator.hidesWhenStopped = true
         return indicator
     }()
-    /*
-    private let userService: UserService = {
-            #if DEBUG
-            return TestUserService()
-            #else
-            return CurrentUserService(
-                user: User(
-                    login: fireBaseUser.email ?? "",
-                    fullName: fireBaseUser.email ?? "",
-                    avatar: UIImage(named: "johnsmith"),
-                    status: "Online"
-                )
-            )
-            
-            #endif
-        }()
-     */
+   
     
     
-    // MARK: - Setup section
-    
+  
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -239,45 +217,7 @@ final class LoginViewController: UIViewController {
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             present(alert, animated: true, completion: nil)
         }
-    // MARK: - Event handlers
-    /*
-    @objc private func touchLoginButton() {
-            guard let login = loginField.text,
-            let password = passwordField.text
-            else { return }
-            let isValid = loginDelegate?.check(login: login, password: password) ?? false
-            //print ("loginDelegate: ", loginDelegate)
-            if isValid {
-                if let user = userService.getUser(by: login) {
-                    //let profileVC = ProfileViewController(user: user)
-                    //let viewModel = ProfileViewModel(user: user)
-                    
-                    //let profileVC = ProfileViewController(viewModel: viewModel)
-                    
-                    
-                    
-                    //navigationController?.setViewControllers([profileVC], animated: true)
-                    
-                    coordinator?.openProfile(user: user)
-                    
-                    print(user, " это юзер")
-                }
-                else {
-                    showLoginError(message: "Такого пользователя не существует")
-                }
-            }
-            else {
-                showLoginError(message: "Неправильный логин или пароль")
-                print("login - ", login, "password - ", password)
-            }
-        /*
-            print("LOGIN - ", login)
-            print(" PASSWORD - ", password)
-            print("errror - ", userService.getUser(by: login))
-            print("LoginDelegate", loginDelegate)
-         */
-        }
-     */
+   
     
     private func openUserProfile() {
         guard let fireBaseUser = Auth.auth().currentUser else { return }
@@ -294,20 +234,82 @@ final class LoginViewController: UIViewController {
         
     }
     
-    @objc private func touchLoginButton() {
+//    @objc private func touchLoginButton() {
+//
+//        guard
+//            let email = loginField.text,
+//            let password = passwordField.text
+//        else { return }
+//
+//        guard !email.isEmpty, !password.isEmpty else {
+//            showLoginError(message: "fill_fields_key".localized)
+//            return
+//        }
+//
+//        loginDelegate?.checkCredentials(email: email, password: password) { [weak self] result in
+//
+//            DispatchQueue.main.async {
+//
+//                switch result {
+//
+//                case .success:
+//                    guard let self else { return }
+//                    self.openUserProfile()
+//                   
+//
+//                case .failure:
+//
+//                    self?.loginDelegate?.signUp(email: email, password: password) { result in
+//
+//                        DispatchQueue.main.async {
+//
+//                            switch result {
+//
+//                            case .success:
+//                                guard let self else { return }
+//                                self.openUserProfile()
+//                                
+//
+//                            case .failure(let error):
+//
+//                                let nsError = error as NSError
+//
+//                                if nsError.code == AuthErrorCode.emailAlreadyInUse.rawValue {
+//
+//                                    self?.showLoginError(message: "password_wrong_key".localized)
+//
+//                                } else {
+//
+//                                    self?.showLoginError(message: error.localizedDescription)
+//
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 
+    @objc private func touchLoginButton() {
         guard
             let email = loginField.text,
             let password = passwordField.text
-        else { return }
+        else {
+            return
+        }
 
-        guard !email.isEmpty, !password.isEmpty else {
+        guard viewModel.isValid(
+            email: email,
+            password: password
+        ) else {
             showLoginError(message: "fill_fields_key".localized)
             return
         }
 
-        loginDelegate?.checkCredentials(email: email, password: password) { [weak self] result in
 
+        loginDelegate?.checkCredentials(email: email, password: password) { [weak self] result in
+        
             DispatchQueue.main.async {
 
                 switch result {
@@ -315,7 +317,7 @@ final class LoginViewController: UIViewController {
                 case .success:
                     guard let self else { return }
                     self.openUserProfile()
-                   
+
 
                 case .failure:
 
@@ -328,7 +330,7 @@ final class LoginViewController: UIViewController {
                             case .success:
                                 guard let self else { return }
                                 self.openUserProfile()
-                                
+
 
                             case .failure(let error):
 
@@ -350,21 +352,9 @@ final class LoginViewController: UIViewController {
             }
         }
     }
-/*
-    @objc private func touchLoginButton() {
-        guard let login = loginField.text else { return }
-                if let user = userService.getUser(by: login) {
-                    let profileVC = ProfileViewController(user: user)
-                    navigationController?.setViewControllers([profileVC], animated: true)
-                }
-                else {
-                    showLoginError()
-                }
-        
-        //let profileVC = ProfileViewController()
-        //navigationController?.setViewControllers([profileVC], animated: true)
-    }
-*/
+
+
+
     @objc private func keyboardShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             loginScrollView.contentOffset.y = keyboardSize.height - (loginScrollView.frame.height - loginButton.frame.minY)
