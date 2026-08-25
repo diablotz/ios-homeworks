@@ -7,6 +7,7 @@
 import UIKit
 import FirebaseCore
 
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -14,6 +15,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // она переехала в SceneDelegate.swift
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        // добавляем функцию уведомлений
+        LocalNotificationService.shared.registerForLastUpdatesIfPossible()
+        
+        
         // Здесь можно инициализировать сторонние библиотеки (Firebase, SDK аналитики и т.д.)
         FirebaseApp.configure()
         return true
@@ -31,6 +37,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Вызывается, когда пользователь закрывает сцену (например, смахивает окно в многозадачности)
     }
 }
+
+
 /*
 import UIKit
 
