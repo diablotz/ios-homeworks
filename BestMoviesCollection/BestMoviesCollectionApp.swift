@@ -11,11 +11,21 @@ import CoreData
 @main
 struct BestMoviesCollectionApp: App {
     let persistenceController = PersistenceController.shared
+       
+       init() {
+           CoreDataManager.shared.addInitialPosts()
+       }
+       
+       var body: some Scene {
+           
+           WindowGroup {
+               
+               ContentView()
+                   .environment(
+                       \.managedObjectContext,
+                       persistenceController.container.viewContext
+                   )
+           }
+       }
 
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-        }
-    }
 }

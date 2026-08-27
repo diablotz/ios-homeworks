@@ -35,16 +35,6 @@
 			path = BestMoviesCollection;
 			sourceTree = "<group>";
 		};
-		C3F983023040038A0039CF42 /* BestMoviesCollectionTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BestMoviesCollectionTests;
-			sourceTree = "<group>";
-		};
-		C3F9830C3040038A0039CF42 /* BestMoviesCollectionUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BestMoviesCollectionUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,8 +66,6 @@
 			isa = PBXGroup;
 			children = (
 				C3F982EF304003880039CF42 /* BestMoviesCollection */,
-				C3F983023040038A0039CF42 /* BestMoviesCollectionTests */,
-				C3F9830C3040038A0039CF42 /* BestMoviesCollectionUITests */,
 				C3F982EE304003880039CF42 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -130,9 +118,6 @@
 			dependencies = (
 				C3F983013040038A0039CF42 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				C3F983023040038A0039CF42 /* BestMoviesCollectionTests */,
-			);
 			name = BestMoviesCollectionTests;
 			packageProductDependencies = (
 			);
@@ -152,9 +137,6 @@
 			);
 			dependencies = (
 				C3F9830B3040038A0039CF42 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				C3F9830C3040038A0039CF42 /* BestMoviesCollectionUITests */,
 			);
 			name = BestMoviesCollectionUITests;
 			packageProductDependencies = (
