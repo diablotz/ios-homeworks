@@ -41,6 +41,7 @@ final class CoreDataManager {
                 movie.imageName = post.imageName
                 movie.rating = post.rating
                 movie.genre = post.genre
+                movie.date = post.date
             }
             
             try context.save()

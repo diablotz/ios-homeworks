@@ -11,11 +11,21 @@ import SwiftUI
 
 struct ContentView: View {
     
+    //@State private var titleOn = true
+    // Задача 3
+    @AppStorage("titleOn") private var titleOn = true
+    
+    // Задача 4*
+    @AppStorage("rowHeight") private var rowHeight: Double = 100
+    
     var body: some View {
         
         TabView {
             
-            InfoView()
+            InfoView(
+                titleOn: titleOn,
+                rowHeight: rowHeight
+            )
                 .tabItem {
                     Label(
                         "Фильмы",
@@ -31,7 +41,11 @@ struct ContentView: View {
                     )
                 }
             
-            SettingsView()
+            SettingsView(
+                titleOn: $titleOn,
+                // Задача 4
+                rowHeight: $rowHeight
+            )
                 .tabItem {
                     Label(
                         "Настройки",
