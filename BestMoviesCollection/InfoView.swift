@@ -10,6 +10,12 @@ import CoreData
 
 struct InfoView: View {
     
+    
+    
+    var titleOn: Bool
+    // Задача 4
+    var rowHeight: Double
+    
     @FetchRequest(
         entity: Movies.entity(),
         sortDescriptors: [
@@ -37,16 +43,21 @@ struct InfoView: View {
                     NavigationLink {
                         InfoDetails(post: post)
                     } label: {
-                        InfoRow(post: post)
+                        InfoRow(
+                            post: post,
+                            rowHeight: rowHeight
+                        )
                     }
                 }
             }
-            .navigationTitle("Лучшие фильмы")
+            .navigationTitle(
+               titleOn ? "Лучшие фильмы" : "Не только лучшие фильмы"
+            )
         }
     }
 }
 
 #Preview {
-    InfoView()
+    InfoView(titleOn: true, rowHeight: 100)
 }
 

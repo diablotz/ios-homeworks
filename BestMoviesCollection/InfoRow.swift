@@ -11,6 +11,9 @@ struct InfoRow: View {
     
     let post: Movies
     
+    // Задача 4
+    var rowHeight: Double
+    
     var body: some View {
         
         HStack(spacing: 16) {
@@ -21,8 +24,9 @@ struct InfoRow: View {
                     .resizable()
                     .scaledToFill()
                     .frame(
-                        width: 70,
-                        height: 100
+                        // Задача 4
+                        width: rowHeight * 0.7,
+                        height: rowHeight
                     )
                     .clipShape(
                         RoundedRectangle(
@@ -36,9 +40,18 @@ struct InfoRow: View {
                 Text(post.title ?? "Без названия")
                     .font(.headline)
                 
+                Text("Год выхода:   \(post.date)")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                
+                Text("Жанр: \(post.genre ?? "")")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                
                 Text("Рейтинг IMDb: " + String(format: "%.1f",post.rating))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
+                
             }
             
             Spacer()
