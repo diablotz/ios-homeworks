@@ -33,11 +33,11 @@ struct ContentView: View {
                     )
                 }
             
-            HelloView()
+            StatisticsView()
                 .tabItem {
                     Label(
-                        "Hello",
-                        systemImage: "hand.wave"
+                        "Просмотры",
+                        systemImage: "chart.bar.xaxis"
                     )
                 }
             

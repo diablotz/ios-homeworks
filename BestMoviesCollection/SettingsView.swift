@@ -135,7 +135,7 @@ struct SettingsView: View {
         movie.title = "Крестный отец"
         movie.genre = "Драма"
         movie.rating = 8.4
-        movie.date = 1972
+        movie.year = 1972
         movie.imageName = "godfather"
         
         return movie

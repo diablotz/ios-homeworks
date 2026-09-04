@@ -49,6 +49,16 @@ struct InfoView: View {
                         )
                     }
                 }
+//                ForEach(posts) { post in
+//                    VStack(alignment: .leading) {
+//                        Text(post.title ?? "Без названия")
+//                        Text("ID: \(post.objectID)")
+//                            .font(.caption)
+//                            .foregroundStyle(.secondary)
+//                    }
+//                }
+
+
             }
             .navigationTitle(
                titleOn ? "Лучшие фильмы" : "Не только лучшие фильмы"

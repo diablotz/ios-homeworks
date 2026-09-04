@@ -15,7 +15,9 @@ struct Post: Identifiable {
     let image: Image
     let rating: Double
     let genre: String
-    let date: Int16
+    let year: Int16
+    let viewsCount: Int64
+    let trailerURL: String
     
     init (
         id: Int,
@@ -24,7 +26,10 @@ struct Post: Identifiable {
         image: Image,
         rating: Double,
         genre: String,
-        date: Int16
+        year: Int16,
+        viewsCount: Int64,
+        trailerURL: String
+        
     ) {
         self.id = id
         self.title = title
@@ -32,6 +37,8 @@ struct Post: Identifiable {
         self.image = image
         self.rating = rating
         self.genre = genre
-        self.date = date
+        self.year = year
+        self.viewsCount = viewsCount
+        self.trailerURL = trailerURL
     }
 }
