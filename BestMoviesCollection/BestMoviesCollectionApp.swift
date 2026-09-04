@@ -14,6 +14,7 @@ struct BestMoviesCollectionApp: App {
        
        init() {
            CoreDataManager.shared.addInitialPosts()
+           //CoreDataManager.shared.resetMovies()
        }
        
        var body: some Scene {

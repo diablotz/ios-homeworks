@@ -17,7 +17,8 @@ struct PostData {
             imageName: String,
             genre: String,
             rating: Double,
-            date: Int16
+            year: Int16,
+            trailerURL: String
         )
     ] = [
         
@@ -27,7 +28,8 @@ struct PostData {
             imageName: "shawshank",
             genre: "Драма",
             rating: 9.3,
-            date: 1994
+            year: 1994,
+            trailerURL: "https://www.youtube.com/watch?v=kgAeKpAPOYk"
             
         ),
         
@@ -37,8 +39,8 @@ struct PostData {
             imageName: "godfather",
             genre: "Драма",
             rating: 9.2,
-            date:1972
-            
+            year:1972,
+            trailerURL: "https://www.youtube.com/watch?v=E3b9jVCUh7Q"
         ),
         
         (
@@ -47,8 +49,8 @@ struct PostData {
             imageName: "godfather2",
             genre: "Драма",
             rating: 9.1,
-            date:1974
-            
+            year:1974,
+            trailerURL: "https://www.youtube.com/watch?v=oQgTfIlAN64"
         ),
         
         (
@@ -57,8 +59,8 @@ struct PostData {
             imageName: "darkknight",
             genre: "Фантастика",
             rating: 9.0,
-            date:2008
-            
+            year:2008,
+            trailerURL: "https://www.youtube.com/watch?v=HF1_epZNoCg"
         ),
         
         (
@@ -67,8 +69,8 @@ struct PostData {
             imageName: "schindler",
             genre: "История",
             rating: 8.9,
-            date:1993
-            
+            year:1993,
+            trailerURL: "https://www.youtube.com/watch?v=4r2Z0U9Y53o"
         ),
         
         (
@@ -77,8 +79,8 @@ struct PostData {
             imageName: "lordofrings3",
             genre: "Фэнтези",
             rating: 8.8,
-            date:2003
-            
+            year:2003,
+            trailerURL: "https://www.youtube.com/watch?v=lxAeV1-KpSA"
         ),
         
         (
@@ -87,8 +89,8 @@ struct PostData {
             imageName: "pulpfiction",
             genre: "Боевик",
             rating: 8.7,
-            date:1994
-            
+            year:1994,
+            trailerURL: "https://www.youtube.com/watch?v=vBADUmfa9Q4"
         ),
         
         (
@@ -97,8 +99,8 @@ struct PostData {
             imageName: "fightclub",
             genre: "Драма",
             rating: 8.6,
-            date:1999
-            
+            year:1999,
+            trailerURL: "https://www.youtube.com/watch?v=C7-7qQ61QHU"
         ),
         (
             title: "Властелин колец: Братство кольца",
@@ -106,8 +108,8 @@ struct PostData {
             imageName: "lordofrings1",
             genre: "Фэнтези",
             rating: 8.5,
-            date:2001
-            
+            year:2001,
+            trailerURL: "https://www.youtube.com/watch?v=RNksw9VU2BQ"
         ),
         (
             title: "Форрест Гамп",
@@ -115,8 +117,8 @@ struct PostData {
             imageName: "forrestgump",
             genre: "Драма",
             rating: 8.4,
-            date:1994
-            
+            year:1994,
+            trailerURL: "https://www.youtube.com/watch?v=otmeAaifX04"
         )
         
     ]
