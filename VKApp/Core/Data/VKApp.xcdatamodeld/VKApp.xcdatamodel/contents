@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="25249" systemVersion="26A434" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="ConversationEntity" representedClassName=".ConversationEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="avatarName" optional="YES" attributeType="String"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isGroup" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="unreadCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="messages" toMany="YES" deletionRule="Cascade" destinationEntity="MessageEntity" inverseName="conversation" inverseEntity="MessageEntity"/>
+        <relationship name="participants" toMany="YES" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="conversations" inverseEntity="UserEntity"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="MessageEntity" representedClassName=".MessageEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isRead" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="sentAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="text" attributeType="String" defaultValueString="&quot;&quot;"/>
+        <relationship name="conversation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ConversationEntity" inverseName="messages" inverseEntity="ConversationEntity"/>
+        <relationship name="sender" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="sentMessages" inverseEntity="UserEntity"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="NotificationEntity" representedClassName=".NotificationEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isRead" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="kind" attributeType="String" defaultValueString="&quot;&quot;"/>
+        <attribute name="message" attributeType="String" defaultValueString="&quot;&quot;"/>
+        <relationship name="post" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PostEntity" inverseName="notifications" inverseEntity="PostEntity"/>
+        <relationship name="sender" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="sentNotifications" inverseEntity="UserEntity"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="PhotoEntity" representedClassName=".PhotoEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="imageName" attributeType="String" defaultValueString="&quot;&quot;"/>
+        <attribute name="isLiked" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="likesCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="photos" inverseEntity="UserEntity"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="PostEntity" representedClassName=".PostEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="commentsCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="imageName" optional="YES" attributeType="String"/>
+        <attribute name="isLiked" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="likesCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="mediaType" optional="YES" attributeType="String"/>
+        <attribute name="sharesCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="text" attributeType="String" defaultValueString="&quot;&quot;"/>
+        <attribute name="videoName" optional="YES" attributeType="String"/>
+        <attribute name="viewsCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="posts" inverseEntity="UserEntity"/>
+        <relationship name="notifications" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="NotificationEntity" inverseName="post" inverseEntity="NotificationEntity"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="ReelEntity" representedClassName="ReelEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="captionText" attributeType="String" defaultValueString="&quot;&quot;"/>
+        <attribute name="commentsCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isLiked" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isSaved" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="likesCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="sharesCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="videoName" attributeType="String" defaultValueString="&quot;&quot;"/>
+        <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="reels" inverseEntity="UserEntity"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="StoryEntity" representedClassName=".StoryEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="imageName" attributeType="String" defaultValueString="&quot;&quot;"/>
+        <attribute name="isViewed" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="stories" inverseEntity="UserEntity"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="UserEntity" representedClassName=".UserEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="avatarName" optional="YES" attributeType="String"/>
+        <attribute name="firstName" attributeType="String" defaultValueString="&quot;&quot;"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isCurrentUser" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isFriend" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isOnline" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="lastName" attributeType="String" defaultValueString="&quot;&quot;"/>
+        <attribute name="phone" optional="YES" attributeType="String"/>
+        <attribute name="statusText" optional="YES" attributeType="String"/>
+        <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="author" inverseEntity="UserEntity"/>
+        <relationship name="conversations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ConversationEntity" inverseName="participants" inverseEntity="ConversationEntity"/>
+        <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PhotoEntity" inverseName="author" inverseEntity="PhotoEntity"/>
+        <relationship name="posts" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PostEntity" inverseName="author" inverseEntity="PostEntity"/>
+        <relationship name="reels" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ReelEntity" inverseName="author" inverseEntity="ReelEntity"/>
+        <relationship name="sentMessages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MessageEntity" inverseName="sender" inverseEntity="MessageEntity"/>
+        <relationship name="sentNotifications" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="NotificationEntity" inverseName="sender" inverseEntity="NotificationEntity"/>
+        <relationship name="stories" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="StoryEntity" inverseName="author" inverseEntity="StoryEntity"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+</model>
