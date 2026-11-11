@@ -37,7 +37,44 @@ struct FeedPost {
 
         return formatter.string(from: createdAt)
     }
+    
+    let externalID: String?
+    let externalTitle: String?
+    let externalSubtitle: String?
+    let externalImageURL: String?
+    let externalMediaURL: String?
+    let externalStoreURL: String?
 }
+
+
+extension FeedPost {
+
+    var remoteImageURL: URL? {
+        guard let externalImageURL else {
+            return nil
+        }
+
+        return URL(string: externalImageURL)
+    }
+
+    var remoteMediaURL: URL? {
+        guard let externalMediaURL else {
+            return nil
+        }
+
+        return URL(string: externalMediaURL)
+    }
+
+    var storeURL: URL? {
+        guard let externalStoreURL else {
+            return nil
+        }
+
+        return URL(string: externalStoreURL)
+    }
+}
+
+
 
 
 //import Foundation

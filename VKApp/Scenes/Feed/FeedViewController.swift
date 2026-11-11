@@ -29,6 +29,10 @@ final class FeedViewController: UIViewController {
 
     private let currentUser: AppUser
     private let viewModel: FeedViewModel
+    
+    
+    private var musicPlayer: AVPlayer?
+    private var playingMusicPostID: UUID?
 
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(
@@ -98,6 +102,16 @@ final class FeedViewController: UIViewController {
         viewModel.loadData()
         
     }
+    
+    override func viewWillDisappear(
+        _ animated: Bool
+    ) {
+        super.viewWillDisappear(animated)
+
+        stopMusicPlayback()
+    }
+
+
 
     private func setupView() {
         view.backgroundColor = AppColors.secondaryBackground
@@ -243,7 +257,7 @@ final class FeedViewController: UIViewController {
         ]
 
         let titleButton = UIButton(type: .system)
-        titleButton.setTitle("Главная⌄", for: .normal)
+        titleButton.setTitle(L10n.string("feed.title"), for: .normal)
         titleButton.setTitleColor(
             AppColors.primaryText,
             for: .normal
@@ -253,20 +267,20 @@ final class FeedViewController: UIViewController {
 
         titleButton.menu = UIMenu(children: [
             UIAction(
-                title: "Главная",
+                title: L10n.string("feed.title"),
                 image: UIImage(systemName: "house.fill"),
                 state: .on
             ) { _ in },
 
             UIAction(
-                title: "Друзья",
+                title: L10n.string("feed.friends"),
                 image: UIImage(systemName: "person.2")
             ) { [weak self] _ in
                 self?.onShowFriends?()
             },
 
             UIAction(
-                title: "Фото",
+                title: L10n.string("feed.photos"),
                 image: UIImage(systemName: "photo")
             ) { [weak self] _ in
                 self?.onShowPhotos?()
@@ -365,13 +379,13 @@ final class FeedViewController: UIViewController {
 
     private func showError(_ message: String) {
         let alert = UIAlertController(
-            title: "Ошибка",
+            title: L10n.string("common.error"),
             message: message,
             preferredStyle: .alert
         )
 
         alert.addAction(
-            UIAlertAction(title: "ОК", style: .default)
+            UIAlertAction(title: L10n.string("common.ok"), style: .default)
         )
 
         present(alert, animated: true)
@@ -455,6 +469,27 @@ extension FeedViewController: UICollectionViewDataSource {
 //                [weak self] videoName in
 //                self?.showVideo(fileName: videoName)
 //            }
+            
+            
+            cell.setMusicPlaying(
+                playingMusicPostID == post.id
+            )
+
+            cell.onMusicTapped = { [weak self] postID, urlString in
+                self?.toggleMusicPlayback(
+                    postID: postID,
+                    urlString: urlString
+                )
+            }
+
+            cell.onExternalLinkTapped = { [weak self] urlString in
+                self?.openExternalLink(
+                    urlString
+                )
+            }
+
+
+
 
             cell.onLike = { [weak self] in
                 self?.viewModel.toggleLike(
@@ -495,20 +530,125 @@ extension FeedViewController: UICollectionViewDataSource {
 
     private func showVideoError() {
         let alert = UIAlertController(
-            title: "Ошибка",
+            title: L10n.string("common.error"),
             message: "Файл видео не найден.",
             preferredStyle: .alert
         )
 
         alert.addAction(
             UIAlertAction(
-                title: "ОК",
+                title: L10n.string("common.ok"),
                 style: .default
             )
         )
 
         present(alert, animated: true)
     }
+    
+    
+    private func toggleMusicPlayback(
+        postID: UUID,
+        urlString: String
+    ) {
+        if playingMusicPostID == postID {
+            stopMusicPlayback()
+            return
+        }
+
+        guard let url = URL(
+            string: urlString
+        ) else {
+            showMusicError(
+                "Некорректная ссылка на музыкальный preview"
+            )
+            return
+        }
+
+        musicPlayer?.pause()
+
+        let player = AVPlayer(
+            url: url
+        )
+
+        musicPlayer = player
+        playingMusicPostID = postID
+
+        player.play()
+
+        reloadVisibleMusicCells()
+    }
+
+
+    private func stopMusicPlayback() {
+        musicPlayer?.pause()
+        musicPlayer = nil
+        playingMusicPostID = nil
+
+        reloadVisibleMusicCells()
+    }
+
+
+
+    private func reloadVisibleMusicCells() {
+        for case let cell as PostCollectionViewCell
+            in collectionView.visibleCells {
+
+            guard let indexPath = collectionView.indexPath(
+                for: cell
+            ) else {
+                continue
+            }
+
+            let post = viewModel.posts[
+                indexPath.item
+            ]
+
+            cell.setMusicPlaying(
+                post.id == playingMusicPostID
+            )
+        }
+    }
+
+
+    private func openExternalLink(
+        _ urlString: String
+    ) {
+        guard let url = URL(
+            string: urlString
+        ) else {
+            return
+        }
+
+        UIApplication.shared.open(
+            url
+        )
+    }
+
+
+
+    private func showMusicError(
+        _ message: String
+    ) {
+        let alert = UIAlertController(
+            title: "Музыка недоступна",
+            message: message,
+            preferredStyle: .alert
+        )
+
+        alert.addAction(
+            UIAlertAction(
+                title: L10n.string("common.ok"),
+                style: .default
+            )
+        )
+
+        present(
+            alert,
+            animated: true
+        )
+    }
+
+
 
 
 }

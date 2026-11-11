@@ -16,16 +16,16 @@ enum AuthenticationError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidPhone:
-            return "Введите корректный номер телефона"
+            return L10n.string("error.valid_phone")
 
         case .userNotFound:
-            return "Пользователь с таким номером не найден"
+            return L10n.string("error.number_not_found")
 
         case .phoneAlreadyRegistered:
-            return "Этот номер телефона уже зарегистрирован"
+            return L10n.string("error.number_registred")
 
         case .storageError:
-            return "Не удалось выполнить операцию с базой данных"
+            return L10n.string("error.database")
         }
     }
 }

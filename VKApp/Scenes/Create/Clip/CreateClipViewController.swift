@@ -31,7 +31,7 @@ final class CreateClipViewController:
 
     private let placeholderLabel: UILabel = {
         let label = UILabel()
-        label.text = "Видео не выбрано"
+        label.text = L10n.string("create.no_video")
         label.textColor = .white
         label.font = AppFonts.body
         label.textAlignment = .center
@@ -59,7 +59,7 @@ final class CreateClipViewController:
 
     private lazy var selectVideoButton: UIButton = {
         var configuration = UIButton.Configuration.filled()
-        configuration.title = "Выбрать видео"
+        configuration.title = L10n.string("create.select_video")
         configuration.image = UIImage(
             systemName: "video.badge.plus"
         )
@@ -97,10 +97,10 @@ final class CreateClipViewController:
 
     private func setupView() {
         view.backgroundColor = AppColors.background
-        navigationItem.title = "Новый клип"
+        navigationItem.title = L10n.string("create.new_clip")
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "Опубликовать",
+            title: L10n.string("common.publish"),
             style: .done,
             target: self,
             action: #selector(publishTapped)
@@ -204,22 +204,7 @@ final class CreateClipViewController:
 
 
 
-//    private func bindViewModel() {
-//        viewModel.onVideoSelected = {
-//            [weak self] videoName in
-//
-//            self?.showPreview(videoName: videoName)
-//        }
-//
-//        viewModel.onCreated = { [weak self] in
-//            self?.navigationController?
-//                .popViewController(animated: true)
-//        }
-//
-//        viewModel.onError = { [weak self] message in
-//            self?.showError(message)
-//        }
-//    }
+
     
     @MainActor
     private func showPreview(videoName: String) {
@@ -228,7 +213,7 @@ final class CreateClipViewController:
                 for: videoName
             )
         else {
-            showError("Сохранённое видео не найдено")
+            showError(L10n.string("error.video_not_found"))
             return
         }
 
@@ -276,98 +261,6 @@ final class CreateClipViewController:
     }
 
 
-//    private func showPreview(videoName: String) {
-//        guard
-//            let url = LocalVideoStore.shared.url(
-//                named: videoName
-//            )
-//        else {
-//            showError("Сохранённое видео не найдено")
-//            return
-//        }
-//
-//        previewController?.player?.pause()
-//
-//        if let previewController {
-//            previewController.willMove(toParent: nil)
-//            previewController.view.removeFromSuperview()
-//            previewController.removeFromParent()
-//        }
-//
-//        let playerController = AVPlayerViewController()
-//        let player = AVPlayer(url: url)
-//
-//        playerController.player = player
-//
-//        addChild(playerController)
-//
-//        playerController.view.translatesAutoresizingMaskIntoConstraints =
-//            false
-//
-//        previewContainerView.addSubview(
-//            playerController.view
-//        )
-//
-//        NSLayoutConstraint.activate([
-//            playerController.view.topAnchor.constraint(
-//                equalTo: previewContainerView.topAnchor
-//            ),
-//            playerController.view.leadingAnchor.constraint(
-//                equalTo: previewContainerView.leadingAnchor
-//            ),
-//            playerController.view.trailingAnchor.constraint(
-//                equalTo: previewContainerView.trailingAnchor
-//            ),
-//            playerController.view.bottomAnchor.constraint(
-//                equalTo: previewContainerView.bottomAnchor
-//            )
-//        ])
-//
-//        playerController.didMove(toParent: self)
-//
-//        placeholderLabel.isHidden = true
-//        previewController = playerController
-//
-//        player.play()
-//    }
-
-
-
-//    private func showPreview(videoName: String) {
-//        guard
-//            let url = LocalVideoStore.shared.url(
-//                named: videoName
-//            )
-//        else {
-//            return
-//        }
-//
-//        previewController?.willMove(toParent: nil)
-//        previewController?.view.removeFromSuperview()
-//        previewController?.removeFromParent()
-//
-//        let playerController = AVPlayerViewController()
-//        playerController.player = AVPlayer(url: url)
-//
-//        addChild(playerController)
-//
-//        playerController.view.frame =
-//            previewContainerView.bounds
-//        playerController.view.autoresizingMask = [
-//            .flexibleWidth,
-//            .flexibleHeight
-//        ]
-//
-//        previewContainerView.addSubview(
-//            playerController.view
-//        )
-//        playerController.didMove(toParent: self)
-//
-//        placeholderLabel.isHidden = true
-//        previewController = playerController
-//
-//        playerController.player?.play()
-//    }
 
     @objc private func selectVideoTapped() {
         var configuration = PHPickerConfiguration()
@@ -392,13 +285,13 @@ final class CreateClipViewController:
 
     private func showError(_ message: String) {
         let alert = UIAlertController(
-            title: "Ошибка",
+            title: L10n.string("common.error"),
             message: message,
             preferredStyle: .alert
         )
 
         alert.addAction(
-            UIAlertAction(title: "ОК", style: .default)
+            UIAlertAction(title: L10n.string("common.ok"), style: .default)
         )
 
         present(alert, animated: true)
@@ -410,23 +303,23 @@ final class CreateClipViewController:
 
 extension CreateClipViewController:
     PHPickerViewControllerDelegate {
-
+    
     func picker(
         _ picker: PHPickerViewController,
         didFinishPicking results: [PHPickerResult]
     ) {
         picker.dismiss(animated: true)
-
+        
         guard let result = results.first else {
             return
         }
-
+        
         let provider = result.itemProvider
-
+        
         guard provider.hasItemConformingToTypeIdentifier(
             UTType.movie.identifier
         ) else {
-            showError("Выбранный файл не является видео")
+            showError(L10n.string("error.not_video"))
             return
         }
         
@@ -440,146 +333,33 @@ extension CreateClipViewController:
                 DispatchQueue.main.async {
                     // Внутренние [weak self] больше не нужны, так как self уже weak во внешней области
                     self?.showError(
-                        "Ошибка загрузки видео: " + error.localizedDescription
+                        L10n.string("error.load_video") + error.localizedDescription
                     )
                 }
                 return
             }
-
+            
             guard let temporaryURL else {
                 DispatchQueue.main.async {
-                    self?.showError("Не удалось получить видеофайл")
+                    self?.showError(L10n.string("error.retrieve_video"))
                 }
                 return
             }
-
+            
             do {
                 let fileName = try LocalVideoStore.shared.saveVideo(from: temporaryURL)
-
+                
                 DispatchQueue.main.async {
                     self?.viewModel.setSelectedVideoName(fileName)
                 }
             } catch {
                 DispatchQueue.main.async {
                     self?.showError(
-                        "Не удалось сохранить видео: " + error.localizedDescription
+                        L10n.string("error.save_video") + error.localizedDescription
                     )
                 }
             }
         }
-
-
-//        provider.loadFileRepresentation(
-//            forTypeIdentifier: UTType.movie.identifier
-//        ) { temporaryURL, error in
-//            /*
-//             Этот блок выполняется не на главном потоке.
-//             UIKit здесь вызывать нельзя.
-//             */
-//
-//            if let error {
-//                DispatchQueue.main.async { [weak self] in
-//                    self?.showError(
-//                        "Ошибка загрузки видео: "
-//                        + error.localizedDescription
-//                    )
-//                }
-//                return
-//            }
-//
-//            guard let temporaryURL else {
-//                DispatchQueue.main.async { [weak self] in
-//                    self?.showError(
-//                        "Не удалось получить видеофайл"
-//                    )
-//                }
-//                return
-//            }
-//
-//            do {
-//                /*
-//                 Копирование файла можно выполнять
-//                 в фоновом потоке.
-//                 */
-//                let fileName =
-//                    try LocalVideoStore.shared.saveVideo(
-//                        from: temporaryURL
-//                    )
-//
-//                /*
-//                 ViewModel и UIKit вызываются только
-//                 на главном потоке.
-//                 */
-//                DispatchQueue.main.async { [weak self] in
-//                    self?.viewModel.setSelectedVideoName(
-//                        fileName
-//                    )
-//                }
-//            } catch {
-//                DispatchQueue.main.async { [weak self] in
-//                    self?.showError(
-//                        "Не удалось сохранить видео: "
-//                        + error.localizedDescription
-//                    )
-//                }
-//            }
-//        }
+        
     }
 }
-
-
-
-
-//extension CreateClipViewController:
-//    PHPickerViewControllerDelegate {
-//
-//    func picker(
-//        _ picker: PHPickerViewController,
-//        didFinishPicking results: [PHPickerResult]
-//    ) {
-//        picker.dismiss(animated: true)
-//
-//        guard let result = results.first else {
-//            return
-//        }
-//
-//        let provider = result.itemProvider
-//
-//        guard provider.hasItemConformingToTypeIdentifier(
-//            UTType.movie.identifier
-//        ) else {
-//            showError("Выбранный файл не является видео")
-//            return
-//        }
-//
-//        provider.loadFileRepresentation(
-//            forTypeIdentifier: UTType.movie.identifier
-//        ) { [weak self] temporaryURL, error in
-//            if let error {
-//                DispatchQueue.main.async {
-//                    self?.showError(
-//                        "Ошибка загрузки видео: \(error.localizedDescription)"
-//                    )
-//                }
-//                return
-//            }
-//
-//            guard let temporaryURL else {
-//                DispatchQueue.main.async {
-//                    self?.showError(
-//                        "Не удалось получить видеофайл"
-//                    )
-//                }
-//                return
-//            }
-//
-//            self?.viewModel.saveSelectedVideo(
-//                from: temporaryURL
-//            )
-//        }
-//    }
-//}
-//
-//
-//
-//

@@ -70,7 +70,7 @@ final class ProfileViewController: UIViewController {
         view.backgroundColor =
             AppColors.secondaryBackground
 
-        navigationItem.title = "Профиль"
+        navigationItem.title = L10n.string("common.profile")
         navigationItem.largeTitleDisplayMode = .never
 
         view.addSubview(collectionView)
@@ -182,13 +182,13 @@ final class ProfileViewController: UIViewController {
 
     private func showError(_ message: String) {
         let alert = UIAlertController(
-            title: "Ошибка",
+            title: L10n.string("common.error"),
             message: message,
             preferredStyle: .alert
         )
 
         alert.addAction(
-            UIAlertAction(title: "ОК", style: .default)
+            UIAlertAction(title: L10n.string("common.ok"), style: .default)
         )
 
         present(alert, animated: true)
@@ -211,27 +211,26 @@ final class ProfileViewController: UIViewController {
             )
 
         navigationItem.rightBarButtonItem?
-            .accessibilityLabel = "Выйти"
+            .accessibilityLabel = L10n.string("common.logout")
     }
 
     @objc private func logoutTapped() {
         let alert = UIAlertController(
-            title: "Выйти из аккаунта?",
-            message:
-                "Для следующего входа потребуется номер телефона.",
+            title: L10n.string("common.logout_account"),
+            message: L10n.string("common.required_number"),
             preferredStyle: .alert
         )
 
         alert.addAction(
             UIAlertAction(
-                title: "Отмена",
+                title: L10n.string("common.cancel"),
                 style: .cancel
             )
         )
 
         alert.addAction(
             UIAlertAction(
-                title: "Выйти",
+                title: L10n.string("common.logout"),
                 style: .destructive
             ) { [weak self] _ in
                 self?.onLogout?()
@@ -297,7 +296,7 @@ extension ProfileViewController:
             cell.configure(with: user)
 
             cell.onMessage = {
-                print("Открыть диалог с пользователем")
+                print(L10n.string("common.open_dialog"))
             }
 
             return cell

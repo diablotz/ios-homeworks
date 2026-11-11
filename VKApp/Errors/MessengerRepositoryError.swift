@@ -17,19 +17,19 @@ enum MessengerRepositoryError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .conversationNotFound:
-            return "Диалог не найден"
+            return L10n.string("error.dialog_not_found")
 
         case .userNotFound:
-            return "Пользователь не найден"
+            return L10n.string("error.user_not_found")
 
         case .emptyMessage:
-            return "Введите сообщение"
+            return L10n.string("error.enter_message")
 
         case .fetchFailed:
-            return "Не удалось загрузить сообщения"
+            return L10n.string("error.load_message")
 
         case .saveFailed:
-            return "Не удалось отправить сообщение"
+            return L10n.string("error.send_message")
         }
     }
 }

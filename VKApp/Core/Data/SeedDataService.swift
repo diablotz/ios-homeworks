@@ -386,7 +386,7 @@ private extension SeedDataService {
         likeNotification.id = UUID()
         likeNotification.notificationKind = .like
         likeNotification.message =
-            "\(users.sergey.displayName) оценил вашу запись"
+        "\(users.sergey.displayName) " + L10n.string("seed.liked_post")
         likeNotification.createdAt =
             Date().addingTimeInterval(-1_800)
         likeNotification.isRead = false
@@ -400,7 +400,7 @@ private extension SeedDataService {
         friendNotification.id = UUID()
         friendNotification.notificationKind = .friendRequest
         friendNotification.message =
-            "\(users.alexander.displayName) хочет добавить вас в друзья"
+        "\(users.alexander.displayName) " + L10n.string("seed.add_friend")
         friendNotification.createdAt =
             Date().addingTimeInterval(-7_200)
         friendNotification.isRead = false

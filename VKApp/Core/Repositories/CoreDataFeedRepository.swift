@@ -265,18 +265,18 @@ final class CoreDataFeedRepository: FeedRepository {
             return nil
         }
 
-        let mediaType: PostMediaType
-
-        if let rawValue = post.mediaType,
-           let savedType = PostMediaType(rawValue: rawValue) {
-            mediaType = savedType
-        } else if post.videoName != nil {
-            mediaType = .video
-        } else if post.imageName != nil {
-            mediaType = .image
-        } else {
-            mediaType = .text
-        }
+//        let mediaType: PostMediaType
+//
+//        if let rawValue = post.mediaType,
+//           let savedType = PostMediaType(rawValue: rawValue) {
+//            mediaType = savedType
+//        } else if post.videoName != nil {
+//            mediaType = .video
+//        } else if post.imageName != nil {
+//            mediaType = .image
+//        } else {
+//            mediaType = .text
+//        }
 
         return FeedPost(
             id: id,
@@ -286,13 +286,20 @@ final class CoreDataFeedRepository: FeedRepository {
             text: post.text ?? "",
             imageName: post.imageName,
             videoName: post.videoName,
-            mediaType: makeMediaType(imageName: post.imageName, videoName: post.videoName, storedValue: post.mediaType),
+            //mediaType: makeMediaType(imageName: post.imageName, videoName: post.videoName, storedValue: post.mediaType),
+            mediaType: makeMediaType(from: post),
             createdAt: post.createdAt ?? Date(),
             likesCount: Int(post.likesCount),
             commentsCount: Int(post.commentsCount),
             sharesCount: Int(post.sharesCount),
             viewsCount: Int(post.viewsCount),
-            isLiked: post.isLiked
+            isLiked: post.isLiked,
+            externalID: post.externalID,
+            externalTitle: post.externalTitle,
+            externalSubtitle: post.externalSubtitle,
+            externalImageURL: post.externalImageURL,
+            externalMediaURL: post.externalMediaURL,
+            externalStoreURL: post.externalStoreURL
             
 
 
@@ -449,6 +456,186 @@ final class CoreDataFeedRepository: FeedRepository {
             throw FeedRepositoryError.saveFailed(error)
         }
     }
+    
+    
+    func createMoviePost(
+        authorID: UUID,
+        text: String,
+        movie: Movie
+    ) throws {
+        let context = persistenceController
+            .container
+            .viewContext
+
+        let author = try findUser(
+            id: authorID,
+            context: context
+        )
+
+        let post = PostEntity(context: context)
+
+        post.id = UUID()
+        post.author = author
+        post.text = text.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        )
+        post.createdAt = Date()
+
+        post.mediaType = PostMediaType.movie.rawValue
+
+        post.imageName = nil
+        post.videoName = nil
+
+        post.externalID = String(movie.id)
+        post.externalTitle = movie.name
+        post.externalSubtitle = makeMovieSubtitle(
+            movie
+        )
+        post.externalImageURL = movie.image?.original
+            ?? movie.image?.medium
+        post.externalMediaURL = nil
+        post.externalStoreURL = movie.url
+
+        post.likesCount = 0
+        post.commentsCount = 0
+        post.sharesCount = 0
+        post.viewsCount = 0
+        post.isLiked = false
+
+        print("Пост с фильмом сохранён:")
+        print("Название:", movie.name)
+        print(
+            "Постер:",
+            post.externalImageURL ?? "отсутствует"
+        )
+        
+        try context.save()
+
+        
+    }
+    
+//    func createMusicPost(
+//        authorID: UUID,
+//        text: String,
+//        track: MusicTrack
+//    ) throws {
+//        let context = persistenceController
+//            .container
+//            .viewContext
+//
+//        let author = try findUser(
+//            id: authorID,
+//            context: context
+//        )
+//
+//        let post = PostEntity(
+//            context: context
+//        )
+//
+//        post.id = UUID()
+//        post.author = author
+//        post.text = text.trimmingCharacters(
+//            in: .whitespacesAndNewlines
+//        )
+//        post.createdAt = Date()
+//
+//        post.mediaType =
+//            PostMediaType.music.rawValue
+//
+//        post.imageName = nil
+//        post.videoName = nil
+//
+//        post.externalID = track.id
+//        post.externalTitle = track.title
+//        post.externalSubtitle =
+//            track.artistName
+//        post.externalImageURL =
+//            track.artworkURL
+//        post.externalMediaURL =
+//            track.streamURL
+//        post.externalStoreURL =
+//            track.storeURL
+//
+//        post.likesCount = 0
+//        post.commentsCount = 0
+//        post.sharesCount = 0
+//        post.viewsCount = 0
+//        post.isLiked = false
+//
+//        try context.save()
+//
+////        NotificationCenter.default.post(
+////            name: .feedDidChange,
+////            object: nil
+////        )
+//    }
+
+    
+    
+    func createMusicPost(
+        authorID: UUID,
+        text: String,
+        track: MusicTrack
+    ) throws {
+        guard let previewURL = track.previewUrl,
+              !previewURL.isEmpty
+        else {
+            throw FeedRepositoryError.invalidExternalMedia
+        }
+
+        let context = persistenceController
+            .container
+            .viewContext
+
+        let author = try findUser(
+            id: authorID,
+            context: context
+        )
+
+        let post = PostEntity(context: context)
+
+        post.id = UUID()
+        post.author = author
+        post.text = text.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        )
+        post.createdAt = Date()
+
+        post.mediaType = PostMediaType.music.rawValue
+
+        post.imageName = nil
+        post.videoName = nil
+
+        post.externalID = String(track.trackId)
+        post.externalTitle = track.trackName
+        post.externalSubtitle = makeMusicSubtitle(
+            track
+        )
+        post.externalImageURL = makeLargeArtworkURL(
+            from: track.artworkUrl100 ?? ""
+        )
+        post.externalMediaURL = previewURL
+        post.externalStoreURL = track.trackViewUrl
+
+        post.likesCount = 0
+        post.commentsCount = 0
+        post.sharesCount = 0
+        post.viewsCount = 0
+        post.isLiked = false
+
+        print("Пост с музыкой сохранён:")
+        print("Трек:", track.trackName)
+        print("Исполнитель:", track.artistName)
+        print("Preview URL:", previewURL)
+        
+        try context.save()
+
+        
+    }
+
+
+
+
 
     func markStoryAsViewed(id: UUID) throws {
         let request = NSFetchRequest<StoryEntity>(
@@ -478,31 +665,140 @@ final class CoreDataFeedRepository: FeedRepository {
         }
     }
     
+//    private func makeMediaType(
+//        imageName: String?,
+//        videoName: String?,
+//        storedValue: String?
+//    ) -> PostMediaType {
+//        /*
+//         Реальное наличие файла важнее старого значения mediaType.
+//         */
+//        if videoName != nil {
+//            return .video
+//        }
+//
+//        if imageName != nil {
+//            return .image
+//        }
+//
+//        if let storedValue,
+//           let mediaType = PostMediaType(
+//               rawValue: storedValue
+//           ) {
+//            return mediaType
+//        }
+//
+//        return .text
+//    }
+    
     private func makeMediaType(
-        imageName: String?,
-        videoName: String?,
-        storedValue: String?
+        from entity: PostEntity
     ) -> PostMediaType {
-        /*
-         Реальное наличие файла важнее старого значения mediaType.
-         */
-        if videoName != nil {
-            return .video
-        }
-
-        if imageName != nil {
-            return .image
-        }
-
-        if let storedValue,
+        if let rawValue = entity.mediaType,
            let mediaType = PostMediaType(
-               rawValue: storedValue
+               rawValue: rawValue
            ) {
             return mediaType
         }
 
+        if normalizedValue(entity.videoName) != nil {
+            return .video
+        }
+
+        if normalizedValue(entity.imageName) != nil {
+            return .image
+        }
+
+        if normalizedValue(entity.externalMediaURL) != nil {
+            return .music
+        }
+
+        if normalizedValue(entity.externalImageURL) != nil {
+            return .movie
+        }
+
         return .text
     }
+
+
+    
+    
+    private func makeMovieSubtitle(
+        _ movie: Movie
+    ) -> String {
+        var components: [String] = []
+
+        if !movie.genres.isEmpty {
+            components.append(
+                movie.genres.joined(separator: ", ")
+            )
+        }
+
+        if let rating = movie.rating.average {
+            components.append(
+                String(format: "★ %.1f", rating)
+            )
+        }
+
+        if let premiered = movie.premiered,
+           !premiered.isEmpty {
+            components.append(premiered)
+        }
+
+        return components.joined(separator: " • ")
+    }
+    
+    
+    
+    private func makeMusicSubtitle(
+        _ track: MusicTrack
+    ) -> String {
+        var components = [track.artistName]
+
+        if let collectionName = track.collectionName,
+           !collectionName.isEmpty {
+            components.append(collectionName)
+        }
+
+        return components.joined(separator: " • ")
+    }
+
+    
+    private func makeLargeArtworkURL(
+        from artworkURL: String
+    ) -> String {
+        artworkURL
+            .replacingOccurrences(
+                of: "100x100",
+                with: "600x600"
+            )
+    }
+
+
+    
+    private func findUser(
+        id: UUID,
+        context: NSManagedObjectContext
+    ) throws -> UserEntity {
+        let request = UserEntity.fetchRequest()
+
+        request.fetchLimit = 1
+        request.predicate = NSPredicate(
+            format: "id == %@",
+            id as CVarArg
+        )
+
+        guard let user = try context.fetch(request).first else {
+            throw FeedRepositoryError.userNotFound
+        }
+
+        return user
+    }
+
+
+
+
+
 
 
     
@@ -528,38 +824,102 @@ final class CoreDataFeedRepository: FeedRepository {
 //    }
     
     
+//    private func makeFeedPost(
+//        from entity: PostEntity
+//    ) -> FeedPost {
+//        let imageName = normalizedMediaName(
+//            entity.imageName
+//        )
+//
+//        let videoName = normalizedMediaName(
+//            entity.videoName
+//        )
+//
+//        return FeedPost(
+//            id: entity.id ?? UUID(),
+//            authorID: entity.author?.id ?? UUID(),
+//            authorName: entity.author?.displayName
+//                ?? "Пользователь",
+//            authorAvatarName: entity.author?.avatarName,
+//            text: entity.text ?? "",
+//            imageName: imageName,
+//            videoName: videoName,
+////            mediaType: makeMediaType(
+////                imageName: imageName,
+////                videoName: videoName,
+////                storedValue: entity.mediaType
+////            ),
+//            mediaType: makeMediaType(from: entity),
+//            createdAt: entity.createdAt ?? Date(),
+//            likesCount: Int(entity.likesCount),
+//            commentsCount: Int(entity.commentsCount),
+//            sharesCount: Int(entity.sharesCount),
+//            viewsCount: Int(entity.viewsCount),
+//            isLiked: entity.isLiked,
+//            externalID: entity.externalID,
+//            externalTitle: entity.externalTitle,
+//            externalSubtitle: entity.externalSubtitle,
+//            externalImageURL: entity.externalImageURL,
+//            externalMediaURL: entity.externalMediaURL,
+//            externalStoreURL: entity.externalStoreURL
+//            
+//        )
+//    }
+
     private func makeFeedPost(
         from entity: PostEntity
     ) -> FeedPost {
-        let imageName = normalizedMediaName(
-            entity.imageName
+        let mediaType = makeMediaType(
+            from: entity
         )
 
-        let videoName = normalizedMediaName(
-            entity.videoName
-        )
-
-        return FeedPost(
+        let post = FeedPost(
             id: entity.id ?? UUID(),
             authorID: entity.author?.id ?? UUID(),
             authorName: entity.author?.displayName
                 ?? "Пользователь",
             authorAvatarName: entity.author?.avatarName,
             text: entity.text ?? "",
-            imageName: imageName,
-            videoName: videoName,
-            mediaType: makeMediaType(
-                imageName: imageName,
-                videoName: videoName,
-                storedValue: entity.mediaType
+            imageName: normalizedValue(
+                entity.imageName
             ),
+            videoName: normalizedValue(
+                entity.videoName
+            ),
+            mediaType: mediaType,
             createdAt: entity.createdAt ?? Date(),
             likesCount: Int(entity.likesCount),
             commentsCount: Int(entity.commentsCount),
             sharesCount: Int(entity.sharesCount),
             viewsCount: Int(entity.viewsCount),
-            isLiked: entity.isLiked
+            isLiked: entity.isLiked,
+            externalID: normalizedValue(
+                entity.externalID
+            ),
+            externalTitle: normalizedValue(
+                entity.externalTitle
+            ),
+            externalSubtitle: normalizedValue(
+                entity.externalSubtitle
+            ),
+            externalImageURL: normalizedValue(
+                entity.externalImageURL
+            ),
+            externalMediaURL: normalizedValue(
+                entity.externalMediaURL
+            ),
+            externalStoreURL: normalizedValue(
+                entity.externalStoreURL
+            )
         )
+
+        print("Получен пост из Core Data:")
+        print("mediaType:", mediaType.rawValue)
+        print("externalTitle:", post.externalTitle ?? "nil")
+        print("externalImageURL:", post.externalImageURL ?? "nil")
+        print("externalMediaURL:", post.externalMediaURL ?? "nil")
+
+        return post
     }
 
 
@@ -610,6 +970,39 @@ final class CoreDataFeedRepository: FeedRepository {
 
         return trimmedValue
     }
+    
+    
+    private func normalizedValue(
+        _ value: String?
+    ) -> String? {
+        guard let value else {
+            return nil
+        }
+
+        let result = value.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        )
+
+        return result.isEmpty ? nil : result
+    }
+
+
+    
+//    private func normalizedValue(
+//        _ value: String?
+//    ) -> String? {
+//        guard let value else {
+//            return nil
+//        }
+//
+//        let result = value.trimmingCharacters(
+//            in: .whitespacesAndNewlines
+//        )
+//
+//        return result.isEmpty ? nil : result
+//    }
+
+
 
 
 

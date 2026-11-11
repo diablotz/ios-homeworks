@@ -33,7 +33,7 @@ final class NotificationsViewController:
 
     private let emptyLabel: UILabel = {
         let label = UILabel()
-        label.text = "Уведомлений пока нет"
+        label.text = L10n.string("error.no_notifications")
         label.font = AppFonts.body
         label.textColor = AppColors.secondaryText
         label.textAlignment = .center
@@ -65,7 +65,7 @@ final class NotificationsViewController:
 
     private func setupView() {
         view.backgroundColor = AppColors.background
-        navigationItem.title = "Уведомления"
+        navigationItem.title = L10n.string("common.notifications")
 
         view.addSubview(tableView)
         view.addSubview(emptyLabel)
@@ -124,13 +124,13 @@ final class NotificationsViewController:
 
     private func showError(_ message: String) {
         let alert = UIAlertController(
-            title: "Ошибка",
+            title: L10n.string("common.error"),
             message: message,
             preferredStyle: .alert
         )
 
         alert.addAction(
-            UIAlertAction(title: "ОК", style: .default)
+            UIAlertAction(title: L10n.string("common.ok"), style: .default)
         )
 
         present(alert, animated: true)
@@ -177,7 +177,7 @@ extension NotificationsViewController:
     ) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(
             style: .destructive,
-            title: "Удалить"
+            title: L10n.string("common.delete")
         ) { [weak self] _, _, completion in
             self?.viewModel.delete(at: indexPath.row)
             completion(true)

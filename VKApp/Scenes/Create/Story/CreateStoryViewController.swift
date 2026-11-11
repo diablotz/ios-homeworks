@@ -24,7 +24,7 @@ final class CreateStoryViewController:
 
     private lazy var selectButton: UIButton = {
         var configuration = UIButton.Configuration.filled()
-        configuration.title = "Выбрать фотографию"
+        configuration.title = L10n.string("create.select_photo")
         configuration.baseBackgroundColor = AppColors.vkBlue
 
         let button = UIButton(configuration: configuration)
@@ -113,12 +113,12 @@ final class CreateStoryViewController:
 
     private func showError(_ message: String) {
         let alert = UIAlertController(
-            title: "Ошибка",
+            title: L10n.string("common.error"),
             message: message,
             preferredStyle: .alert
         )
         alert.addAction(
-            UIAlertAction(title: "ОК", style: .default)
+            UIAlertAction(title: L10n.string("common.ok"), style: .default)
         )
         present(alert, animated: true)
     }

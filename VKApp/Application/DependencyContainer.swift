@@ -60,6 +60,18 @@ final class DependencyContainer {
             context: persistenceController.viewContext
         )
     }()
+    
+//    lazy var movieService: MovieServiceProtocol = {
+//        MovieService()
+//    }()
+    
+    let movieService: MovieServiceProtocol
+    
+    let musicService: MusicServiceProtocol
+    
+//    lazy var musicService: MusicServiceProtocol = {
+//       musicService()
+//    }()
 
     init(
         persistenceController: PersistenceController = .shared,
@@ -73,6 +85,9 @@ final class DependencyContainer {
         self.seedDataService = SeedDataService(
             persistenceController: persistenceController
         )
+        
+        self.movieService = MovieService()
+        self.musicService = MusicService()
     }
 
     var viewContext: NSManagedObjectContext {

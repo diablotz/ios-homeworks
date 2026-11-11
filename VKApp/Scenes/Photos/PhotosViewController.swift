@@ -65,7 +65,7 @@ final class PhotosViewController: UIViewController {
 
     private func setupView() {
         view.backgroundColor = AppColors.background
-        navigationItem.title = "Фото"
+        navigationItem.title = L10n.string("feed.photos")
         navigationItem.largeTitleDisplayMode = .never
 
         view.addSubview(collectionView)
@@ -225,13 +225,13 @@ final class PhotosViewController: UIViewController {
 
     private func showError(_ message: String) {
         let alert = UIAlertController(
-            title: "Ошибка",
+            title: L10n.string("common.error"),
             message: message,
             preferredStyle: .alert
         )
 
         alert.addAction(
-            UIAlertAction(title: "ОК", style: .default)
+            UIAlertAction(title: L10n.string("common.ok"), style: .default)
         )
 
         present(alert, animated: true)

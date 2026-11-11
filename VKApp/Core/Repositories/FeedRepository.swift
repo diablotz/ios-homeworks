@@ -34,5 +34,18 @@ protocol FeedRepository {
     func markStoryAsViewed(
         id: UUID
     ) throws
+    
+    
+    func createMoviePost(
+        authorID: UUID,
+        text: String,
+        movie: Movie
+    ) throws
+    
+    func createMusicPost(
+        authorID: UUID,
+        text: String,
+        track: MusicTrack
+    ) throws
 }
 
