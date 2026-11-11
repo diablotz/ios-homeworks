@@ -34,7 +34,7 @@ final class MessengerViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = AppColors.background
-        navigationItem.title = "Мессенджер"
+        navigationItem.title = L10n.string("tab.messenger")
 
         tableView.dataSource = self
         tableView.delegate = self
@@ -79,12 +79,12 @@ final class MessengerViewController: UIViewController {
 
     private func showError(_ message: String) {
         let alert = UIAlertController(
-            title: "Ошибка",
+            title: L10n.string("common.error"),
             message: message,
             preferredStyle: .alert
         )
         alert.addAction(
-            UIAlertAction(title: "ОК", style: .default)
+            UIAlertAction(title: L10n.string("common.ok"), style: .default)
         )
         present(alert, animated: true)
     }

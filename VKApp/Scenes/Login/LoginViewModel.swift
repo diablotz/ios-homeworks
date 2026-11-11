@@ -33,16 +33,16 @@ final class LoginViewModel {
         switch mode {
         case .login:
             self.content = Content(
-                title: "С возвращением",
-                subtitle: "Введите номер телефона\nдля входа в приложение",
-                buttonTitle: "ПОДТВЕРДИТЬ"
+                title: L10n.string("login.welcome_back"),
+                subtitle: L10n.string("login.enter_number"),
+                buttonTitle: L10n.string("login.confirm")
             )
 
         case .registration:
             self.content = Content(
-                title: "Регистрация",
-                subtitle: "Введите номер телефона\nдля создания аккаунта",
-                buttonTitle: "ПРОДОЛЖИТЬ"
+                title: L10n.string("login.registration"),
+                subtitle: L10n.string("login.create_account"),
+                buttonTitle: L10n.string("login.continue")
             )
         }
     }
@@ -63,7 +63,7 @@ final class LoginViewModel {
         } catch {
             let message =
                 (error as? LocalizedError)?.errorDescription
-                ?? "Произошла неизвестная ошибка"
+                ?? L10n.string("error.unknown_error")
 
             onError?(message)
         }

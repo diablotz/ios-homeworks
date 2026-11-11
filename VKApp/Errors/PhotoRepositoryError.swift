@@ -15,13 +15,13 @@ enum PhotoRepositoryError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .photoNotFound:
-            return "Фотография не найдена"
+            return L10n.string("error.found_photo")
 
         case .fetchFailed:
-            return "Не удалось загрузить фотографии"
+            return L10n.string("error.load_photos")
 
         case .saveFailed:
-            return "Не удалось сохранить изменение"
+            return L10n.string("error.not_saved")
         }
     }
 }

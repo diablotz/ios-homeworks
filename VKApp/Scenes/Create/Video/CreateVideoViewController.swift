@@ -29,7 +29,7 @@ final class CreateVideoViewController: UIViewController {
 
     private let placeholderLabel: UILabel = {
         let label = UILabel()
-        label.text = "Видео не выбрано"
+        label.text = L10n.string("create.no_video")
         label.textColor = .white
         label.font = AppFonts.body
         label.textAlignment = .center
@@ -57,7 +57,7 @@ final class CreateVideoViewController: UIViewController {
 
     private lazy var selectVideoButton: UIButton = {
         var configuration = UIButton.Configuration.filled()
-        configuration.title = "Выбрать видео"
+        configuration.title = L10n.string("create.select_video")
         configuration.image = UIImage(
             systemName: "video.badge.plus"
         )
@@ -95,10 +95,10 @@ final class CreateVideoViewController: UIViewController {
 
     private func setupView() {
         view.backgroundColor = AppColors.background
-        navigationItem.title = "Новое видео"
+        navigationItem.title = L10n.string("create.new_video")
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "Опубликовать",
+            title: L10n.string("common.publish"),
             style: .done,
             target: self,
             action: #selector(publishTapped)
@@ -211,7 +211,7 @@ final class CreateVideoViewController: UIViewController {
                 for: videoName
             )
         else {
-            showError("Сохранённое видео не найдено")
+            showError(L10n.string("error.video_not_found"))
             return
         }
 
@@ -284,13 +284,13 @@ final class CreateVideoViewController: UIViewController {
 
     private func showError(_ message: String) {
         let alert = UIAlertController(
-            title: "Ошибка",
+            title: L10n.string("common.error"),
             message: message,
             preferredStyle: .alert
         )
 
         alert.addAction(
-            UIAlertAction(title: "ОК", style: .default)
+            UIAlertAction(title: L10n.string("common.ok"), style: .default)
         )
 
         present(alert, animated: true)
@@ -318,7 +318,7 @@ extension CreateVideoViewController:
         guard provider.hasItemConformingToTypeIdentifier(
             UTType.movie.identifier
         ) else {
-            showError("Выбранный файл не является видео")
+            showError(L10n.string("error.not_video"))
             return
         }
         
@@ -332,7 +332,7 @@ extension CreateVideoViewController:
                 DispatchQueue.main.async {
                     // Внутренние [weak self] больше не нужны, так как self уже weak во внешней области
                     self?.showError(
-                        "Ошибка загрузки видео: " + error.localizedDescription
+                        L10n.string("error.load_video") + error.localizedDescription
                     )
                 }
                 return
@@ -340,7 +340,7 @@ extension CreateVideoViewController:
             
             guard let temporaryURL else {
                 DispatchQueue.main.async {
-                    self?.showError("Не удалось получить видеофайл")
+                    self?.showError(L10n.string("error.retrieve_video"))
                 }
                 return
             }
@@ -354,7 +354,7 @@ extension CreateVideoViewController:
             } catch {
                 DispatchQueue.main.async {
                     self?.showError(
-                        "Не удалось сохранить видео: " + error.localizedDescription
+                        L10n.string("error.save_video") + error.localizedDescription
                     )
                 }
             }

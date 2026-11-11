@@ -133,7 +133,9 @@ final class AppCoordinator {
             photoRepository: container.photoRepository,
             notificationRepository: container.notificationRepository,
             messengerRepository: container.messengerRepository,
-            reelRepository: container.reelRepository
+            reelRepository: container.reelRepository,
+            movieService: container.movieService,
+            musicService: container.musicService
         )
         
         mainTabBarController.onLogout = {

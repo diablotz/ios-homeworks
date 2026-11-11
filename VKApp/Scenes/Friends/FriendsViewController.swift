@@ -39,7 +39,7 @@ final class FriendsViewController: UIViewController {
 
     private let emptyLabel: UILabel = {
         let label = UILabel()
-        label.text = "Друзья не найдены"
+        label.text = L10n.string("friends.notfound")
         label.font = AppFonts.body
         label.textColor = AppColors.secondaryText
         label.textAlignment = .center
@@ -72,7 +72,7 @@ final class FriendsViewController: UIViewController {
 
     private func setupView() {
         view.backgroundColor = AppColors.background
-        navigationItem.title = "Друзья"
+        navigationItem.title = L10n.string("feed.friends")
 
         view.addSubview(tableView)
         view.addSubview(emptyLabel)
@@ -92,7 +92,7 @@ final class FriendsViewController: UIViewController {
     private func setupSearchController() {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Поиск друзей"
+        searchController.searchBar.placeholder = L10n.string("friends.search")
 
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
@@ -141,13 +141,13 @@ final class FriendsViewController: UIViewController {
 
     private func showError(_ message: String) {
         let alert = UIAlertController(
-            title: "Ошибка",
+            title: L10n.string("common.error"),
             message: message,
             preferredStyle: .alert
         )
 
         alert.addAction(
-            UIAlertAction(title: "ОК", style: .default)
+            UIAlertAction(title: L10n.string("common.ok"), style: .default)
         )
 
         present(alert, animated: true)

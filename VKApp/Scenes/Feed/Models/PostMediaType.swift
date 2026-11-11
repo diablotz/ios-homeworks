@@ -12,4 +12,6 @@ enum PostMediaType: String {
     case text
     case image
     case video
+    case movie
+    case music
 }

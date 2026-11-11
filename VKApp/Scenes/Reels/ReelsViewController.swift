@@ -66,7 +66,7 @@ final class ReelsViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .black
-        navigationItem.title = "Для вас"
+        navigationItem.title = L10n.string("search.4u")
 
         //view.addSubview(collectionView)
         view.addSubview(reelsContainerView)
@@ -323,12 +323,12 @@ final class ReelsViewController: UIViewController {
 
     private func showError(_ message: String) {
         let alert = UIAlertController(
-            title: "Ошибка",
+            title: L10n.string("common.error"),
             message: message,
             preferredStyle: .alert
         )
         alert.addAction(
-            UIAlertAction(title: "ОК", style: .default)
+            UIAlertAction(title: L10n.string("common.ok"), style: .default)
         )
         present(alert, animated: true)
     }

@@ -69,7 +69,7 @@ final class ProfileHeaderCollectionViewCell:
 
     private lazy var messageButton: UIButton = {
         var configuration = UIButton.Configuration.filled()
-        configuration.title = "Сообщение"
+        configuration.title = L10n.string("common.message")
         configuration.image = UIImage(
             systemName: "message.fill"
         )

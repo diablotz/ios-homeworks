@@ -24,6 +24,21 @@ final class PostCollectionViewCell: UICollectionViewCell {
     private var videoPlayer: AVPlayer?
     private var videoPlayerLayer: AVPlayerLayer?
     
+    // для external services
+    var onMusicTapped: ((
+        UUID,
+        String
+    ) -> Void)?
+
+    var onExternalLinkTapped: ((String) -> Void)?
+
+    private var remoteImageTask: Task<Void, Never>?
+    private var currentPostID: UUID?
+    private var externalStoreURL: String?
+    private var currentExternalMediaURL: String?
+
+    private var postImageHeightConstraint: NSLayoutConstraint?
+
 
 
     
@@ -58,6 +73,8 @@ final class PostCollectionViewCell: UICollectionViewCell {
 
         return button
     }()
+    
+    
     
     private lazy var postImageAspectConstraint: NSLayoutConstraint = {
         postImageView.heightAnchor.constraint(
@@ -174,6 +191,8 @@ final class PostCollectionViewCell: UICollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
+    
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -221,21 +240,54 @@ final class PostCollectionViewCell: UICollectionViewCell {
 
         postImageZeroHeightConstraint.isActive = false
         postImageAspectConstraint.isActive = true
+        
+        remoteImageTask?.cancel()
+        remoteImageTask = nil
+
+        currentPostID = nil
+        externalStoreURL = nil
+
+        onMusicTapped = nil
+        onExternalLinkTapped = nil
+
+        remoteImageActivityIndicator.stopAnimating()
+
+        musicPlayButton.isHidden = true
+        movieLinkButton.isHidden = true
+        setMusicPlaying(false)
+        
+        remoteImageActivityIndicator.stopAnimating()
+
+        currentExternalMediaURL = nil
+        stopVideo()
+        
     }
 
+    func configure(
+        with post: FeedPost
+    ) {
+        remoteImageTask?.cancel()
+        remoteImageTask = nil
 
-    
-    func configure(with post: FeedPost) {
-        
-        //currentPostID = post.id
+        currentPostID = post.id
         currentVideoName = post.videoName
-        //onVideoTapped = nil
+        currentExternalMediaURL = post.externalMediaURL
+        externalStoreURL = post.externalStoreURL
+
+        musicPlayButton.isHidden = true
+        setMusicPlaying(false)
+
         
-        // Автор
-        authorButton.setTitle(post.authorName, for: .normal)
-        
+
+        authorButton.setTitle(
+            post.authorName,
+            for: .normal
+        )
+
         avatarImageView.image =
-            UIImage(named: post.authorAvatarName ?? "")
+            UIImage(
+                named: post.authorAvatarName ?? ""
+            )
             ?? PostImageLoader.image(
                 named: post.authorAvatarName
             )
@@ -243,50 +295,63 @@ final class PostCollectionViewCell: UICollectionViewCell {
                 systemName: "person.crop.circle.fill"
             )
 
+        
 
-
-//        if let avatarName = post.authorAvatarName,
-//           !avatarName.isEmpty {
-//            avatarImageView.image =
-//                PostImageLoader.image(
-//                    named: post.authorAvatarName
-//                )
-//                //?? UIImage(systemName: "person.crop.circle.fill")
-//
-//
-//        } else {
-//            avatarImageView.image = UIImage(
-//                systemName: "person.crop.circle.fill"
-//            )
-//        }
-
-        // Дата и текст публикации
         dateLabel.text = post.createdAt.formatted(
-                    date: .abbreviated,
-                    time: .shortened
-                )
-        descriptionLabel.text = post.text
-
-        let postText = post.text.trimmingCharacters(
-            in: .whitespacesAndNewlines
+            date: .abbreviated,
+            time: .shortened
         )
 
-        descriptionLabel.isHidden = postText.isEmpty
+        
 
-        // Кнопка «Показать ещё»
-        let shouldShowReadMore = postText.count > 180
+        let descriptionText: String
 
-        readMoreButton.isHidden = !shouldShowReadMore
-        descriptionLabel.numberOfLines = shouldShowReadMore ? 3 : 0
+        switch post.mediaType {
+        case .movie, .music:
+            descriptionText = makeExternalDescription(
+                title: post.externalTitle,
+                subtitle: post.externalSubtitle,
+                postText: post.text
+            )
 
-        // Счётчики
+        case .text, .image, .video:
+            descriptionText = post.text
+        }
+
+        descriptionLabel.text = descriptionText
+
+        let normalizedDescription = descriptionText
+            .trimmingCharacters(
+                in: .whitespacesAndNewlines
+            )
+
+        descriptionLabel.isHidden =
+            normalizedDescription.isEmpty
+
+       
+
+        let shouldShowReadMore =
+            normalizedDescription.count > 180
+
+        readMoreButton.isHidden =
+            !shouldShowReadMore
+
+        descriptionLabel.numberOfLines =
+            shouldShowReadMore ? 3 : 0
+
+        
+
         likeButton.setTitle(
             " \(post.likesCount)",
             for: .normal
         )
 
         likeButton.setImage(
-            UIImage(systemName: post.isLiked ? "heart.fill" : "heart"),
+            UIImage(
+                systemName: post.isLiked
+                    ? "heart.fill"
+                    : "heart"
+            ),
             for: .normal
         )
 
@@ -294,16 +359,36 @@ final class PostCollectionViewCell: UICollectionViewCell {
             ? .systemRed
             : AppColors.secondaryText
 
-        commentsLabel.text = "💬 \(post.commentsCount)"
-        sharesLabel.text = "↗ \(post.sharesCount)"
-        viewsLabel.text = "◉ \(post.viewsCount)"
-        
-        let videoName = validMediaName(post.videoName)
-        let imageName = validMediaName(post.imageName)
-        
+        commentsLabel.text =
+            "💬 \(post.commentsCount)"
+
+        sharesLabel.text =
+            "↗ \(post.sharesCount)"
+
+        viewsLabel.text =
+            "◉ \(post.viewsCount)"
+
+       
+        let videoName = validMediaName(
+            post.videoName
+        )
+
+        let imageName = validMediaName(
+            post.imageName
+        )
+
+        let externalImageURL = validMediaName(
+            post.externalImageURL
+        )
+
         let hasVideo = videoName != nil
-        let hasImage = imageName != nil
-        let hasMedia = hasVideo || hasImage
+        let hasLocalImage = imageName != nil
+        let hasExternalImage = externalImageURL != nil
+
+        let hasMedia =
+            hasVideo
+            || hasLocalImage
+            || hasExternalImage
 
         postImageAspectConstraint.isActive = false
         postImageZeroHeightConstraint.isActive = false
@@ -314,55 +399,357 @@ final class PostCollectionViewCell: UICollectionViewCell {
             postImageZeroHeightConstraint.isActive = true
         }
 
-        if let videoName = post.videoName,
-           !videoName.isEmpty {
+        
 
-            print("Пост содержит видео:", videoName)
+        switch post.mediaType {
+        case .video:
+            guard let videoName else {
+                configureEmptyMedia()
+                break
+            }
 
+            print(
+                "Пост содержит видео:",
+                videoName
+            )
+
+            // Это  прежний рабочий метод
             configureVideo(
                 fileName: videoName
             )
 
-        } else if let imageName = post.imageName,
-                  !imageName.isEmpty {
-            stopVideo()
+        case .image:
+            guard let imageName else {
+                configureEmptyMedia()
+                break
+            }
 
-            print("===== ЗАГРУЗКА КАРТИНКИ =====")
-            print("Название из Core Data:", imageName)
-            print(
-                "UIImage(named:):",
-                UIImage(named: imageName) as Any
+            configureLocalImage(
+                imageName: imageName
             )
 
+            
+        case .movie:
+            stopVideo()
+
             postImageView.isHidden = false
-            postImageView.backgroundColor = .clear
-            postImageView.contentMode = .scaleAspectFill
-            postImageView.tintColor = nil
+            postImageView.image = nil
+            postImageView.backgroundColor =
+                AppColors.secondaryBackground
+            postImageView.contentMode = .scaleAspectFit
+            postImageView.tintColor =
+                AppColors.secondaryText
 
-            let image =
-                UIImage(named: imageName)
-                ?? PostImageLoader.image(named: imageName)
-
-            postImageView.image = image
             playImageView.isHidden = true
+            musicPlayButton.isHidden = true
 
-            if image == nil {
-                postImageView.backgroundColor =
-                    AppColors.secondaryBackground
+            movieLinkButton.isHidden =
+                post.externalStoreURL == nil
 
-                print("ИТОГ: картинка не найдена:", imageName)
-            } else {
-                print("ИТОГ: картинка загружена:", imageName)
-            }
+            loadRemoteImage(
+                urlString: externalImageURL,
+                placeholderName: "film"
+            )
+
+            contentView.bringSubviewToFront(
+                movieLinkButton
+            )
+
+            print("Фильм:")
+            print(
+                "externalStoreURL:",
+                post.externalStoreURL ?? "nil"
+            )
+
+
+//        case .movie:
+//            stopVideo()
+//
+//            postImageView.isHidden = false
+//            postImageView.image = nil
+//            postImageView.backgroundColor =
+//                AppColors.secondaryBackground
+//            postImageView.contentMode = .scaleAspectFit
+//            postImageView.tintColor =
+//                AppColors.secondaryText
+//
+//            playImageView.isHidden = true
+//            musicPlayButton.isHidden = true
+//
+//            loadRemoteImage(
+//                urlString: externalImageURL,
+//                placeholderName: "film"
+//            )
+//
+//            print("Пост содержит фильм:")
+//            print(
+//                "Название:",
+//                post.externalTitle ?? "nil"
+//            )
+//            print(
+//                "Постер:",
+//                externalImageURL ?? "nil"
+//            )
+
+        case .music:
+            stopVideo()
+
+            postImageView.isHidden = false
+            postImageView.image = nil
+            postImageView.backgroundColor =
+                AppColors.secondaryBackground
+            postImageView.contentMode = .scaleAspectFit
+            postImageView.tintColor =
+                AppColors.secondaryText
+
+            playImageView.isHidden = true
+            movieLinkButton.isHidden = true
+
+            musicPlayButton.isHidden =
+                post.externalMediaURL == nil
+
+            loadRemoteImage(
+                urlString: externalImageURL,
+                placeholderName: "music.note"
+            )
+
+            contentView.bringSubviewToFront(
+                musicPlayButton
+            )
+
+            print("Музыка:")
+            print(
+                "externalMediaURL:",
+                post.externalMediaURL ?? "nil"
+            )
+
+
+//        case .music:
+//            stopVideo()
+//
+//            postImageView.isHidden = false
+//            postImageView.image = nil
+//            postImageView.backgroundColor =
+//                AppColors.secondaryBackground
+//            postImageView.contentMode = .scaleAspectFit
+//            postImageView.tintColor =
+//                AppColors.secondaryText
+//
+//            playImageView.isHidden = true
+//
+//            musicPlayButton.isHidden =
+//                post.externalMediaURL == nil
+//
+//            loadRemoteImage(
+//                urlString: externalImageURL,
+//                placeholderName: "music.note"
+//            )
+//
+//            print("Пост содержит музыку:")
+//            print(
+//                "Название:",
+//                post.externalTitle ?? "nil"
+//            )
+//            print(
+//                "Обложка:",
+//                externalImageURL ?? "nil"
+//            )
+//            print(
+//                "Preview:",
+//                post.externalMediaURL ?? "nil"
+//            )
+
+        case .text:
+            configureEmptyMedia()
         }
 
+        setNeedsLayout()
+    }
 
+
+
+//    func configure(with post: FeedPost) {
+//        currentPostID = post.id
+//        currentExternalMediaURL = post.externalMediaURL
+//        externalStoreURL = post.externalStoreURL
+//
+//        remoteImageTask?.cancel()
+//        remoteImageTask = nil
+//
+//        musicPlayButton.isHidden = true
+//        setMusicPlaying(false)
+//
+//        updateMediaHeight(
+//            for: post
+//        )
+//
+//        switch post.mediaType {
+//        case .text:
+//            postImageView.image = nil
+//            postImageView.isHidden = true
+//
+//            descriptionLabel.text = post.text
+//
+//        case .image:
+//            postImageView.isHidden = false
+//            postImageView.contentMode = .scaleAspectFill
+//
+//            if let imageName = post.imageName {
+//                postImageView.image = UIImage(
+//                    named: imageName
+//                )
+//            } else {
+//                postImageView.image = nil
+//            }
+//
+//            descriptionLabel.text = post.text
+//
+//        case .video:
+//            postImageView.isHidden = false
+//            postImageView.contentMode = .scaleAspectFill
+//
+//            configureVideoPost(
+//                post
+//            )
+//
+//            descriptionLabel.text = post.text
+//
+//        case .movie:
+//            postImageView.isHidden = false
+//            postImageView.contentMode = .scaleAspectFit
+//            postImageView.backgroundColor =
+//                UIColor.secondarySystemBackground
+//
+//            loadRemoteImage(
+//                urlString: post.externalImageURL,
+//                placeholderName: "film"
+//            )
+//
+//            descriptionLabel.text = makeExternalDescription(
+//                title: post.externalTitle,
+//                subtitle: post.externalSubtitle,
+//                postText: post.text
+//            )
+//
+//        case .music:
+//            postImageView.isHidden = false
+//            postImageView.contentMode = .scaleAspectFit
+//            postImageView.backgroundColor =
+//                UIColor.secondarySystemBackground
+//
+//            musicPlayButton.isHidden =
+//                post.externalMediaURL == nil
+//
+//            loadRemoteImage(
+//                urlString: post.externalImageURL,
+//                placeholderName: "music.note"
+//            )
+//
+//            descriptionLabel.text = makeExternalDescription(
+//                title: post.externalTitle,
+//                subtitle: post.externalSubtitle,
+//                postText: post.text
+//            )
+//        }
+//
+//
+//    }
+//    
+//    func configure(with post: FeedPost) {
+//        
+//        updateMediaHeight(for: post)
+//        
+//        currentExternalMediaURL = post.externalMediaURL
+//        //currentPostID = post.id
+//        currentVideoName = post.videoName
+//        //onVideoTapped = nil
+//        
+//        // Автор
+//        authorButton.setTitle(post.authorName, for: .normal)
+//        
+//        avatarImageView.image =
+//            UIImage(named: post.authorAvatarName ?? "")
+//            ?? PostImageLoader.image(
+//                named: post.authorAvatarName
+//            )
+//            ?? UIImage(
+//                systemName: "person.crop.circle.fill"
+//            )
+//
+//
+//        // Дата и текст публикации
+//        dateLabel.text = post.createdAt.formatted(
+//                    date: .abbreviated,
+//                    time: .shortened
+//                )
+//        descriptionLabel.text = post.text
+//
+//        let postText = post.text.trimmingCharacters(
+//            in: .whitespacesAndNewlines
+//        )
+//
+//        descriptionLabel.isHidden = postText.isEmpty
+//
+//        // Кнопка «Показать ещё»
+//        let shouldShowReadMore = postText.count > 180
+//
+//        readMoreButton.isHidden = !shouldShowReadMore
+//        descriptionLabel.numberOfLines = shouldShowReadMore ? 3 : 0
+//
+//        // Счётчики
+//        likeButton.setTitle(
+//            " \(post.likesCount)",
+//            for: .normal
+//        )
+//
+//        likeButton.setImage(
+//            UIImage(systemName: post.isLiked ? "heart.fill" : "heart"),
+//            for: .normal
+//        )
+//
+//        likeButton.tintColor = post.isLiked
+//            ? .systemRed
+//            : AppColors.secondaryText
+//
+//        commentsLabel.text = "💬 \(post.commentsCount)"
+//        sharesLabel.text = "↗ \(post.sharesCount)"
+//        viewsLabel.text = "◉ \(post.viewsCount)"
+//        
+//        let videoName = validMediaName(post.videoName)
+//        let imageName = validMediaName(post.imageName)
+//        
+//        let hasVideo = videoName != nil
+//        let hasImage = imageName != nil
+//        let hasMedia = hasVideo || hasImage
+//
+//        postImageAspectConstraint.isActive = false
+//        postImageZeroHeightConstraint.isActive = false
+//
+//        if hasMedia {
+//            postImageAspectConstraint.isActive = true
+//        } else {
+//            postImageZeroHeightConstraint.isActive = true
+//        }
+//
+//        if let videoName = post.videoName,
+//           !videoName.isEmpty {
+//
+//            print("Пост содержит видео:", videoName)
+//
+//            configureVideo(
+//                fileName: videoName
+//            )
+//
 //        } else if let imageName = post.imageName,
 //                  !imageName.isEmpty {
-//
-//            print("Пост содержит картинку:", imageName)
-//
 //            stopVideo()
+//
+//            print("===== ЗАГРУЗКА КАРТИНКИ =====")
+//            print("Название из Core Data:", imageName)
+//            print(
+//                "UIImage(named:):",
+//                UIImage(named: imageName) as Any
+//            )
 //
 //            postImageView.isHidden = false
 //            postImageView.backgroundColor = .clear
@@ -380,81 +767,41 @@ final class PostCollectionViewCell: UICollectionViewCell {
 //                postImageView.backgroundColor =
 //                    AppColors.secondaryBackground
 //
-//                print("Картинка не найдена:", imageName)
-//            }
-//
-//        }
-        else {
-            print("Пост без изображения и видео:", post.id)
-
-            stopVideo()
-
-            postImageView.image = nil
-            postImageView.backgroundColor = .clear
-            postImageView.isHidden = true
-        }
-
-        setNeedsLayout()
-
-
-    }
-
-
-//    private func makeVideoPreview(
-//        videoName: String,
-//        postID: UUID
-//    ) {
-//        postImageView.image = UIImage(systemName: "video.fill")
-//        postImageView.tintColor = .systemBlue
-//        postImageView.contentMode = .scaleAspectFit
-//
-//        guard let videoURL = LocalVideoStore.shared.url(
-//            for: videoName
-//        ) else {
-//            print("Видео не найдено:", videoName)
-//            return
-//        }
-//
-//        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-//            let asset = AVURLAsset(url: videoURL)
-//            let generator = AVAssetImageGenerator(asset: asset)
-//
-//            generator.appliesPreferredTrackTransform = true
-//            generator.maximumSize = CGSize(
-//                width: 1000,
-//                height: 1000
-//            )
-//
-//            let time = CMTime(
-//                seconds: 0.1,
-//                preferredTimescale: 600
-//            )
-//
-//            do {
-//                let cgImage = try generator.copyCGImage(
-//                    at: time,
-//                    actualTime: nil
-//                )
-//
-//                let previewImage = UIImage(cgImage: cgImage)
-//
-//                DispatchQueue.main.async {
-//                    guard self?.currentPostID == postID else {
-//                        return
-//                    }
-//
-//                    self?.postImageView.image = previewImage
-//                    self?.postImageView.tintColor = nil
-//                    self?.postImageView.contentMode = .scaleAspectFill
-//                }
-//            } catch {
-//                print(
-//                    "Не удалось получить кадр видео:",
-//                    error.localizedDescription
-//                )
+//                print("ИТОГ: картинка не найдена:", imageName)
+//            } else {
+//                print("ИТОГ: картинка загружена:", imageName)
 //            }
 //        }
+//
+//
+//        else {
+//            print("Пост без изображения и видео:", post.id)
+//
+//            stopVideo()
+//
+//            postImageView.image = nil
+//            postImageView.backgroundColor = .clear
+//            postImageView.isHidden = true
+//        }
+//        
+//        
+//        remoteImageTask?.cancel()
+//        remoteImageTask = nil
+//
+//        currentPostID = post.id
+//        externalStoreURL = post.externalStoreURL
+//
+//        musicPlayButton.isHidden = true
+//        setMusicPlaying(false)
+//
+//
+//        setNeedsLayout()
+//
+//
 //    }
+
+
+
     // 12345
     private func configureVideo(
         fileName: String
@@ -524,51 +871,311 @@ final class PostCollectionViewCell: UICollectionViewCell {
         setNeedsLayout()
         layoutIfNeeded()
     }
+    
+    private func configureMoviePost(
+        _ post: FeedPost
+    ) {
+        musicPlayButton.isHidden = true
+
+        postImageView.contentMode = .scaleAspectFit
+        postImageView.backgroundColor = UIColor.secondarySystemBackground
+
+        loadRemoteImage(
+            urlString: post.externalImageURL,
+            placeholderName: "film"
+        )
+
+        descriptionLabel.text = makeExternalDescription(
+            title: post.externalTitle,
+            subtitle: post.externalSubtitle,
+            postText: post.text
+        )
+    }
+
+    
+    private func configureMusicPost(
+        _ post: FeedPost
+    ) {
+        musicPlayButton.isHidden =
+            post.externalMediaURL == nil
+
+        postImageView.contentMode = .scaleAspectFit
+        postImageView.backgroundColor = UIColor.secondarySystemBackground
+
+        loadRemoteImage(
+            urlString: post.externalImageURL,
+            placeholderName: "music.note"
+        )
+
+        descriptionLabel.text = makeExternalDescription(
+            title: post.externalTitle,
+            subtitle: post.externalSubtitle,
+            postText: post.text
+        )
+    }
+    private func configureLocalImage(
+        imageName: String
+    ) {
+        stopVideo()
+
+        print("===== ЗАГРУЗКА КАРТИНКИ =====")
+        print(
+            "Название из Core Data:",
+            imageName
+        )
+
+        postImageView.isHidden = false
+        postImageView.backgroundColor = .clear
+        postImageView.contentMode = .scaleAspectFill
+        postImageView.tintColor = nil
+
+        let image =
+            UIImage(
+                named: imageName
+            )
+            ?? PostImageLoader.image(
+                named: imageName
+            )
+
+        postImageView.image = image
+        playImageView.isHidden = true
+        musicPlayButton.isHidden = true
+
+        if image == nil {
+            postImageView.backgroundColor =
+                AppColors.secondaryBackground
+
+            print(
+                "ИТОГ: картинка не найдена:",
+                imageName
+            )
+        } else {
+            print(
+                "ИТОГ: картинка загружена:",
+                imageName
+            )
+        }
+    }
 
 
-//    private func configureVideo(
-//        fileName: String
-//    ) {
-//        stopVideo()
+    private func configureEmptyMedia() {
+        stopVideo()
+
+        postImageView.image = nil
+        postImageView.backgroundColor = .clear
+        postImageView.isHidden = true
+
+        playImageView.isHidden = true
+        musicPlayButton.isHidden = true
+    }
+
+
+
+    private func makeExternalDescription(
+        title: String?,
+        subtitle: String?,
+        postText: String
+    ) -> String {
+        var components: [String] = []
+
+        if let title {
+            let normalizedTitle = title.trimmingCharacters(
+                in: .whitespacesAndNewlines
+            )
+
+            if !normalizedTitle.isEmpty {
+                components.append(
+                    normalizedTitle
+                )
+            }
+        }
+
+        if let subtitle {
+            let normalizedSubtitle =
+                subtitle.trimmingCharacters(
+                    in: .whitespacesAndNewlines
+                )
+
+            if !normalizedSubtitle.isEmpty {
+                components.append(
+                    normalizedSubtitle
+                )
+            }
+        }
+
+        let normalizedText =
+            postText.trimmingCharacters(
+                in: .whitespacesAndNewlines
+            )
+
+        if !normalizedText.isEmpty {
+            components.append(
+                normalizedText
+            )
+        }
+
+        return components.joined(
+            separator: "\n"
+        )
+    }
+
+
+
+//    // формирование текста поста
+//    private func makeExternalDescription(
+//        title: String?,
+//        subtitle: String?,
+//        postText: String
+//    ) -> String {
+//        var components: [String] = []
 //
-//        guard let videoURL = LocalVideoStore.shared.url(
-//            for: fileName
-//        ) else {
-//            postImageView.image = UIImage(
-//                systemName: "exclamationmark.video"
-//            )
-//            postImageView.tintColor = .systemRed
-//            return
+//        if let title,
+//           !title.isEmpty {
+//            components.append(title)
 //        }
 //
-//        currentVideoName = fileName
+//        if let subtitle,
+//           !subtitle.isEmpty {
+//            components.append(subtitle)
+//        }
 //
-//        postImageView.image = nil
-//        postImageView.backgroundColor = .black
-//        playImageView.isHidden = false
-//
-//        let player = AVPlayer(url: videoURL)
-//
-//        let playerLayer = AVPlayerLayer(player: player)
-//        playerLayer.videoGravity = .resizeAspect
-//
-//        postImageView.layer.insertSublayer(
-//            playerLayer,
-//            at: 0
+//        let normalizedText = postText.trimmingCharacters(
+//            in: .whitespacesAndNewlines
 //        )
 //
-//        videoPlayer = player
-//        videoPlayerLayer = playerLayer
+//        if !normalizedText.isEmpty {
+//            components.append(normalizedText)
+//        }
 //
-//        player.seek(
-//            to: CMTime(
-//                seconds: 0.1,
-//                preferredTimescale: 600
-//            )
+//        return components.joined(
+//            separator: "\n"
 //        )
-//
-//        setNeedsLayout()
 //    }
+
+    // загрузкка обложки-картинки
+    private func loadRemoteImage(
+        urlString: String?,
+        placeholderName: String
+    ) {
+        remoteImageTask?.cancel()
+
+        postImageView.image = UIImage(
+            systemName: placeholderName
+        )
+        postImageView.tintColor = .secondaryLabel
+
+        guard let urlString,
+              let url = URL(string: urlString)
+        else {
+            return
+        }
+
+        remoteImageActivityIndicator.startAnimating()
+
+        remoteImageTask = Task { [weak self] in
+            guard let self else {
+                return
+            }
+
+            do {
+                let image = try await RemoteImageLoader.shared.image(
+                    from: url
+                )
+
+                guard !Task.isCancelled else {
+                    return
+                }
+
+                postImageView.image = image
+                postImageView.tintColor = nil
+                remoteImageActivityIndicator.stopAnimating()
+            } catch {
+                guard !Task.isCancelled else {
+                    return
+                }
+
+                postImageView.image = UIImage(
+                    systemName: placeholderName
+                )
+                remoteImageActivityIndicator.stopAnimating()
+
+                print(
+                    "Не удалось загрузить изображение:",
+                    urlString
+                )
+            }
+        }
+    }
+
+
+
+    private let movieLinkButton: UIButton = {
+        var configuration = UIButton.Configuration.filled()
+
+        configuration.title = L10n.string("post.movie_details")
+        configuration.image = UIImage(
+            systemName: "arrow.up.right.square"
+        )
+        configuration.imagePadding = 8
+        configuration.cornerStyle = .capsule
+        configuration.baseBackgroundColor =
+            UIColor.black.withAlphaComponent(0.72)
+        configuration.baseForegroundColor = .white
+
+        let button = UIButton(
+            configuration: configuration
+        )
+
+        button.isHidden = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+
+        return button
+    }()
+
+
+    
+    private let musicPlayButton: UIButton = {
+        let button = UIButton(type: .system)
+
+        let configuration = UIImage.SymbolConfiguration(
+            pointSize: 54,
+            weight: .regular
+        )
+
+        button.setImage(
+            UIImage(
+                systemName: "play.circle.fill",
+                withConfiguration: configuration
+            ),
+            for: .normal
+        )
+
+        button.tintColor = .white
+        button.backgroundColor = UIColor.black.withAlphaComponent(0.25)
+        button.layer.cornerRadius = 35
+        button.isHidden = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+
+        return button
+    }()
+
+    // индикатор загрузки
+    private let remoteImageActivityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(
+            style: .large
+        )
+
+        indicator.color = .secondaryLabel
+        indicator.hidesWhenStopped = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+
+        return indicator
+    }()
+
+
+
+
+
 
 
 
@@ -581,6 +1188,34 @@ final class PostCollectionViewCell: UICollectionViewCell {
         contentView.backgroundColor = AppColors.background
         contentView.layer.cornerRadius = AppLayout.cornerRadius
         contentView.clipsToBounds = true
+        
+        
+
+        musicPlayButton.addTarget(
+            self,
+            action: #selector(musicPlayButtonTapped),
+            for: .touchUpInside
+        )
+        
+        movieLinkButton.addTarget(
+            self,
+            action: #selector(movieLinkButtonTapped),
+            for: .touchUpInside
+        )
+
+
+
+        postImageView.isUserInteractionEnabled = true
+
+        let imageTapGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(postImageTapped)
+        )
+
+        postImageView.addGestureRecognizer(
+            imageTapGesture
+        )
+
 
         [
             avatarImageView,
@@ -603,6 +1238,10 @@ final class PostCollectionViewCell: UICollectionViewCell {
         )
 
         postImageView.addGestureRecognizer(tapGesture)
+        
+        contentView.addSubview(musicPlayButton)
+        contentView.addSubview(remoteImageActivityIndicator)
+        contentView.addSubview(movieLinkButton)
 
 
     }
@@ -635,6 +1274,40 @@ final class PostCollectionViewCell: UICollectionViewCell {
                 lessThanOrEqualTo: contentView.trailingAnchor,
                 constant: -16
             ),
+            
+            musicPlayButton.centerXAnchor.constraint(
+                equalTo: postImageView.centerXAnchor
+            ),
+            musicPlayButton.centerYAnchor.constraint(
+                equalTo: postImageView.centerYAnchor
+            ),
+            musicPlayButton.widthAnchor.constraint(
+                equalToConstant: 70
+            ),
+            musicPlayButton.heightAnchor.constraint(
+                equalToConstant: 70
+            ),
+            
+            movieLinkButton.trailingAnchor.constraint(
+                    equalTo: postImageView.trailingAnchor,
+                    constant: -16
+                ),
+                movieLinkButton.bottomAnchor.constraint(
+                    equalTo: postImageView.bottomAnchor,
+                    constant: -16
+                ),
+                movieLinkButton.heightAnchor.constraint(
+                    greaterThanOrEqualToConstant: 44
+                ),
+
+
+            remoteImageActivityIndicator.centerXAnchor.constraint(
+                equalTo: postImageView.centerXAnchor
+            ),
+            remoteImageActivityIndicator.centerYAnchor.constraint(
+                equalTo: postImageView.centerYAnchor
+            ),
+
 
             dateLabel.topAnchor.constraint(
                 equalTo: authorButton.bottomAnchor,
@@ -735,8 +1408,18 @@ final class PostCollectionViewCell: UICollectionViewCell {
             playImageView.heightAnchor.constraint(
                 equalTo: playImageView.widthAnchor
             )
+            
+            
+
+
 
         ])
+        postImageHeightConstraint = postImageView.heightAnchor.constraint(
+            equalTo: postImageView.widthAnchor,
+            multiplier: 0.75
+        )
+
+        postImageHeightConstraint?.isActive = true
     }
 
     @objc private func likeTapped() {
@@ -779,6 +1462,29 @@ final class PostCollectionViewCell: UICollectionViewCell {
 
         playImageView.isHidden = true
     }
+    
+    
+    func setMusicPlaying(
+        _ isPlaying: Bool
+    ) {
+        let imageName = isPlaying
+            ? "pause.circle.fill"
+            : "play.circle.fill"
+
+        let configuration = UIImage.SymbolConfiguration(
+            pointSize: 54,
+            weight: .regular
+        )
+
+        musicPlayButton.setImage(
+            UIImage(
+                systemName: imageName,
+                withConfiguration: configuration
+            ),
+            for: .normal
+        )
+    }
+
 
     
     private func validMediaName(
@@ -801,6 +1507,100 @@ final class PostCollectionViewCell: UICollectionViewCell {
 
         return trimmedValue
     }
+    
+    
+
+    @objc private func musicPlayButtonTapped() {
+        guard let currentPostID,
+              let mediaURL = currentExternalMediaURL
+        else {
+            return
+        }
+
+        onMusicTapped?(
+            currentPostID,
+            mediaURL
+        )
+    }
+    
+    @objc private func movieLinkButtonTapped() {
+        guard let externalStoreURL,
+              !externalStoreURL.isEmpty
+        else {
+            print(
+                "У фильма отсутствует ссылка"
+            )
+            return
+        }
+
+        print(
+            "Нажата кнопка фильма:",
+            externalStoreURL
+        )
+
+        onExternalLinkTapped?(
+            externalStoreURL
+        )
+    }
+
+
+    
+    
+    @objc private func postImageTapped() {
+        guard let externalStoreURL,
+              !externalStoreURL.isEmpty
+        else {
+            return
+        }
+
+        onExternalLinkTapped?(
+            externalStoreURL
+        )
+    }
+    
+    private func updateMediaHeight(
+        for post: FeedPost
+    ) {
+        postImageHeightConstraint?.isActive = false
+
+        switch post.mediaType {
+        case .text:
+            postImageHeightConstraint =
+                postImageView.heightAnchor.constraint(
+                    equalToConstant: 0
+                )
+
+        case .movie:
+            postImageHeightConstraint =
+                postImageView.heightAnchor.constraint(
+                    equalTo: postImageView.widthAnchor,
+                    multiplier: 1.15
+                )
+
+        case .music:
+            postImageHeightConstraint =
+                postImageView.heightAnchor.constraint(
+                    equalTo: postImageView.widthAnchor,
+                    multiplier: 0.75
+                )
+
+        case .image, .video:
+            postImageHeightConstraint =
+                postImageView.heightAnchor.constraint(
+                    equalTo: postImageView.widthAnchor,
+                    multiplier: 0.75
+                )
+        }
+
+        postImageHeightConstraint?.isActive = true
+    }
+
+
+
+
+    
+    
+    
 
 
 

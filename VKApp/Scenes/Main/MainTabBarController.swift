@@ -16,6 +16,8 @@ final class MainTabBarController: UITabBarController {
     private let notificationRepository: NotificationRepository
     private let messengerRepository: MessengerRepository
     private let reelRepository: ReelRepository
+    private let movieService: MovieServiceProtocol
+    private let musicService: MusicServiceProtocol
     
     var onLogout: (() -> Void)?
 
@@ -26,7 +28,9 @@ final class MainTabBarController: UITabBarController {
         photoRepository: PhotoRepository,
         notificationRepository: NotificationRepository,
         messengerRepository: MessengerRepository,
-        reelRepository: ReelRepository
+        reelRepository: ReelRepository,
+        movieService: MovieServiceProtocol,
+        musicService: MusicServiceProtocol
 
     ) {
         self.currentUser = currentUser
@@ -36,6 +40,8 @@ final class MainTabBarController: UITabBarController {
         self.notificationRepository = notificationRepository
         self.messengerRepository = messengerRepository
         self.reelRepository = reelRepository
+        self.movieService = movieService
+        self.musicService = musicService
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -252,6 +258,54 @@ final class MainTabBarController: UITabBarController {
                     )
 
 
+                case .movie:
+
+                    //let movieService: MovieServiceProtocol = MovieService()
+
+                    let viewModel = CreateMoviePostViewModel(
+                        movieService: self.movieService,
+                        feedRepository: feedRepository,
+                        currentUser: currentUser
+                    )
+
+                    let viewController = CreateMoviePostViewController(
+                        viewModel: viewModel
+                    )
+
+                    guard let navigationController =
+                            self.selectedViewController as? UINavigationController
+                    else {
+                        return
+                    }
+
+                    navigationController.pushViewController(
+                        viewController,
+                        animated: true
+                    )
+                    
+                case .music:
+                    //let musicService: MusicServiceProtocol = MusicService()
+
+                    let viewModel = CreateMusicPostViewModel(
+                        musicService: self.musicService,
+                        feedRepository: feedRepository,
+                        currentUser: currentUser
+                    )
+
+                    let viewController = CreateMusicPostViewController(
+                        viewModel: viewModel
+                    )
+
+                    guard let navigationController =
+                            self.selectedViewController as? UINavigationController
+                    else {
+                        return
+                    }
+
+                    navigationController.pushViewController(
+                        viewController,
+                        animated: true
+                    )
 
 
 
@@ -355,21 +409,21 @@ final class MainTabBarController: UITabBarController {
 
         let feedNavigationController = makeNavigationController(
             rootViewController: feedViewController,
-            title: "Главная",
+            title: L10n.string("tab.home"),
             imageName: "house",
             selectedImageName: "house.fill"
         )
 
         let searchNavigationController = makeNavigationController(
             rootViewController: searchViewController,
-            title: "Поиск",
+            title: L10n.string("tab.search"),
             imageName: "magnifyingglass",
             selectedImageName: "magnifyingglass"
         )
 
         let messengerNavigationController = makeNavigationController(
             rootViewController: messengerViewController,
-            title: "Мессенджер",
+            title: L10n.string("tab.messenger"),
             imageName: "bubble.left.and.bubble.right",
             selectedImageName:
                 "bubble.left.and.bubble.right.fill"
@@ -377,7 +431,7 @@ final class MainTabBarController: UITabBarController {
 
         let reelsNavigationController = makeNavigationController(
             rootViewController: reelsViewController,
-            title: "Reels",
+            title: L10n.string("tab.reels"),
             imageName: "play.rectangle",
             selectedImageName: "play.rectangle.fill"
         )

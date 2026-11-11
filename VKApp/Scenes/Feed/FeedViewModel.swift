@@ -51,7 +51,7 @@ final class FeedViewModel {
     private func show(_ error: Error) {
         let message =
             (error as? LocalizedError)?.errorDescription
-            ?? "Произошла неизвестная ошибка"
+        ?? L10n.string("error.unknown_error")
 
         onError?(message)
     }

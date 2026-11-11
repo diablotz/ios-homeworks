@@ -30,7 +30,7 @@ final class CreatePostViewController: UIViewController {
 
     private let placeholderLabel: UILabel = {
         let label = UILabel()
-        label.text = "Что у вас нового?"
+        label.text = L10n.string("create.whats_new")
         label.font = AppFonts.body
         label.textColor = AppColors.secondaryText
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -59,10 +59,10 @@ final class CreatePostViewController: UIViewController {
 
     private func setupView() {
         view.backgroundColor = AppColors.background
-        navigationItem.title = "Новый пост"
+        navigationItem.title = L10n.string("create.new_post")
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "Опубликовать",
+            title: L10n.string("common.publish"),
             style: .done,
             target: self,
             action: #selector(publishTapped)
@@ -117,13 +117,13 @@ final class CreatePostViewController: UIViewController {
 
     private func showError(_ message: String) {
         let alert = UIAlertController(
-            title: "Ошибка",
+            title: L10n.string("common.error"),
             message: message,
             preferredStyle: .alert
         )
 
         alert.addAction(
-            UIAlertAction(title: "ОК", style: .default)
+            UIAlertAction(title: L10n.string("common.ok"), style: .default)
         )
 
         present(alert, animated: true)

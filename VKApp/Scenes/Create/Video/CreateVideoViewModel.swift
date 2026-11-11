@@ -35,7 +35,7 @@ final class CreateVideoViewModel {
 
     func createVideo(caption: String) {
         guard let selectedVideoName else {
-            onError?("Сначала выберите видео")
+            onError?(L10n.string("error.select_clip"))
             return
         }
 
@@ -51,7 +51,7 @@ final class CreateVideoViewModel {
         } catch {
             onError?(
                 (error as? LocalizedError)?.errorDescription
-                ?? "Не удалось создать клип"
+                ?? L10n.string("error.create_clip")
             )
         }
     }

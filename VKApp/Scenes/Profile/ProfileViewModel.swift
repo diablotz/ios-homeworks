@@ -37,7 +37,7 @@ final class ProfileViewModel {
             )
 
             guard user != nil else {
-                onError?("Пользователь не найден")
+                onError?(L10n.string("error.user_not_found"))
                 return
             }
 

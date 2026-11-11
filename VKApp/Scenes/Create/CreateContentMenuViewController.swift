@@ -14,7 +14,7 @@ final class CreateContentMenuViewController:
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Создать"
+        label.text = L10n.string("create.title")
         label.font = AppFonts.title
         label.textColor = AppColors.primaryText
         label.translatesAutoresizingMaskIntoConstraints = false

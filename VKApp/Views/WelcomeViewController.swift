@@ -12,7 +12,7 @@ final class WelcomeViewController: UIViewController {
     var onRegistration: (() -> Void)?
     var onLogin: (() -> Void)?
 
-    // MARK: - UI
+    
 
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -39,7 +39,7 @@ final class WelcomeViewController: UIViewController {
 
     private lazy var registrationButton: UIButton = {
         var configuration = UIButton.Configuration.filled()
-        configuration.title = "ЗАРЕГИСТРИРОВАТЬСЯ"
+        configuration.title = L10n.string("login.register")
         configuration.baseBackgroundColor = AppColors.welcomeButton
         configuration.baseForegroundColor = .white
         configuration.cornerStyle = .medium
@@ -61,7 +61,7 @@ final class WelcomeViewController: UIViewController {
 
     private lazy var loginButton: UIButton = {
         var configuration = UIButton.Configuration.plain()
-        configuration.title = "Уже есть аккаунт"
+        configuration.title = L10n.string("login.account_exist")
         configuration.baseForegroundColor = AppColors.primaryText
 
         let button = UIButton(configuration: configuration)
@@ -99,7 +99,7 @@ final class WelcomeViewController: UIViewController {
         return stack
     }()
 
-    // MARK: - Lifecycle
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -108,7 +108,7 @@ final class WelcomeViewController: UIViewController {
         setupLayout()
     }
 
-    // MARK: - Setup
+    
 
     private func setupView() {
         view.backgroundColor = AppColors.background
@@ -202,7 +202,7 @@ final class WelcomeViewController: UIViewController {
         ])
     }
 
-    // MARK: - Actions
+    
 
     @objc private func registrationButtonTapped() {
         onRegistration?()

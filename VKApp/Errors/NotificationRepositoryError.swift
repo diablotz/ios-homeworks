@@ -15,13 +15,13 @@ enum NotificationRepositoryError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .notificationNotFound:
-            return "Уведомление не найдено"
+            return L10n.string("error.found_notification")
 
         case .fetchFailed:
-            return "Не удалось загрузить уведомления"
+            return L10n.string("error.load_notifications")
 
         case .saveFailed:
-            return "Не удалось сохранить изменение"
+            return L10n.string("error.not_saved")
         }
     }
 }

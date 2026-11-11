@@ -25,7 +25,7 @@ final class SearchViewController: UIViewController {
 
     private let segmentedControl: UISegmentedControl = {
         let control = UISegmentedControl(
-            items: ["Для вас", "Новости"]
+            items: [L10n.string("search.4u"), L10n.string("search.news")]
         )
         control.selectedSegmentIndex = 0
         control.translatesAutoresizingMaskIntoConstraints = false
@@ -91,7 +91,7 @@ final class SearchViewController: UIViewController {
     private func setupView() {
         view.backgroundColor =
             AppColors.secondaryBackground
-        navigationItem.title = "Поиск"
+        navigationItem.title = L10n.string("tab.search")
 
         segmentedControl.addTarget(
             self,
@@ -106,8 +106,8 @@ final class SearchViewController: UIViewController {
     private func setupSearchController() {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder =
-            "Люди, сообщества и другое"
+        searchController.searchBar.placeholder = L10n.string("search.people")
+           
 
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
@@ -191,8 +191,7 @@ final class SearchViewController: UIViewController {
                 let availableWidth =
                     environment.container
                         .effectiveContentSize.width
-                var columns =
-                    AdaptiveLayout.numberOfGridColumns(
+                var columns = AdaptiveLayout.numberOfGridColumns(
                         availableWidth: availableWidth,
                         minimumItemWidth: 110
                     )
@@ -281,12 +280,12 @@ final class SearchViewController: UIViewController {
 
     private func showError(_ message: String) {
         let alert = UIAlertController(
-            title: "Ошибка",
+            title: L10n.string("common.error"),
             message: message,
             preferredStyle: .alert
         )
         alert.addAction(
-            UIAlertAction(title: "ОК", style: .default)
+            UIAlertAction(title: L10n.string("common.ok"), style: .default)
         )
         present(alert, animated: true)
     }

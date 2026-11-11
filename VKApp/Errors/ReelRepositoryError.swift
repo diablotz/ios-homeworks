@@ -18,22 +18,22 @@ enum ReelRepositoryError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .reelNotFound:
-            return "Клип не найден"
+            return L10n.string("error.clip_found")
 
         case .authorNotFound:
-            return "Автор клипа не найден"
+            return L10n.string("error.author_video_found")
 
         case .videoNotSelected:
-            return "Выберите видео"
+            return L10n.string("create.select_video")
 
         case .emptyCaption:
-            return "Введите описание клипа"
+            return L10n.string("error.description_clip")
 
         case .fetchFailed:
-            return "Не удалось загрузить клипы"
+            return L10n.string("error.load_clip")
 
         case .saveFailed:
-            return "Не удалось сохранить клип"
+            return L10n.string("error.save_clip")
         }
     }
 }

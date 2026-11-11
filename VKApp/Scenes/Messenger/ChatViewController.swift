@@ -31,7 +31,7 @@ final class ChatViewController: UIViewController {
 
     private let textField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Сообщение"
+        textField.placeholder = L10n.string("common.message")
         textField.backgroundColor =
             AppColors.secondaryBackground
         textField.layer.cornerRadius = 18
@@ -180,12 +180,12 @@ final class ChatViewController: UIViewController {
 
     private func showError(_ message: String) {
         let alert = UIAlertController(
-            title: "Ошибка",
+            title: L10n.string("common.error"),
             message: message,
             preferredStyle: .alert
         )
         alert.addAction(
-            UIAlertAction(title: "ОК", style: .default)
+            UIAlertAction(title: L10n.string("common.ok"), style: .default)
         )
         present(alert, animated: true)
     }

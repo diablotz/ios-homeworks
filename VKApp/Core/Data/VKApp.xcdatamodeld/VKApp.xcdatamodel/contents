@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="25249" systemVersion="26A434" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="25249" systemVersion="26B123" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="ConversationEntity" representedClassName=".ConversationEntity" syncable="YES" codeGenerationType="class">
         <attribute name="avatarName" optional="YES" attributeType="String"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
@@ -58,6 +58,12 @@
     <entity name="PostEntity" representedClassName=".PostEntity" syncable="YES" codeGenerationType="class">
         <attribute name="commentsCount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="externalID" optional="YES" attributeType="String" defaultValueString=""/>
+        <attribute name="externalImageURL" optional="YES" attributeType="String" defaultValueString=""/>
+        <attribute name="externalMediaURL" optional="YES" attributeType="String" defaultValueString=""/>
+        <attribute name="externalStoreURL" optional="YES" attributeType="String" defaultValueString=""/>
+        <attribute name="externalSubtitle" optional="YES" attributeType="String" defaultValueString=""/>
+        <attribute name="externalTitle" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="imageName" optional="YES" attributeType="String"/>
         <attribute name="isLiked" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>

@@ -35,7 +35,7 @@ final class CreateClipViewModel {
 
     func createClip(caption: String) {
         guard let selectedVideoName else {
-            onError?("Сначала выберите видео")
+            onError?(L10n.string("error.select_clip"))
             return
         }
 
@@ -50,100 +50,12 @@ final class CreateClipViewModel {
         } catch {
             onError?(
                 (error as? LocalizedError)?.errorDescription
-                ?? "Не удалось создать клип"
+                ?? L10n.string("error.create_clip")
             )
         }
     }
 }
 
 
-//final class CreateClipViewModel {
-//
-//    private let currentUserID: UUID
-//    private let repository: ReelRepository
-//    private let videoStore: LocalVideoStore
-//
-//    private(set) var selectedVideoName: String?
-//
-//    var onVideoSelected: ((String) -> Void)?
-//    var onCreated: (() -> Void)?
-//    var onError: ((String) -> Void)?
-//
-//    init(
-//        currentUserID: UUID,
-//        repository: ReelRepository,
-//        videoStore: LocalVideoStore = .shared
-//    ) {
-//        self.currentUserID = currentUserID
-//        self.repository = repository
-//        self.videoStore = videoStore
-//    }
-//
-//    func saveSelectedVideo(from temporaryURL: URL) {
-//        do {
-//            selectedVideoName = try videoStore.saveVideo(
-//                from: temporaryURL
-//            )
-//
-//            if let selectedVideoName {
-//                onVideoSelected?(selectedVideoName)
-//            }
-//        } catch {
-//            onError?("Не удалось сохранить выбранное видео")
-//        }
-//    }
-//
-//    func createClip(caption: String) {
-//        guard let selectedVideoName else {
-//            onError?("Сначала выберите видео")
-//            return
-//        }
-//
-//        do {
-//            try repository.createReel(
-//                authorID: currentUserID,
-//                videoName: selectedVideoName,
-//                caption: caption
-//            )
-//
-//            onCreated?()
-//        } catch {
-//            onError?(
-//                (error as? LocalizedError)?.errorDescription
-//                ?? "Не удалось создать клип"
-//            )
-//        }
-//    }
-//    
-//    
-//    
-//    func saveSelectedVideo(
-//        _ temporaryURL: URL
-//    ) {
-//        do {
-//            let fileName = try videoStore.saveVideo(
-//                from: temporaryURL
-//            )
-//
-//            selectedVideoName = fileName
-//
-//            DispatchQueue.main.async { [weak self] in
-//                self?.onVideoSelected?(fileName)
-//            }
-//        } catch {
-//            DispatchQueue.main.async { [weak self] in
-//                self?.onError?(
-//                    "Не удалось сохранить видео: "
-//                    + error.localizedDescription
-//                )
-//            }
-//        }
-//    }
-//
-//
-//
-//
-//
-//
-//}
+
 
